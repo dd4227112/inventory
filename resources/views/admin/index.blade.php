@@ -23,17 +23,21 @@
                         <h5 class="card-title">Select Shops</h5>
                     </div>
                     <div class="card-body">
-                        <form action="#">
+                        <form action="{{route('admin.home')}}" method="POST">
+                            @csrf
                             <div class="form-group row">
                                 <label class="col-form-label col-md-2">Select</label>
                                 <div class="col-md-10">
-                                    <select class="form-select">
-                                        <option>-- Select --</option>
-                                        <option>Option 1</option>
-                                        <option>Option 2</option>
-                                        <option>Option 3</option>
-                                        <option>Option 4</option>
-                                        <option>Option 5</option>
+                                    <select class="form-select" name="id">
+                                        <option value="">-- Select --</option>
+                                        @if(!$shops->isEmpty())
+                                        @foreach($shops as $shop)
+                                        <option value="{{ $shop->id}}">{{ $shop->name}} - {{ $shop->location }}</option>
+                                        @endforeach
+                                        @else
+                                        <option value="">No data found..</option>
+                                        @endif
+                                       
                                     </select>
                                 </div>
                             </div>
