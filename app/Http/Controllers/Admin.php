@@ -56,16 +56,16 @@ class Admin extends Controller
     public function store(Request $request)
     {
         $data = [
-            'name'=> $request->name,
-            'phone'=> $request->phone,
-            'email'=> $request->email,
-            'status'=> 1,
-            'password'=> Hash::make($request->password),
-            'role_id'=> $request->role_id
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'status' => 1,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id
         ];
         if (Role::find($request->role_id)->name != 'Sales') {
             $data['shop_id'] = null;
-        }else{
+        } else {
             $data['shop_id'] = $request->shop_id;
         }
         if ($request->hasFile('photo')) {
@@ -85,12 +85,11 @@ class Admin extends Controller
                 return redirect()->back()->with('warning', 'Invalid file type. Only  images (jpg,jpeg,png,webp)  files are allowed.');
             }
         }
-        if(User::create($data)){
+        if (User::create($data)) {
             return redirect()->route('admin.list_user')->with('success', "User Added Successfully");
-        }else{
+        } else {
             return  redirect()->back()->with('error', "Unable to Register new User");
         }
-      
     }
 
     public function viewUser()
@@ -105,5 +104,27 @@ class Admin extends Controller
     }
     public function deleteUser()
     {
+    }
+
+    //SHOPS
+    public function shop()
+    {
+        $shops = Shop::all();
+        $this->data['shops'] = $shops;
+        return view('admin.shop', $this->data);
+    }
+
+    public function  addshop()
+    {
+        return view('admin.add_shop');
+    }
+    public function store_shop(Request $request)
+    {
+        $data = $request->except('_token');
+        if (Shop::create($data)) {
+            return redirect()->route('admin.list_shop')->with('success', "Shop Added Successfully");
+        }else{
+            return redirect()->back()->with('error', "Failed to add new shop.");
+        }
     }
 }

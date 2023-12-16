@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('location');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
+            $table->uuid('uuid');
         });
     }
 

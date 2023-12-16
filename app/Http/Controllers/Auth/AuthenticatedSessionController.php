@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Session;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -32,7 +33,9 @@ class AuthenticatedSessionController extends Controller
         if (Auth::user()->role->name =='Admin' || Auth::user()->role->name =='Auditor' ) {
             return redirect()->intended(RouteServiceProvider::ADMIN);
         }else {
+            Session::put('shop_id', Auth::user()->shop_id);
             return redirect()->intended(RouteServiceProvider::SALES);
+            
         }
 
 

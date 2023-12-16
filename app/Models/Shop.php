@@ -4,10 +4,9 @@ namespace App\Models;
 use \App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Shop extends Model
+class Shop extends BasicModel
 {
     use HasFactory, Notifiable;
 
@@ -27,6 +26,9 @@ class Shop extends Model
     }
     public function product(){
         return $this->hasMany(Product::class);
+    }
+    public function sales(){
+        return $this->hasMany(Sale::class);
     }
 
 }

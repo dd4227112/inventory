@@ -61,5 +61,15 @@ class DatabaseSeeder extends Seeder
                 'description' => ' Duka la Vifaa vyote jumla na rejareja'
             ]
         );
+
+        \App\Models\Category::factory()->create([
+            'name' =>'Default',
+            'description' => 'For Testing Only'
+        ]);
+
+        \App\Models\Unit::factory()->create([
+            'name' =>'Default',
+            'description' => 'For Testing Only'
+        ]);
     }
 }

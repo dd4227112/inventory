@@ -19,10 +19,20 @@ return new class extends Migration
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->bigInteger('quantity');
+            $table->string('code');
+            $table->float('cost');
+            $table->float('price');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->OnDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units')->OnDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->OnDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->uuid('uuid');
+            $table->unique(['code', 'name', 'shop_id']);
+            $table->unique(['code', 'shop_id']);
         });
     }
     /**

@@ -8,15 +8,27 @@
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="productlist.html">Product List</a></li>
-                        <li><a href="addproduct.html">Add Product</a></li>
+                        <li><a href="{{ route('list_product')}}">Product List</a></li>
+                        <li><a href="{{ route('add_product')}}">Add Product</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="saleslist.html">Sales List</a></li>
-                        <li><a href="pos.html">Add Sale</a></li>
+                        <li><a href="{{ route('list_sale') }}">Sales List</a></li>
+                        <li><a href="{{ route('add_sale')}}">Add Sale</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="assets/img/icons/users1.svg" alt="img"><span>
+                            People</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{{ route('list_customer')}}">Customer List</a></li>
+                        <li><a href="{{ route('add_customer')}}">Add Customer </a></li>
+                        <li><a href="{{ route('list_supplier')}}">Supplier List</a></li>
+                        <li><a href="{{ route('add_supplier')}}">Add Supplier </a></li>
+                        <li><a href="{{ route('admin.list_user')}}">List Users</a></li>
+                        <li><a href="{{ route('admin.add_user')}}">Add User </a></li>
                     </ul>
                 </li>
 
@@ -30,17 +42,10 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/users1.svg" alt="img"><span> Users</span> <span class="menu-arrow"></span></a>
-                    <ul>
-                        <li><a href="{{ route('admin.list_user')}}">List Users</a></li>
-                        <li><a href="{{ route('admin.add_user')}}">Add User </a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
                     <a href="javascript:void(0);"><i class="fa fa-university"></i><span> Shops</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="salesreturnlist.html">List Shops</a></li>
-                        <li><a href="createsalesreturn.html">Add Shop </a></li>
+                        <li><a href="{{route('admin.list_shop') }}">List Shops</a></li>
+                        <li><a href="{{ route('admin.add_shop') }}">Add Shop </a></li>
 
                     </ul>
                 </li>

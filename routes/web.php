@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/sales', function () {
-    return view('sales.index');
+    return view('sales.dashboard');
 })->middleware(['auth', 'verified'])->name('sales');
 
 
@@ -38,26 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', [Admin::class, 'index'])->name('admin');
     Route::post('/home', [Admin::class, 'home'])->name('admin.home');
     Route::get('/dashboard', [Admin::class, 'dashboard'])->name('admin.dashboard');
-
-
-    //users
     
-    Route::get('/users', [Admin::class, 'user'])->name('admin.list_user');
-    Route::get('/store', [Admin::class, 'store'])->name('admin.store_user');
-
-    Route::get('/addUser', [Admin::class, 'addUser'])->name('admin.add_user');
-    Route::post('/viewUser', [Admin::class, 'viewUser'])->name('admin.view_user');
-    Route::post('/getUser', [Admin::class, 'getUser'])->name('admin.get_user');
-    Route::post('/updateUser', [Admin::class, 'updateUser'])->name('admin.update_user');
-    Route::post('/deleteUser', [Admin::class, 'deleteUser'])->name('admin.delete_user');
-
-
-
     
-
-    
-
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/product.php';
+require __DIR__ . '/shop.php';
+require __DIR__ . '/people.php';
+require __DIR__ . '/sales.php';
+
+
+

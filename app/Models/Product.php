@@ -3,16 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Product extends BasicModel
 {
     use HasFactory;
     protected $fillable = [
         'shop_id', // the shop where this product belong
+        'code',
         'name',
+        'quantity',
         'description',
-        'user_id' // user who created/ add this product
+        'user_id', // user who created/ add this product
+        'price',
+        'cost',
+        'unit_id',
+        'category_id',
     ];
 
     public function shop()
@@ -23,5 +28,17 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function sale_product(){
+        return $this->hasMany(SaleProduct::class);
     }
 }
