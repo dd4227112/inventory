@@ -15,8 +15,15 @@
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="{{ route('list_sale') }}">Sales List</a></li>
+                        <li><a href="{{ route('list_sale') }}">List Sales</a></li>
                         <li><a href="{{ route('add_sale')}}">Add Sale</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span> Purchases</span> <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="{{ route('list_purchase') }}">List Purchases</a></li>
+                        <li><a href="{{ route('add_purchase')}}">Add Purchase</a></li>
                     </ul>
                 </li>
                 <li class="submenu">

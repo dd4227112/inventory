@@ -70,7 +70,7 @@
                                 <td>{{ $product->description}}</td>
                                 <td>{{ $product->unit->name}}</td>
                                 <td>{{ $product->category->name}}</td>
-                                <td>{{ number_format($product->quantity, 1)}}</td>
+                                <td>{{ number_format(product_balance($product->id)['balance'])}}</td>
                                 <td>{{ number_format($product->cost, 2)}}</td>
                                 <td>{{ number_format($product->price, 2)}}</td>
                                 <td>{{ $product->shop->name}}</td>

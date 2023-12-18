@@ -43,6 +43,6 @@ class ProductController extends Controller
      products($search);
     }
     public function fetch_product(Request $request){
-            fetch($request);
+            fetch_sale($request);
     }
 }

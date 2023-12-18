@@ -65,17 +65,17 @@
                                         <span class="checkmarks"></span>
                                     </label>
                                 </td>
-                                <td> {{ $sales->customer->name}}</td>
-                                <td>{{ $sales->date }}</td>
-                                <td>{{ $sales->reference }}</td>
+                                <td>{{ $sale->date }}</td>
+                                <td> {{ $sale->customer->name}}</td>
+                                <td>{{ $sale->reference }}</td>
                                 <!-- <td><span class="badges bg-lightgreen">Completed</span></td>
                                 <td><span class="badges bg-lightg">Paid</span></td> -->
                                 <td><span class="badges bg-lightred">Pending</span></td>
                                         <td><span class="badges bg-lightred">Due</span></td>
-                                <td>{{ $sales->grand_total }}</td>
-                                <td>0.00</td>
-                                <td class="text-red">100.00</td>
-                                <td>{{ $sales->user->name }}</td>
+                                <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
+                                <td style="text-align: right;">0.00</td>
+                                <td style="text-align: right;">100.00</td>
+                                <td>{{ $sale->user->name }}</td>
                                 <td class="text-center">
                                     <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
                                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>

@@ -12,8 +12,11 @@ class Sale extends BasicModel
         'grand_total',
         'date',
         'user_id',
+        'shop_id',
         'customer_id',
         'status',
+        'uuid',
+
     ];
     public function sale_product(){
         return $this->hasMany(SaleProduct::class);
@@ -26,5 +29,8 @@ class Sale extends BasicModel
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function payment(){
+        return $this->hasMany(Payment::class);
     }
 }

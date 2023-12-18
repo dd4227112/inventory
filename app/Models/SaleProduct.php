@@ -11,10 +11,10 @@ class SaleProduct extends BasicModel
     protected $fillable = [
         'sale_id',
         'product_id',
-            'date',
-            'quantity',
-            'price',
-            'total'
+        'date',
+        'quantity',
+        'price',
+        'total',
     ];
 
     public function sale()

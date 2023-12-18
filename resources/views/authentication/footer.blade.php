@@ -30,7 +30,6 @@
 <script src="{{ asset('/assets/plugins/sweetalert/sweetalerts.min.js')}}"></script>
 
 <script src="{{ asset('/assets/js/script.js')}}"></script>
-<script src="{{ asset('/assets/js/project.js')}}"></script>
 
 
 

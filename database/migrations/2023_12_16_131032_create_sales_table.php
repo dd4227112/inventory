@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('status')->default(1);
             $table->unsignedBigInteger('shop_id');
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('user_id');

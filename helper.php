@@ -2,7 +2,11 @@
 
 use App\Models\Customer;
 use App\Models\Product;
-
+use App\Models\Purchase;
+use App\Models\PurchaseProduct;
+use App\Models\Sale;
+use App\Models\SaleProduct;
+use App\Models\Supplier;
 
 function upload_file($file, $subpath)
 {
@@ -38,6 +42,19 @@ function customers()
 
     echo $output;
 }
+function supplier(){
+    $suppliers = Supplier::where('status', 1)->get();
+    $output = " ";
+    if (!$suppliers->isEmpty()) {
+        foreach ($suppliers as $key => $supplier) {
+            $output .= " <option value='" . $supplier->id . "'>" . $supplier->name . "</option>";
+        }
+    } else {
+        $output = " <option value=''>No Supplier Registered</option>";
+    }
+
+    echo $output;
+}
 function products($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
@@ -64,17 +81,36 @@ function products($key)
     echo $output;
 }
 
-function fetch($request)
+function fetch_sale($request)
 {
     $id = $request->product_id;
     $product = Product::find($id);
     $output = '';
     if (!empty($product)) {
         $output .= "<tr><td class=''>" . $product->name ."(".$product->code.") - ".$product->description."</td>";
-        $output .= "<td><input type ='number' name ='quantity[]' value ='1'</td>";
-        $output .= "<td>".$product->price."</td>";
-        $output .= "<td>".number_format(($product->price*1), 2)."</td>";
-        $output .= "<td><a href='javascript:void(0);' class='delete-set'><img src='assets/img/icons/delete.svg' alt='svg'></a></td></tr>";
+        $output .=" <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='".$product->id."'>";
+        $output .= "<td><input type ='number' id='quantity' max='".$product->quantity."' name ='quantity[]' value ='1'></td>";
+        $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='".$product->price."'></td>";
+        $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='".($product->price*1)."'></td>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='assets/img/icons/delete.svg' alt='svg' title='remove this items'></a></td></tr>";
+    } else {
+        $output .= "Error!!";
+    }
+    echo $output;
+}
+
+function fetch_purchase($request)
+{
+    $id = $request->product_id;
+    $product = Product::find($id);
+    $output = '';
+    if (!empty($product)) {
+        $output .= "<tr><td class=''>" . $product->name ."(".$product->code.") - ".$product->description."</td>";
+        $output .=" <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='".$product->id."'>";
+        $output .= "<td><input type ='number' id='quantity' max='".$product->quantity."' name ='quantity[]' value ='1'></td>";
+        $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='".$product->cost."'></td>";
+        $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='".($product->price*1)."'></td>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='assets/img/icons/delete.svg' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
@@ -83,4 +119,9 @@ function fetch($request)
 function reference(){
     $reference = 'NTYD-'.time();
     return $reference;
+}
+function product_balance($product){
+    $purchased = PurchaseProduct::where('product_id', $product)->sum('quantity');
+    $sold = SaleProduct::where('product_id', $product)->sum('quantity');
+    return ['purchased' =>$purchased, 'sold'=>$sold, 'balance'=>($purchased - $sold)];
 }

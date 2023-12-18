@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/addsupplier', [SupplierController::class, 'addsupplier'])->name('add_supplier');
     Route::post('/storesupplier', [SupplierController::class, 'store'])->name('store_supplier');
     Route::post('/viewsupplier', [SupplierController::class, 'viewsupplier'])->name('view_supplier');
-    Route::post('/getsupplier', [SupplierController::class, 'getsupplier'])->name('get_supplier');
+    Route::get('/getsupplier', [SupplierController::class, 'getsupplier'])->name('get_supplier');
     Route::post('/updatesupplier', [SupplierController::class, 'updatesupplier'])->name('update_supplier');
     Route::post('/deletesupplier', [SupplierController::class, 'deletesupplier'])->name('delete_supplier');
 });
