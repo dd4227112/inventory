@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->double('amount');
             $table->date('date');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->integer('payment_method')->default(1);
             $table->integer('status')->default(1);
             $table->unsignedBigInteger('purchase_id')->nullable();

@@ -17,13 +17,13 @@ class PaymentController extends Controller
             $data = [
                 'supplier' => $purchase->supplier->name,
                 'purchase_id' => $purchase->id,
-                'purchase_amount' => number_format($purchase->grand_total, 2),
+                'balance' => number_format($purchase->grand_total - $purchase->payment->sum('amount'), 2),
             ];
         } else {
             $data = [
                 'supplier' => '',
                 'purchase_id' => '',
-                'purchase_amount' => '',
+                'balance' => '',
             ];
         }
         echo json_encode($data);
@@ -31,6 +31,9 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
+        if ($request->amount > $request->balance) {
+            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of ".$request->balance);
+        }
         $other_data = [
             'user_id' => Auth::user()->id,
             'status' => 1,

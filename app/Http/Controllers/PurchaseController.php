@@ -10,10 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
-   protected $data;
+    protected $data;
     public function index()
     {
         $purchases = Purchase::where('shop_id', session('shop_id'))->get();
+        $payment = [];
+        foreach ($purchases as $key => $purchase) {
+            $payment[$purchase->id] =  $purchase->payment->sum('amount');
+        }
+        $this->data['payments'] = $payment;
         $this->data['purchases'] = $purchases;
         return view('purchases.index', $this->data);
     }
@@ -52,10 +57,10 @@ class PurchaseController extends Controller
         }
         return redirect()->route('list_purchase')->with('success', "purchase Added Successfully");
     }
-    
+
     //get selected product on adding purchase via ajax request
-    public function fetch_purchase(Request $request){
+    public function fetch_purchase(Request $request)
+    {
         fetch_purchase($request);
-}
-   
+    }
 }

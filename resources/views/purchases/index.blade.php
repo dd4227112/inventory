@@ -57,56 +57,68 @@
                         </thead>
                         <tbody>
                             @if(!$purchases->isEmpty())
-                            @foreach($purchases as $key => $purchase)
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td>{{ $purchase->date }}</td>
-                                <td> {{ $purchase->supplier->name}}</td>
-                                <td>{{ $purchase->reference }}</td>
-                                <!-- <td><span class="badges bg-lightgreen">Completed</span></td>
-                                <td><span class="badges bg-lightg">Paid</span></td> -->
-                                <td><span class="badges bg-lightred">Pending</span></td>
-                                <td><span class="badges bg-lightred">Due</span></td>
-                                <td style="text-align: right;">{{ number_format($purchase->grand_total,2) }}</td>
-                                <td style="text-align: right;">0.00</td>
-                                <td style="text-align: right;">100.00</td>
-                                <td>{{ $purchase->user->name }}</td>
-                                <td class="text-center">
-                                    <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
-                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="purchases-details.html" class="dropdown-item"><img src="assets/img/icons/eye1.svg" class="me-2" alt="img">purchase
-                                                Detail</a>
-                                        </li>
-                                        <li>
-                                            <a href="edit-purchases.html" class="dropdown-item"><img src="assets/img/icons/edit.svg" class="me-2" alt="img">Edit
-                                                purchase</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showpayment"><img src="assets/img/icons/dollar-square.svg" class="me-2" alt="img">Show Payments</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $purchase->uuid }}"><img src="assets/img/icons/plus-circle.svg" class="me-2" alt="img">Add Payment</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item"><img src="assets/img/icons/printer.svg" class="me-2" alt="img">Invoice/Slip</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item confirm-text"><img src="assets/img/icons/delete1.svg" class="me-2" alt="img">Delete purchase</a>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @endif
+                                @foreach($purchases as $key => $purchase)
+                                <tr>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{ $purchase->date }}</td>
+                                    <td> {{ $purchase->supplier->name}}</td>
+                                    <td>{{ $purchase->reference }}</td>
+                                    <td><span class="badges bg-lightgreen">Completed</span></td>
+                                    @if($purchase->grand_total == $payments[$purchase->id] )
+                                    <td><span class="badges bg-lightgreen">Completed</span></td>
+                                    @elseif(( $payments[$purchase->id] < $purchase->grand_total) && ($payments[$purchase->id] > 0))
+                                        <td> <span class="badges bg-lightyellow">Partial</span></td>
+                                        @else
+                                        <td><span class="badges bg-lightred">Pending</span></td>
+                                        @endif
+                                        <td style="text-align: right;">{{ number_format($purchase->grand_total,2) }}</td>
+                                        <td style="text-align: right;">{{ number_format($payments[$purchase->id], 2) }}</td>
+                                        <td style="text-align: right;">{{ number_format(($purchase->grand_total - $payments[$purchase->id]), 2) }}</td>
 
+                                        <td>{{ $purchase->user->name }}</td>
+                                        <td class="text-center">
+                                            <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="purchases-details.html" class="dropdown-item"><img src="assets/img/icons/eye1.svg" class="me-2" alt="img">purchase
+                                                        Detail</a>
+                                                </li>
+                                                @if($payments[$purchase->id] == 0)
+                                                <li>
+                                                    <a href="edit-purchases.html" class="dropdown-item"><img src="assets/img/icons/edit.svg" class="me-2" alt="img">Edit
+                                                        purchase</a>
+                                                </li>
+                                                @endif
+                                                <li>
+                                                    <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showpayment"><img src="assets/img/icons/dollar-square.svg" class="me-2" alt="img">Show Payments</a>
+                                                </li>
+                                                @if(($payments[$purchase->id] < $purchase->grand_total))
+                                                    <li>
+                                                        <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $purchase->uuid }}"><img src="assets/img/icons/plus-circle.svg" class="me-2" alt="img">Add Payment</a>
+                                                    </li>
+                                                    @endif
+                                                    @if($payments[$purchase->id] !=0)
+                                                    <li>
+                                                        <a href="javascript:void(0);" class="dropdown-item"><img src="assets/img/icons/printer.svg" class="me-2" alt="img">Invoice/Slip</a>
+                                                    </li>
+                                                    @endif
+                                                    @if($payments[$purchase->id] == 0)
+                                                    <li>
+                                                        <a href="javascript:void(0);" class="dropdown-item confirm-text"><img src="assets/img/icons/delete1.svg" class="me-2" alt="img">Delete purchase</a>
+                                                    </li>
+                                                    @endif
+                                            </ul>
+                                        </td>
+                                </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -142,7 +154,7 @@
                                 <label>Date</label>
                                 <div class="input-groupicon">
                                     <input type="text" required value="{{date('Y-m-d')}}" name="date" class="">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -155,14 +167,14 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Amount</label>
-                                <input type="text" id="purchase_amount" readonly value="0.00">
+                                <input type="text" id="purchase_amount" name="balance" readonly value="0.00">
                                 <input type="hidden" id="purchase_id" name="purchase_id" value="0.00">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Paying Amount</label>
-                                <input type="text" value="0.00" id="amount"  required name="amount" min="1">
+                                <input type="text" value="0.00" id="amount" required name="amount" min="1">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12 col-12">
@@ -184,7 +196,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button  type="submit" class="btn btn-submit">Submit</button>
+                    <button type="submit" class="btn btn-submit">Submit</button>
                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
