@@ -3,7 +3,7 @@
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 //payments
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verify_shop'])->group(function () {
    Route::get('/payments', [paymentController::class, 'index'])->name('list_payment');
    Route::get('/addpayment', [PaymentController::class, 'addpayment'])->name('add_payment');
    Route::post('/storepayment', [PaymentController::class, 'store'])->name('store_payment');

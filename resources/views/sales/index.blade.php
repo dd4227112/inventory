@@ -56,7 +56,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @if(!$sales->isEmpty())
+                            @if(!$sales->isEmpty())
                             @foreach($sales as $key => $sale)
                             <tr>
                                 <td>
@@ -71,7 +71,7 @@
                                 <!-- <td><span class="badges bg-lightgreen">Completed</span></td>
                                 <td><span class="badges bg-lightg">Paid</span></td> -->
                                 <td><span class="badges bg-lightred">Pending</span></td>
-                                        <td><span class="badges bg-lightred">Due</span></td>
+                                <td><span class="badges bg-lightred">Due</span></td>
                                 <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
                                 <td style="text-align: right;">0.00</td>
                                 <td style="text-align: right;">100.00</td>
@@ -93,7 +93,7 @@
                                             <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showpayment"><img src="assets/img/icons/dollar-square.svg" class="me-2" alt="img">Show Payments</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#createpayment"><img src="assets/img/icons/plus-circle.svg" class="me-2" alt="img">Add Payment</a>
+                                            <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $sale->uuid }}"><img src="assets/img/icons/plus-circle.svg" class="me-2" alt="img">Add Payment</a>
                                         </li>
                                         <li>
                                             <a href="javascript:void(0);" class="dropdown-item"><img src="assets/img/icons/printer.svg" class="me-2" alt="img">Invoice/Slip</a>
@@ -117,4 +117,80 @@
 </div>
 <!-- page end -->
 
+<!-- add payemnt modal -->
+<div class="modal fade" id="createpayment" tabindex="-1" aria-labelledby="createpayment" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <form action="{{ route('store_sale_payment') }}" method="POST">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Customer</label>
+                                <div class="input-groupicon">
+                                    <input type="text" value="" id="customer" readonly class="datetimepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <div class="input-groupicon">
+                                    <input type="text" required value="{{date('Y-m-d')}}" name="date" class="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Reference</label>
+                                <input type="text" name="reference" readonly value="{{reference() }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <input type="text" id="purchase_amount" name="balance" readonly value="0.00">
+                                <input type="hidden" id="sale_id" name="sale_id" value="0.00">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Paying Amount</label>
+                                <input type="text" value="" id="amount" required name="amount" min="1">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select class="select" name="payment_method">
+                                    <option value="1">Cash</option>
+                                    <option value="2">Bank</option>
+                                    <option value="3">Credit Card</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group mb-0">
+                                <label>Description</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-submit">Submit</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @include('authentication.footer')
+<script src="{{ asset('/assets/js/sales.js')}}"></script>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Models\SaleProduct;
 use App\Models\Shop;
@@ -53,5 +54,44 @@ class SaleController extends Controller
             SaleProduct::create($product);
         }
         return redirect()->route('list_sale')->with('success', "Sale Added Successfully");
+    }
+    public function salepayment(Request $request)
+    {
+        $uuid = $request->uuid;
+        $sale = Sale::where('uuid', $uuid)->first();
+        if (!empty($sale)) {
+            $data = [
+                'customer' => $sale->customer->name,
+                'sale_id' => $sale->id,
+                'balance' => number_format($sale->grand_total - $sale->payment->sum('amount'), 2),
+            ];
+        } else {
+            $data = [
+                'customer' => '',
+                'sale_id' => '',
+                'balance' => '',
+            ];
+        }
+        echo json_encode($data);
+    }
+    public function savepayment(Request $request){
+        $data = $request->except('_token');
+        if ($request->amount > $request->balance) {
+            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of ".$request->balance);
+        }
+        $other_data = [
+            'user_id' => Auth::user()->id,
+            'status' => 1,
+        ];
+        $data = $data +  $other_data;
+        //dd($data);
+
+        if (Payment::create($data)) {
+            return redirect()->route('list_sale')->with('success', "Payment Added Successfully");
+        }
+        else{
+            return redirect()->back()->with('error', "Failed to Add Payment");
+        }
+
     }
 }

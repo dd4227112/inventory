@@ -28,17 +28,19 @@ Route::get('/sales', function () {
 //     return view('admin.index');
 // })->middleware(['auth', 'verified'])->name('admin');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Admin
+
+    Route::get('/dashboard', [Admin::class, 'dashboard'])->name('admin.dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/admin', [Admin::class, 'index'])->name('admin');
     Route::post('/home', [Admin::class, 'home'])->name('admin.home');
-    Route::get('/dashboard', [Admin::class, 'dashboard'])->name('admin.dashboard');
-    
-    
 });
 
 require __DIR__ . '/auth.php';
@@ -48,7 +50,3 @@ require __DIR__ . '/people.php';
 require __DIR__ . '/sales.php';
 require __DIR__ . '/purchases.php';
 require __DIR__ . '/payments.php';
-
-
-
-

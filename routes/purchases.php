@@ -3,7 +3,7 @@
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 //purchases
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verify_shop'])->group(function () {
    Route::get('/purchases', [PurchaseController::class, 'index'])->name('list_purchase');
    Route::get('/addpurchase', [PurchaseController::class, 'addpurchase'])->name('add_purchase');
    Route::post('/storepurchase', [PurchaseController::class, 'store'])->name('store_purchase');

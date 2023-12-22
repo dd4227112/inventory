@@ -126,3 +126,28 @@ function grand_sub_total() {
     return grand_sub_total.innerHTML = amount ;
     
 }
+
+// add payment modal
+add_payment = $('.createpayment').click(function () {
+    var uuid = $(this).attr('id');
+    $.ajax({
+        type: 'POST',
+        url: 'getsalepayment',
+        dataType:'json',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            uuid: uuid
+        },
+        success: function (response) {
+            $('#purchase_amount').val(response.balance);
+            $('#customer').val(response.customer);
+            $('#sale_id').val(response.sale_id);
+            $('#createpayment').modal('show');
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+});
+$(document).ready(add_payment);
