@@ -15,8 +15,10 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::where('shop_id', session('shop_id'))->get();
         $payment = [];
-        foreach ($purchases as $key => $purchase) {
-            $payment[$purchase->id] =  $purchase->payment->sum('amount');
+        if (!$purchases->isEmpty()) {
+            foreach ($purchases as $key => $purchase) {
+                $payment[$purchase->id] =  $purchase->payment->sum('amount');
+            }
         }
         $this->data['payments'] = $payment;
         $this->data['purchases'] = $purchases;

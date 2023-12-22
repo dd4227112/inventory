@@ -18,6 +18,13 @@ class SaleController extends Controller
     {
         $sales = sale::where('shop_id', session('shop_id'))->get();
         $this->data['sales'] = $sales;
+        $payment = [];
+        if (!$sales->isEmpty()) {
+            foreach ($sales as $key => $sale) {
+                $payment[$sale->id] =  $sale->payment->sum('amount');
+            }
+        }
+        $this->data['payments'] = $payment;
         return view('sales.index', $this->data);
     }
 
@@ -74,11 +81,14 @@ class SaleController extends Controller
         }
         echo json_encode($data);
     }
-    public function savepayment(Request $request){
+    public function savepayment(Request $request)
+    {
         $data = $request->except('_token');
         if (remove_comma($request->amount) > remove_comma($request->balance)) {
-            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of ".$request->balance);
+            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of " . $request->balance);
         }
+        $amount = remove_comma($request->amount);
+        $data['amount'] = $amount;
         $other_data = [
             'user_id' => Auth::user()->id,
             'status' => 1,
@@ -88,10 +98,40 @@ class SaleController extends Controller
 
         if (Payment::create($data)) {
             return redirect()->route('list_sale')->with('success', "Payment Added Successfully");
-        }
-        else{
+        } else {
             return redirect()->back()->with('error', "Failed to Add Payment");
         }
-
     }
+    public function viewsale($uuid){
+        $sale = Sale::where('uuid', $uuid)->first();
+        if (empty($sale)) {
+          abort(403);
+        }
+        $payment_status = sale_payment_status("Sale", $sale->id, $sale->grand_total);
+        $this->data['status'] = $payment_status['status'];
+        $this->data['class'] = $payment_status['class'];
+        $this->data['paid'] = $payment_status['amount'];
+        $this->data['balance'] = $sale->grand_total - $payment_status['amount'];
+        $this->data['sale'] = $sale;
+        return view('sales.details', $this->data);
+    }
+    public function destroy(Request $request){
+
+        if ( Sale::find($request->id)->delete() && SaleProduct::where('sale_id', $request->id)->delete() &&  Payment::where('sale_id', $request->id)->delete() ) {
+           $response = ['message' =>'Deleleted Successfully'];
+        }else{
+            $response = ['message' =>'Failed to delete this sale'];
+        }
+        echo json_encode($response);
+       
+    }
+    public function edit($uuid){
+        $sale = Sale::where('uuid', $uuid)->first();
+        if (empty($sale)) {
+          abort(403);
+        }
+        $this->data['sales'] = $sale;
+        return view('sales.edit', $this->data);
+    }
+    
 }

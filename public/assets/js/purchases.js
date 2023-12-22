@@ -139,6 +139,7 @@ add_payment = $('.createpayment').click(function () {
         },
         success: function (response) {
             $('#purchase_amount').val(response.balance);
+            $('#amount').val(response.balance);
             $('#supplier').val(response.supplier);
             $('#purchase_id').val(response.purchase_id);
             $('#createpayment').modal('show');

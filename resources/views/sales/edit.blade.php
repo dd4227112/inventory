@@ -139,7 +139,6 @@
     </div>
 </div>
 
-<!-- page end -->
-
+<!-- page end  -->
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/sales.js')}}"></script>

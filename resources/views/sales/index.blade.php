@@ -68,13 +68,17 @@
                                 <td>{{ $sale->date }}</td>
                                 <td> {{ $sale->customer->name}}</td>
                                 <td>{{ $sale->reference }}</td>
-                                <!-- <td><span class="badges bg-lightgreen">Completed</span></td>
-                                <td><span class="badges bg-lightg">Paid</span></td> -->
-                                <td><span class="badges bg-lightred">Pending</span></td>
-                                <td><span class="badges bg-lightred">Due</span></td>
+                                <td><span class="badges bg-lightgreen">Completed</span></td>
+                                    @if($sale->grand_total == $payments[$sale->id] )
+                                    <td><span class="badges bg-lightgreen">Completed</span></td>
+                                    @elseif(( $payments[$sale->id] < $sale->grand_total) && ($payments[$sale->id] > 0))
+                                        <td> <span class="badges bg-lightyellow">Partial</span></td>
+                                        @else
+                                        <td><span class="badges bg-lightred">Pending</span></td>
+                                        @endif
                                 <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
-                                <td style="text-align: right;">0.00</td>
-                                <td style="text-align: right;">100.00</td>
+                                <td style="text-align: right;">{{ number_format($payments[$sale->id],2) }}</td>
+                                <td style="text-align: right;">{{ number_format(($sale->grand_total - $payments[$sale->id] ),2) }}</td>
                                 <td>{{ $sale->user->name }}</td>
                                 <td class="text-center">
                                     <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
@@ -82,11 +86,11 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="sales-details.html" class="dropdown-item"><img src="assets/img/icons/eye1.svg" class="me-2" alt="img">Sale
+                                            <a href="{{ route('view_sale',   $sale->uuid) }}" class="dropdown-item"><img src="assets/img/icons/eye1.svg" class="me-2" alt="img">Sale
                                                 Detail</a>
                                         </li>
                                         <li>
-                                            <a href="edit-sales.html" class="dropdown-item"><img src="assets/img/icons/edit.svg" class="me-2" alt="img">Edit
+                                            <a href="{{ route('edit_sale', $sale->uuid) }}" class="dropdown-item"><img src="assets/img/icons/edit.svg" class="me-2" alt="img">Edit
                                                 Sale</a>
                                         </li>
                                         <li>
@@ -99,7 +103,7 @@
                                             <a href="javascript:void(0);" class="dropdown-item"><img src="assets/img/icons/printer.svg" class="me-2" alt="img">Invoice/Slip</a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0);" class="dropdown-item confirm-text"><img src="assets/img/icons/delete1.svg" class="me-2" alt="img">Delete Sale</a>
+                                            <a href="javascript:void(0);" class="dropdown-item delete_sale" id="{{$sale->id }}"><img src="assets/img/icons/delete1.svg" class="me-2" alt="img">Delete Sale</a>
                                         </li>
                                     </ul>
                                 </td>

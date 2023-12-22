@@ -35,6 +35,8 @@ class PaymentController extends Controller
         if (remove_comma($request->amount) > remove_comma($request->balance)) {
             return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of ".$request->balance);
         }
+        $amount = remove_comma($request->amount);
+        $data['amount'] = $amount;
         $other_data = [
             'user_id' => Auth::user()->id,
             'status' => 1,
