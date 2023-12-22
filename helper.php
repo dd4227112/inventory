@@ -125,3 +125,6 @@ function product_balance($product){
     $sold = SaleProduct::where('product_id', $product)->sum('quantity');
     return ['purchased' =>$purchased, 'sold'=>$sold, 'balance'=>($purchased - $sold)];
 }
+function remove_comma($number){
+return str_replace(',', '', $number);
+}

@@ -28,10 +28,11 @@ class PaymentController extends Controller
         }
         echo json_encode($data);
     }
+
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        if ($request->amount > $request->balance) {
+        if (remove_comma($request->amount) > remove_comma($request->balance)) {
             return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of ".$request->balance);
         }
         $other_data = [
