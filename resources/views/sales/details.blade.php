@@ -18,16 +18,16 @@
                     <h2>Sale Detail : {{$sale->reference }}</h2>
                     <ul>
                         <li>
-                            <a href="javascript:void(0);"><img src="assets/img/icons/edit.svg" alt="img"></a>
+                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);"><img src="assets/img/icons/pdf.svg" alt="img"></a>
+                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);"><img src="assets/img/icons/excel.svg" alt="img"></a>
+                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);"><img src="assets/img/icons/printer.svg" alt="img"></a>
+                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
                         </li>
                     </ul>
                 </div>

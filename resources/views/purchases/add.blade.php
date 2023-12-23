@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-lg-2 col-sm-2 col-2 ps-0">
                                     <div class="add-icon">
-                                        <span><img src="assets/img/icons/plus1.svg" alt="img"></span>
+                                        <span><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                             <div class="input-groupicon">
                                 <input type="date" class="form-control" value="{{ date('Y-m-d')}}" name="date">
                                 <!-- <div class="addonset">
-                                    <img src="assets/img/icons/calendars.svg" alt="img">
+                                    <img src="{{ asset('assets/img/icons/calendars.svg')}}" alt="img">
                                 </div> -->
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                             <div class="input-groupicon">
                                 <input type="text" placeholder="Please type product name or code and select..." id="serchProduct" name="searchProduct">
                                 <div class="addonset">
-                                    <img src="assets/img/icons/scanner.svg" alt="img">
+                                    <img src="{{ asset('assets/img/icons/scanner.svg')}}" alt="img">
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ $(document).ready(function () {
 function getcustomer() {
     $.ajax({
         type: 'GET',
-        url: "getcustomer",
+        url: "/Inventory_Management/public/getcustomer",
         dataType: "html",
         success: function (response) {
             $('#getCustomer').html(response);

@@ -2,10 +2,10 @@
 
     <div class="header-left active">
         <a href="index.html" class="logo">
-            <img src="assets/img/logo.png" alt="">
+            <img src="{{ asset('assets/img/logo.png')}}" alt="">
         </a>
         <a href="index.html" class="logo-small">
-            <img src="assets/img/logo-small.png" alt="">
+            <img src="{{ asset('assets/img/logo-small.png')}}" alt="">
         </a>
         <a id="toggle_btn" href="javascript:void(0);">
         </a>
@@ -30,10 +30,10 @@
                     <div class="searchinputs">
                         <input type="text" placeholder="Search Here ...">
                         <div class="search-addon">
-                            <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                            <span><img src="{{ asset('assets/img/icons/closes.svg')}}" alt="img"></span>
                         </div>
                     </div>
-                    <a class="btn" id="searchdiv"><img src="assets/img/icons/search.svg" alt="img"></a>
+                    <a class="btn" id="searchdiv"><img src="{{ asset('assets/img/icons/search.svg')}}" alt="img"></a>
                 </form>
             </div>
         </li>
@@ -58,7 +58,7 @@
                     <a class="dropdown-item" href="profile.html"> <i class="me-2" data-feather="user"></i> My Profile</a>
                     <a class="dropdown-item" href="generalsettings.html"><i class="me-2" data-feather="settings"></i>Settings</a>
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="{{ route('logout') }}"><img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout</a>
+                    <a class="dropdown-item logout pb-0" href="{{ route('logout') }}"><img src="{{ asset('assets/img/icons/log-out.svg')}}" class="me-2" alt="img">Logout</a>
                 </div>
             </div>
         </li>

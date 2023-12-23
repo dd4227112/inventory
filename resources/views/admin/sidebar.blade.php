@@ -3,31 +3,31 @@
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 <li class="active">
-                    <a href="index.html"><img src="assets/img/icons/dashboard.svg" alt="img"><span> Dashboard</span> </a>
+                    <a href="index.html"><img src="{{ asset('assets/img/icons/dashboard.svg')}}" alt="img"><span> Dashboard</span> </a>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/product.svg')}}" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="{{ route('list_product')}}">Product List</a></li>
                         <li><a href="{{ route('add_product')}}">Add Product</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/sales1.svg')}}" alt="img"><span> Sales</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="{{ route('list_sale') }}">List Sales</a></li>
                         <li><a href="{{ route('add_sale')}}">Add Sale</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span> Purchases</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><img src=" {{ asset('assets/img/icons/purchase1.svg')}}" alt="img"><span> Purchases</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="{{ route('list_purchase') }}">List Purchases</a></li>
                         <li><a href="{{ route('add_purchase')}}">Add Purchase</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/users1.svg" alt="img"><span>
+                    <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/users1.svg')}}" alt="img"><span>
                             People</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="{{ route('list_customer')}}">Customer List</a></li>
@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/time.svg" alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/time.svg')}}" alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="purchaseorderreport.html">Products report</a></li>
                         <li><a href="inventoryreport.html">Inventory Report</a></li>
@@ -57,7 +57,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="javascript:void(0);"><img src="assets/img/icons/settings.svg" alt="img"><span> Account</span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/settings.svg')}}" alt="img"><span> Account</span> <span class="menu-arrow"></span></a>
                     <ul>
                         <li><a href="generalsettings.html">Profile</a></li>
                         <li><a href="emailsettings.html">Password</a></li>
