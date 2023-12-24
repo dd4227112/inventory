@@ -130,8 +130,37 @@ class SaleController extends Controller
         if (empty($sale)) {
           abort(403);
         }
-        $this->data['sales'] = $sale;
+        $sale_items = SaleProduct::where('sale_id', $sale->id)->get();
+        $this->data['sale'] = $sale;
+        $this->data['items'] = $sale_items;
         return view('sales.edit', $this->data);
+    }
+    public function updatesale(Request $request){
+        $sale_id = $request->sale_id;
+        $data = [
+            'reference' => $request->reference,
+            'grand_total' => str_replace(',', '', $request->grand_total),
+            'date' => $request->date,
+            'user_id' => Auth::user()->id,
+            'shop_id' => session('shop_id'),
+            'customer_id' => $request->customer_id,
+            'status' => 1,
+        ];
+        Sale::find($sale_id)->update($data);
+        SaleProduct::where('sale_id', $sale_id)->delete();
+        $size  = sizeof($request->product_id);
+        for ($i = 0; $i < $size; $i++) {
+            $product = [
+                'date' => $request->date,
+                'quantity' => $request->quantity[$i],
+                'product_id' => $request->product_id[$i],
+                'price' => $request->price[$i],
+                'total' => ($request->quantity[$i] * $request->price[$i]),
+                'sale_id' => $sale_id,
+            ];
+            SaleProduct::create($product);
+        }
+        return redirect()->route('list_sale')->with('success', "Sale Updated Successfully");
     }
     
 }

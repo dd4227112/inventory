@@ -24,7 +24,7 @@
                 <h6>Add sale</h6>
             </div>
         </div>
-        <form action="{{ route('store_sale')}}" method="POST">
+        <form action="{{ route('update_sale')}}" method="POST">
             @csrf
             <div class="card">
                 <div class="card-body">
@@ -35,7 +35,9 @@
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
                                         <select class="select2" id="getCustomer" required name="customer_id">
+                                            <option value="{{ $sale->customer->id}}" selected >{{ $sale->customer->name}}</option>
                                         </select>
+                                        <input type="hidden" value="{{ $sale->id}}" name="sale_id">
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">
                                         <div class="add-icon">
@@ -49,7 +51,7 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="date" class="form-control" value="{{ date('Y-m-d')}}" name="date">
+                                    <input type="date" class="form-control" value="{{ $sale->date }}" name="date">
                                     <!-- <div class="addonset">
                                     <img src="{{ asset('assets/img/icons/calendars.svg')}}" alt="img">
                                 </div> -->
@@ -59,7 +61,7 @@
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Reference/Invoice No.</label>
-                                <input type="text" name="reference" value="{{ reference() }}" readonly>
+                                <input type="text" name="reference" value="{{ $sale->reference }} " readonly>
                             </div>
                         </div>
                     </div>
@@ -93,6 +95,16 @@
                                     </tr>
                                 </thead>
                                 <tbody id="selectedProduct">
+                                    @foreach ($items as $item)
+                                    <tr>
+                                        <td class=" ">{{ $item->product->name }} ( {{ $item->product->code }} ) - {{ $item->product->description }}</td>
+                                        <input class="" type='hidden' id='product_id' name='product_id[]' value="{{ $item->product->id }}">
+                                        <td><input type='number' id='quantity' max=" {{$item->product->quantity }}" name='quantity[]' value='{{ $item->quantity }}'></td>
+                                        <td><input type='text' id='price' readonly name='price[]' value="{{ $item->price }}"></td>
+                                        <td><input type='text' id='sub_total' readonly name='sub_total[]' value="{{ $item->total}}"></td>
+                                        <td><a href="javascript:void(0);" id='remove'><img src="{{ asset('assets/img/icons/delete.svg')}}"> </td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -109,11 +121,11 @@
                                     <ul>
                                         <li>
                                             <h4>Quantity</h4>
-                                            <h5 id="total_items">0</h5>
+                                            <h5 id="total_items"></h5>
                                         </li>
                                         <li>
                                             <h4>Sub Total</h4>
-                                            <h5 id="grand_sub_total"></h5>
+                                            <h5 id="grand_sub_total"> {{$sale->grand_total }}</h5>
                                         </li>
                                         <li>
                                             <h4>Tax</h4>
@@ -122,14 +134,14 @@
                                         <li class="total">
                                             <input type="hidden" name="grand_total" value="" id="grand_sub">
                                             <h4>Grand Total</h4>
-                                            <h5 id="grand_total"></h5>
+                                            <h5 id="grand_total">{{$sale->grand_total}}</h5>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12 align-right">
-                            <button type="submit" class="btn btn-submit me-2">Submit</button>
+                            <button type="submit" class="btn btn-submit me-2">Update</button>
                             <a href="{{ route('list_sale')}}" class="btn btn-cancel">Cancel</a>
                         </div>
                     </div>
@@ -142,3 +154,69 @@
 <!-- page end  -->
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/sales.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        getcustomer();
+    });
+
+
+    function getcustomer() {
+        $.ajax({
+            type: 'GET',
+            url: "{{ url('getcustomer/') }}",
+            dataType: "html",
+            success: function(response) {
+                $('#getCustomer').append(response);
+            }
+        });
+
+    }
+
+    search = $('#serchProduct').keyup(function() {
+        var seachkey = $('input[name =searchProduct]').val();
+        if (seachkey.length >= 2) {
+            $.ajax({
+                method: 'GET',
+                url: "{{url('getProduct')}}"+"/" + seachkey,
+                dataType: "html",
+                success: function(response) {
+                    $('#searchResult').html(response);
+                }
+            });
+        } else {
+            $('#searchResult').html('');
+        }
+    });
+
+    $(document).ready(search);
+
+    $(document).on("click", ".pick_product", function() {
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('fetch_product')}}",
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                product_id: id
+            },
+            success: function(response) {
+                $('#selectedProduct').append(response);
+                $('input[name =searchProduct]').val('');
+                $('#searchResult').html('');
+                getTotalItems();
+                grand_sub_total();
+                calculteTotalAmount();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+    });
+    $(document).ready(function() {
+        getTotalItems();
+        grand_sub_total();
+        calculteTotalAmount();
+
+    });
+</script>

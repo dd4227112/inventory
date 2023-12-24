@@ -18,17 +18,18 @@
                     <h2>Sale Detail : {{$sale->reference }}</h2>
                     <ul>
                         <li>
-                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
+                            <a href="{{ route('edit_sale', $sale->uuid) }}"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
                         </li>
                         <li>
                             <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
-                        </li>
-                        <li>
                             <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
                         </li>
+                        <li>
+                            <a href="javascript:void(0);"  class = "delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img"></a>
+                        </li>
+
                     </ul>
                 </div>
                 <div class="invoice-box table-height" style="max-width: 1600px;width:100%;overflow: auto;margin:15px auto;padding: 0;font-size: 14px;line-height: 24px;color: #555;">
@@ -113,17 +114,19 @@
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;">
-                                                            {{ $sale->reference }} </font>
+                                                            {{ $sale->reference }}
+                                                        </font>
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;font-size: 14px;color:#2E7D32;font-weight: 400;">
-                                                        Completed</font>
+                                                            Completed</font>
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font class="{{ $class }}" style="vertical-align: inherit;font-size: 14px;font-weight: 400;">
-                                                            {{ $status }}</font>
+                                                            {{ $status }}
+                                                        </font>
                                                     </font><br>
-                                                    
+
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -151,16 +154,16 @@
                             <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
                                 <td> {{++$key }}</td>
                                 <td style="padding: 10px;vertical-align: top; display: flex;align-items: center;">
-                                    {{ $item->product->name}}
+                                    {{ $item->product->name }} ( {{ $item->product->code }} ) - {{ $item->product->description }}
                                 </td>
                                 <td style="padding: 10px;vertical-align: top; ">
-                                {{ number_format($item->quantity)}}
+                                    {{ number_format($item->quantity)}}
                                 </td>
                                 <td style="padding: 10px;vertical-align: top; ">
-                                {{ number_format($item->price,2)}}
+                                    {{ number_format($item->price,2)}}
                                 </td>
                                 <td style="padding: 10px;vertical-align: top; text-align:right;">
-                                {{ number_format($item->total, 2)}}
+                                    {{ number_format($item->total, 2)}}
                                 </td>
                             </tr>
                             <!-- <tr>
@@ -170,26 +173,26 @@
                         </tbody>
                     </table>
                 </div>
-                    <div class="row">
-                        <div class="col-lg-12 ">
-                            <div class="total-order">
-                                <ul>
-                                    <li class="total">
-                                        <h4>Grand Total</h4>
-                                        <h5>{{ number_format($sale->grand_total,2) }}</h5>
-                                    </li>
-                                    <li class="total">
-                                        <h4>Paid </h4>
-                                        <h5>{{ number_format($paid,2) }}</h5>
-                                    </li>
-                                    <li class="total">
-                                        <h4>Balance </h4>
-                                        <h5>{{ number_format($balance,2) }}</h5>
-                                    </li>
-                                </ul>
-                            </div>
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <div class="total-order">
+                            <ul>
+                                <li class="total">
+                                    <h4>Grand Total</h4>
+                                    <h5>{{ number_format($sale->grand_total,2) }}</h5>
+                                </li>
+                                <li class="total">
+                                    <h4>Paid </h4>
+                                    <h5>{{ number_format($paid,2) }}</h5>
+                                </li>
+                                <li class="total">
+                                    <h4>Balance </h4>
+                                    <h5>{{ number_format($balance,2) }}</h5>
+                                </li>
+                            </ul>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
@@ -197,3 +200,44 @@
 
 <!-- page end  -->
 @include('authentication.footer')
+<script>
+    $(document).ready(function() {
+        $(".delete_sale").on("click", function() {
+            var id = $(this).attr('id');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+                confirmButtonClass: "btn btn-primary",
+                cancelButtonClass: "btn btn-danger ml-1",
+                buttonsStyling: false
+            }).then(function(t) {
+                if (t.value && t.dismiss !== "cancel") {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{url('deletesale')}}",
+                        dataType: 'json',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            id: id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                type: "success",
+                                title: "Deleted!",
+                                text: response.message,
+                                confirmButtonClass: "btn btn-success"
+                            }).then(function() {
+                                window.location = "{{route('list_sale')}}";
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
