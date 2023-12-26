@@ -21,7 +21,7 @@
                             <a href="{{ route('edit_sale', $sale->uuid) }}"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
+                            <a href="{{ route('print_sale', $sale->uuid ) }}"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
                         <li>
                             <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
@@ -96,6 +96,10 @@
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;">
+                                                            Date </font>
+                                                    </font><br>
+                                                    <font style="vertical-align: inherit;">
+                                                        <font style="vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;">
                                                             Reference </font>
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
@@ -111,6 +115,11 @@
                                                     <font style="vertical-align: inherit;margin-bottom:25px;">
                                                         <font style="vertical-align: inherit;font-size:14px;color:#7367F0;font-weight:600;line-height: 35px; ">
                                                             &nbsp;</font>
+                                                    </font><br>
+                                                    <font style="vertical-align: inherit;">
+                                                        <font style="vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;">
+                                                            {{ $sale->date }}
+                                                        </font>
                                                     </font><br>
                                                     <font style="vertical-align: inherit;">
                                                         <font style="vertical-align: inherit;font-size: 14px;color:#000;font-weight: 400;">
@@ -212,8 +221,8 @@
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!",
-                confirmButtonClass: "btn btn-primary",
-                cancelButtonClass: "btn btn-danger ml-1",
+                confirmButtonClass: "btn btn-danger",
+                cancelButtonClass: "btn btn-secondary ml-1",
                 buttonsStyling: false
             }).then(function(t) {
                 if (t.value && t.dismiss !== "cancel") {

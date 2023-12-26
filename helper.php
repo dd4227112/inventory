@@ -6,7 +6,9 @@ use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\Sale;
 use App\Models\SaleProduct;
+use App\Models\Shop;
 use App\Models\Supplier;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function upload_file($file, $subpath)
 {
@@ -93,7 +95,7 @@ function fetch_sale($request)
         $output .= "<td><input type ='number' id='quantity' max='" . $product->quantity . "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
-        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='{{ asset('assets/img/icons/delete.svg')}}' alt='svg' title='remove this items'></a></td></tr>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='assets/img/icons/delete.svg' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
@@ -106,8 +108,8 @@ function fetch_purchase($request)
     $product = Product::find($id);
     $output = '';
     if (!empty($product)) {
-        $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td>";
-        $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'>";
+        $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description;
+        $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'></td>";
         $output .= "<td><input type ='number' id='quantity' max='" . $product->quantity . "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->cost . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
@@ -150,3 +152,113 @@ function sale_payment_status($table, $id, $grand_total)
     }
     return ['status'=>$status, 'class' =>$class, 'amount'=>$amount];
 }
+function site_address()
+{
+    $shop = Shop::find(session('shop_id'));
+    $address = "";
+    $address .= "<p>";
+    $address .= "<b>".$shop->name."</b><br>";
+    $address .= $shop->address . "<br>";
+    $address .= $shop->location . "<br>";
+    $address .= $shop->phone . "<br>";
+    $address .= " </p>";
+    return $address;
+}
+function number_to_words($number)
+{
+    if (($number < 0) || ($number > 999999999)) {
+        return "$number";
+    }
+
+    $Gn = floor($number / 1000000);  /* Millions (giga) */
+    $number -= $Gn * 1000000;
+    $kn = floor($number / 1000);     /* Thousands (kilo) */
+    $number -= $kn * 1000;
+    $Hn = floor($number / 100);      /* Hundreds (hecto) */
+    $number -= $Hn * 100;
+    $Dn = floor($number / 10);       /* Tens (deca) */
+    $n = $number % 10; /* Ones */
+
+    $res = "";
+
+    if ($Gn) {
+        $res .= number_to_words($Gn) . " Million";
+    }
+
+    if ($kn) {
+        $res .= (empty($res) ? "" : " ") .
+            number_to_words($kn) . " Thousand";
+    }
+
+    if ($Hn) {
+        $res .= (empty($res) ? "" : " ") .
+            number_to_words($Hn) . " Hundred";
+    }
+
+    $ones = array(
+        "", "One", "Two", "Three", "Four", "Five", "Six",
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen",
+        "Nineteen"
+    );
+    $tens = array(
+        "", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty",
+        "Seventy", "Eigthy", "Ninety"
+    );
+
+    if ($Dn || $n) {
+        if (!empty($res)) {
+            $res .= " and ";
+        }
+
+        if ($Dn < 2) {
+            $res .= $ones[$Dn * 10 + $n];
+        } else {
+            $res .= $tens[$Dn];
+
+            if ($n) {
+                $res .= "-" . $ones[$n];
+            }
+        }
+    }
+
+    if (empty($res)) {
+        $res = "zero";
+    }
+
+    return $res;
+}
+function encrypt_code($number)
+{
+    $replace = ['A', 'e_', 'jk', 'F{', 'rgc', 'Db', 'm$', 'Z-', 'd', 'xY'];
+    $key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
+    $number = str_replace($key, $replace, $number);
+    return $number;
+}
+function decrypt_code($number)
+{
+    $replace = ['A', 'e_', 'jk', 'F{', 'rgc', 'Db', 'm$', 'Z-', 'd', 'xY'];
+    $key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
+    $number = str_replace($replace, $key, $number);
+    return $number;
+}
+function generateQr($id, $format)
+{
+    $append = random_int(100, 999);
+    $payment_code = encrypt_code($id) . $append;
+    $code = url('previewpayment?payment=' . $payment_code);
+    $qrCode = QrCode::generate(
+        $code
+    );
+    if ($format == 'pdf') {
+        $output = '<img src="' . 'data:image/png;base64,' . base64_encode($qrCode) . '">';
+    } else {
+        $output = $qrCode;
+    }
+
+    return $output;
+}
+
+

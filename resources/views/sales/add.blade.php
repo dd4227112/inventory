@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">
                                         <div class="add-icon">
-                                            <span><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
+                                            <span class="add_customer"><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -80,22 +80,20 @@
 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="table-responsive mb-3">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Product Name</th>
-                                        <th>QTY</th>
-                                        <th>Price</th>
-                                        <th>Subtotal</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="selectedProduct">
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive mb-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>QTY</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="selectedProduct">
+                            </tbody>
+                        </table>
                     </div>
                     <div class="row">
                         <div class="row" style="border: 1px solid #ff9f43; margin-left: 1px; margin-bottom: 5px;border-radius:5px;">
@@ -128,6 +126,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <h5 class="modal-title">Add Payment</h5>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Reference</label>
+                                            <input type="text" name="payment_reference" readonly value="{{reference() }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Amount</label>
+                                            <input type="text" id="payment_amount" name="payment_amount" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Payment Method</label>
+                                            <select class="select" name="payment_method">
+                                                <option value="1">Cash</option>
+                                                <option value="2">Bank</option>
+                                                <option value="3">Credit Card</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group mb-0">
+                                            <label>Description</label>
+                                            <textarea class="form-control" name="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-12 align-right">
                             <button type="submit" class="btn btn-submit me-2">Submit</button>
                             <a href="{{ route('list_sale')}}" class="btn btn-cancel">Cancel</a>
@@ -140,7 +173,7 @@
 </div>
 
 <!-- page end -->
-
+@include('sales.actions');
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/sales.js')}}"></script>
 <script>
@@ -208,4 +241,38 @@
         calculteTotalAmount();
 
     });
+
+    add_customer = $('.add_customer').on('click', function() {
+        var sale_id = $(this).attr('id');
+
+        $('#add_customer').modal('show');
+    });
+    $(document).ready(add_customer);
+
+    save_customer = $('#save_customer').on('submit', function(e) {
+        e.preventDefault();
+
+        var data = $('#save_customer').serialize();
+        $.ajax({
+            type: 'POST',
+            url: "{{url('storecustomer')}}",
+            dataType: 'json',
+            data: data,
+            success: function(response) {
+                Swal.fire({
+                    type: "success",
+                    title: "Added!",
+                    text: response.message,
+                    confirmButtonClass: "btn btn-success"
+                }).then(function() {
+                    $('#add_customer').modal('hide');
+                    $('#save_customer')[0].reset();
+                    $('#getCustomer').html('');
+                    getcustomer();
+                });
+            }
+        });
+
+    });
+    $(document).ready(save_customer);
 </script>

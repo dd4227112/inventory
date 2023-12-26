@@ -69,44 +69,44 @@
                                 <td> {{ $sale->customer->name}}</td>
                                 <td>{{ $sale->reference }}</td>
                                 <td><span class="badges bg-lightgreen">Completed</span></td>
-                                    @if($sale->grand_total == $payments[$sale->id] )
-                                    <td><span class="badges bg-lightgreen">Completed</span></td>
-                                    @elseif(( $payments[$sale->id] < $sale->grand_total) && ($payments[$sale->id] > 0))
-                                        <td> <span class="badges bg-lightyellow">Partial</span></td>
-                                        @else
-                                        <td><span class="badges bg-lightred">Pending</span></td>
-                                        @endif
-                                <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
-                                <td style="text-align: right;">{{ number_format($payments[$sale->id],2) }}</td>
-                                <td style="text-align: right;">{{ number_format(($sale->grand_total - $payments[$sale->id] ),2) }}</td>
-                                <td>{{ $sale->user->name }}</td>
-                                <td class="text-center">
-                                    <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
-                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="{{ route('view_sale',   $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">Sale
-                                                Detail</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('edit_sale', $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit
-                                                Sale</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showpayment"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/plus-circle.svg')}}" class="me-2" alt="img">Add Payment</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete Sale</a>
-                                        </li>
-                                    </ul>
-                                </td>
+                                @if($sale->grand_total == $payments[$sale->id] )
+                                <td><span class="badges bg-lightgreen">Completed</span></td>
+                                @elseif(( $payments[$sale->id] < $sale->grand_total) && ($payments[$sale->id] > 0))
+                                    <td> <span class="badges bg-lightyellow">Partial</span></td>
+                                    @else
+                                    <td><span class="badges bg-lightred">Pending</span></td>
+                                    @endif
+                                    <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
+                                    <td style="text-align: right;">{{ number_format($payments[$sale->id],2) }}</td>
+                                    <td style="text-align: right;">{{ number_format(($sale->grand_total - $payments[$sale->id] ),2) }}</td>
+                                    <td>{{ $sale->user->name }}</td>
+                                    <td class="text-center">
+                                        <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
+                                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="{{ route('view_sale',   $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">Sale
+                                                    Detail</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('edit_sale', $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit
+                                                    Sale</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item showpayment" id="{{ $sale->id}}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/plus-circle.svg')}}" class="me-2" alt="img">Add Payment</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('print_sale', $sale->uuid ) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete Sale</a>
+                                            </li>
+                                        </ul>
+                                    </td>
                             </tr>
                             @endforeach
                             @endif
@@ -137,7 +137,7 @@
                             <div class="form-group">
                                 <label>Customer</label>
                                 <div class="input-groupicon">
-                                    <input type="text" value="" id="customer" readonly class="datetimepicker">
+                                    <input type="text" value="" id="customer" readonly class="">
                                 </div>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="text" required value="{{date('Y-m-d')}}" name="date" class="">
+                                    <input type="date" required value="{{date('Y-m-d')}}" name="date" class="form-control">
 
                                 </div>
                             </div>
@@ -195,6 +195,91 @@
         </form>
     </div>
 </div>
-
+@include('sales.actions');
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/sales.js')}}"></script>
+<script>
+    show_payment = $('.showpayment').on('click', function() {
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('singleSalePayment')}}",
+            dataType: 'html',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: sale_id
+            },
+            success: function(response) {
+                $('#payment').html(response);
+                $('#showpayment').modal('show');
+            }
+        });
+
+    });
+    $(document).ready(show_payment);
+
+    $(document).on("click", ".deletePayment", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this payment!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: 'deletepayment',
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+    $(document).on("click", ".getPayment", function() {
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: 'getsinglepayment',
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: id
+            },
+            success: function(response) {
+                $('#amounts').val(response.amount);
+                $('#customers').val(response.customer);
+                $('#payment_id').val(response.payment_id);
+                $('#reference').val(response.reference);
+                $('#description').val(response.description);
+                $('#date').val(response.date);
+                $('#balance').val(response.balance);
+
+                $('#editpayment').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+</script>

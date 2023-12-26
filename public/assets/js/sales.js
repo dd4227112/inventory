@@ -18,7 +18,7 @@ function getTotalItems() {
 
 function calculteTotalAmount() {
     const grand_total = document.getElementById("grand_total");
-    const total = document.getElementById("total");
+    const payment_amount = document.getElementById("payment_amount");
     const grand_sub = document.getElementById("grand_sub");
     var inputs = document.querySelectorAll("#sub_total");
     var amount = 0
@@ -27,7 +27,7 @@ function calculteTotalAmount() {
     }
 
     var amount = amount.toLocaleString("en-US");
-    return grand_total.innerHTML = amount, grand_sub.value = amount;
+    return grand_total.innerHTML = amount, grand_sub.value = amount, payment_amount.value = amount;
 }
 
 //remove product from list

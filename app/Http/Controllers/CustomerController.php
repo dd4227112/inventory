@@ -25,6 +25,11 @@ class CustomerController extends Controller
         $data = $request->except('_token');
 
         if (Customer::create($data)) {
+            if ($request->add_ajax) {
+                $message = ['message' => "Customer Added Successfully"];
+                echo json_encode($message);
+                exit;
+            }
             return redirect()->route('list_customer')->with('success', "Customer Added Successfully");
         } else {
             return redirect()->back()->with('error', "Failed to add new Customer.");

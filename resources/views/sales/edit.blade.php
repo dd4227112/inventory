@@ -35,13 +35,13 @@
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
                                         <select class="select2" id="getCustomer" required name="customer_id">
-                                            <option value="{{ $sale->customer->id}}" selected >{{ $sale->customer->name}}</option>
+                                            <option value="{{ $sale->customer->id}}" selected>{{ $sale->customer->name}}</option>
                                         </select>
                                         <input type="hidden" value="{{ $sale->id}}" name="sale_id">
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">
                                         <div class="add-icon">
-                                            <span><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
+                                            <span class="add_customer"><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -140,6 +140,51 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <h5 class="modal-title">Payment</h5>
+                            @if(isset($payment) && $payment != 'multiple')
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Reference</label>
+                                            <input type="text" name="payment_reference" readonly value="{{isset($payment)?$payment->reference:reference() }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Amount</label>
+                                            <input type="text" id="payment_amount" name="payment_amount" value="{{isset($payment)?$payment->amount:'' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Payment Method</label>
+                                            <select class="select" name="payment_method">
+                                                <option value="1">Cash</option>
+                                                <option value="2">Bank</option>
+                                                <option value="3">Credit Card</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group mb-0">
+                                            <label>Description</label>
+                                            <textarea class="form-control" name="description"> {{isset($payment)?$payment->description:'' }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div class="col-lg-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <p>Multiple Payment Found.</p>
+
+                                    Click here to manage payment records <a href="javascript:void(0);" class="btn btn-success btn-sm showpayment" id="{{ $sale->id}}"><i class="fa fa-eye me-2"></i>Manage Payments</a>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
                         <div class="col-lg-12 align-right">
                             <button type="submit" class="btn btn-submit me-2">Update</button>
                             <a href="{{ route('list_sale')}}" class="btn btn-cancel">Cancel</a>
@@ -152,6 +197,8 @@
 </div>
 
 <!-- page end  -->
+
+@include('sales.actions');
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/sales.js')}}"></script>
 <script>
@@ -177,7 +224,7 @@
         if (seachkey.length >= 2) {
             $.ajax({
                 method: 'GET',
-                url: "{{url('getProduct')}}"+"/" + seachkey,
+                url: "{{url('getProduct')}}" + "/" + seachkey,
                 dataType: "html",
                 success: function(response) {
                     $('#searchResult').html(response);
@@ -219,4 +266,121 @@
         calculteTotalAmount();
 
     });
+    show_payment = $('.showpayment').on('click', function() {
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('singleSalePayment')}}",
+            dataType: 'html',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: sale_id
+            },
+            success: function(response) {
+                $('#payment').html(response);
+                $('#showpayment').modal('show');
+            }
+        });
+
+    });
+    $(document).ready(show_payment);
+
+    $(document).on("click", ".deletePayment", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this payment!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: 'deletepayment',
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+    $(document).on("click", ".getPayment", function() {
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('getsinglepayment')}}",
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: id
+            },
+            success: function(response) {
+                $('#amounts').val(response.amount);
+                $('#customers').val(response.customer);
+                $('#payment_id').val(response.payment_id);
+                $('#reference').val(response.reference);
+                $('#description').val(response.description);
+                $('#date').val(response.date);
+                $('#balance').val(response.balance);
+
+                $('#editpayment').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+    add_customer = $('.add_customer').on('click', function() {
+        var sale_id = $(this).attr('id');
+
+        $('#add_customer').modal('show');
+    });
+    $(document).ready(add_customer);
+
+    save_customer = $('#save_customer').on('submit', function(e) {
+        e.preventDefault();
+
+        var data = $('#save_customer').serialize();
+        $.ajax({
+            type: 'POST',
+            url: "{{url('storecustomer')}}",
+            dataType: 'json',
+            data: data,
+            success: function(response) {
+                Swal.fire({
+                    type: "success",
+                    title: "Added!",
+                    text: response.message,
+                    confirmButtonClass: "btn btn-success"
+                }).then(function() {
+                    $('#add_customer').modal('hide');
+                    $('#save_customer')[0].reset();
+                    $('#getCustomer').html('');
+                    getcustomer();
+                });
+
+            }
+        });
+
+    });
+    $(document).ready(save_customer);
 </script>

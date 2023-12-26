@@ -14,9 +14,7 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
    Route::post('/getsalepayment', [SaleController::class, 'salepayment']);
    Route::post('/savesalepayment', [SaleController::class, 'savepayment'])->name('store_sale_payment');
    Route::get('/edit_sales/{id}', [SaleController::class, 'edit'])->name('edit_sale');
+   Route::post('/singleSalePayment', [SaleController::class, 'singleSalePayment'])->name('singleSalePayment');
+   Route::get('/printsale/{sale}', [SaleController::class, 'print'])->name('print_sale');
 
-
-   
-
-   
 });

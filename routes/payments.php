@@ -10,5 +10,13 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
    Route::post('/viewpayment', [PaymentController::class, 'viewpayment'])->name('view_payment');
    Route::post('/getpayment', [PaymentController::class, 'getpayment'])->name('get_payment');
    Route::post('/updatepayment', [PaymentController::class, 'updatepayment'])->name('update_payment');
-   Route::post('/deletepayment', [PaymentController::class, 'deletepayment'])->name('delete_payment');
+   Route::post('deletepayment', [PaymentController::class, 'deletepayment']);
+   Route::get('/salepaymentreceipt/{payment}', [PaymentController::class, 'salepaymentreceipt'])->name('sale_payment_receipt');
+   Route::get('/purchasepaymentreceipt/{payment}', [PaymentController::class, 'purchasepaymentreceipt'])->name('purchase_payment_receipt');
+
+
+   
+   Route::post('getsinglepayment', [PaymentController::class, 'getSinglePayment']); 
 });
+
+Route::get('/previewpayment', [PaymentController::class, 'previewpayment'])->name('previewpayment');
