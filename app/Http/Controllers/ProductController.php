@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\PurchaseProduct;
+use App\Models\SaleProduct;
 use App\Models\Shop;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -38,10 +40,15 @@ class ProductController extends Controller
             return redirect()->back()->with('error', "Failed to add new product.");
         }
     }
-    public function getProduct()
+    public function getSaleProduct()
     {
         $search = request()->segment(2);
-        products($search);
+        searchSaleProduct($search);
+    }
+    public function getPurchaseProduct()
+    {
+        $search = request()->segment(2);
+        searchPurchaseProduct($search);
     }
     public function fetch_product(Request $request)
     {

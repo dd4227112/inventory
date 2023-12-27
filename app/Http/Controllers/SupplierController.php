@@ -37,4 +37,42 @@ class SupplierController extends Controller
     {
         supplier();
     }
+
+    public function fetchsupplier($uuid)
+    {
+        $supplier = Supplier::where('uuid', $uuid)->first();
+        if (empty($supplier)) {
+            abort(404);
+        }
+        $this->data['supplier'] = $supplier;
+        return view('supplier.edit', $this->data);
+    }
+    public function updatesupplier(Request $request)
+    {
+        $id = $request->supplier_id;
+        $data = $request->except(['supplier_id', '_token']);
+        $supplier = Supplier::find($id);
+        if (!empty($supplier) && $supplier->update($data)) {
+            return redirect()->route('list_supplier')->with('success', "supplier Updated Successfully");
+        } else {
+            return redirect()->back()->with('error', "Failed to update supplier.");
+        }
+    }
+
+
+    
+     public function deletesupplier(Request $request){
+        $supplier = Supplier::find($request->id);
+        if (empty($supplier)) {
+            $response = ['message' => 'Error!! supplier not found'];
+            exit;
+        }
+
+        if ($supplier->delete()) {
+            $response = ['message' => 'Deleleted Successfully'];
+        } else {
+            $response = ['message' => 'Failed to delete this sale'];
+        }
+        echo json_encode($response);
+    }
 }

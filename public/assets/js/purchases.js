@@ -20,7 +20,7 @@ search = $('#serchProduct').keyup(function () {
     if (seachkey.length >= 2) {
         $.ajax({
             method: 'GET',
-            url: "getProduct/" + seachkey,
+            url: "getPurchaseProduct/" + seachkey,
             dataType: "html",
             success: function (response) {
                 $('#searchResult').html(response);

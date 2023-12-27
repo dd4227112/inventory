@@ -64,10 +64,10 @@
                                 <td>{{ $customer->email}}</td>
                                 <td>{{ $customer->address}}</td>
                                 <td>
-                                    <a class="me-3" href="editcustomer.html">
+                                    <a class="me-3" href="{{route('fetchcustomer', $customer->uuid)}}">
                                         <img src="{{ asset('assets/img/icons/edit.svg')}}"   alt="img">
                                     </a>
-                                    <a class="me-3 confirm-text" id= "{{$customer->id }}" href="javascript:void(0);">
+                                    <a class="me-3 delete" id= "{{$customer->id }}" href="javascript:void(0);">
                                         <img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img">
                                     </a>
                                 </td>
@@ -86,3 +86,43 @@
 <!-- page content end -->
 
 @include('authentication.footer')
+<script>
+       $(document).on("click", ".delete", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this customer!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('deletecustomer')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>

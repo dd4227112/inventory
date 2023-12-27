@@ -9,7 +9,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-            <h4>shop Management</h4>
+                <h4>shop Management</h4>
                 <h6>List shops</h6>
             </div>
             <div class="page-btn">
@@ -59,16 +59,16 @@
                             @foreach($shops as $key => $shop)
                             <tr>
                                 <td>{{ ++$key}} </td>
-                               
+
                                 <td>{{ $shop->name}}</td>
                                 <td>{{ $shop->address}}</td>
                                 <td>{{ $shop->location}}</td>
                                 <td>{{ $shop->description}}</td>
                                 <td>
-                                    <a class="me-3" href="editshop.html">
-                                        <img src="{{ asset('assets/img/icons/edit.svg')}}"   alt="img">
+                                    <a class="me-3" href="{{route('admin.fetchshop', $shop->uuid)}}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img">
                                     </a>
-                                    <a class="me-3 confirm-text" id= "{{$shop->id }}" href="javascript:void(0);">
+                                    <a class="me-3 delete" id="{{$shop->id }}" href="javascript:void(0);">
                                         <img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img">
                                     </a>
                                 </td>
@@ -87,3 +87,43 @@
 <!-- page content end -->
 
 @include('authentication.footer')
+<script>
+    $(document).on("click", ".delete", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this Shop!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('deleteshop')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>

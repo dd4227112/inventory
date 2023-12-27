@@ -3,7 +3,7 @@
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 <li class="active">
-                    <a href="index.html"><img src="{{ asset('assets/img/icons/dashboard.svg')}}" alt="img"><span> Dashboard</span> </a>
+                    <a href="{{ url('/dashboard')}}"><img src="{{ asset('assets/img/icons/dashboard.svg')}}" alt="img"><span> Dashboard</span> </a>
                 </li>
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/product.svg')}}" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
@@ -59,8 +59,8 @@
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/settings.svg')}}" alt="img"><span> Account</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="generalsettings.html">Profile</a></li>
-                        <li><a href="emailsettings.html">Password</a></li>
+                        <li><a href="{{route('profile')}}">Profile</a></li>
+                        <li><a href="{{route('password')}}">Password</a></li> 
                         <li><a href="{{ route('logout') }}">Logout</a></li>
 
                     </ul>

@@ -129,3 +129,22 @@ $(document).ready(function () {
     });
 });
 
+search = $('#serchProduct').keyup(function () {
+    var seachkey = $('input[name =searchProduct]').val();
+    if (seachkey.length >= 2) {
+        $.ajax({
+            method: 'GET',
+            url: "getSaleProduct/" + seachkey,
+            dataType: "html",
+            success: function (response) {
+                $('#searchResult').html(response);
+            }
+        });
+    } else {
+        $('#searchResult').html('');
+    }
+});
+
+
+$(document).ready(search);
+

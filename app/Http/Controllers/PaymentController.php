@@ -100,7 +100,7 @@ class PaymentController extends Controller
         $payment = Payment::find($req->payment_id);
         $data['amount'] = remove_comma($req->amount);
         if (remove_comma($req->amount) > (remove_comma($req->balance) + $payment->amount)) {
-            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of " .remove_comma($req->balance));
+            return redirect()->back()->with('warning', "Can't accept greater amount than the current balance of " . remove_comma($req->balance));
         }
         if (!empty($payment)) {
             if ($payment->update($data)) {
@@ -112,7 +112,8 @@ class PaymentController extends Controller
             return redirect()->back()->with('error', "Payment details not found");
         }
     }
-    public function salepaymentreceipt($uuid){
+    public function salepaymentreceipt($uuid)
+    {
         $payment = Payment::where('uuid', $uuid)->first();
         if (empty($payment)) {
             abort(403);
@@ -129,23 +130,48 @@ class PaymentController extends Controller
         $this->data['payment'] = $payment;
         $this->data['in_words'] = number_to_words($payment->amount);
         $this->data['show_payment'] = 'yes';
-        $this->data['sale_reference']  = "<li>Sales Reference: &nbsp;&nbsp;&nbsp;<strong>".$sale->reference."</strong></li>";
+        $this->data['sale_reference']  = "<li>Sales Reference: &nbsp;&nbsp;&nbsp;<strong>" . $sale->reference . "</strong></li>";
         $this->data['date'] = $payment->date;
         $this->data['heading'] = "Received By:";
         $this->data['name'] = $payment->user->name;
         $this->data['qr'] = generateQr($payment->id, 'pdf');
 
-        
+
 
 
         $pdf = PDF::loadView('sales.invoice', $this->data);
         $pdf->setPaper('A4');
         // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('receipt_'.$payment->reference . '.pdf');
+        return $pdf->download('receipt_' . $payment->reference . '.pdf');
     }
-    public function previewpayment(){
-        $id = request('payment');
-        echo $id;
-        exit;
+    public function previewpayment()
+    {
+        $code = request('payment');
+        $payment_id = substr($code, 0, -3);
+        $id = decrypt_code($payment_id);
+        $payment = Payment::where('id', $id)->first();
+        if (empty($payment)) {
+            abort(403);
+        }
+        $sale = Sale::find($payment->sale_id);
+        $payment_status = sale_payment_status("Sale", $sale->id, $sale->grand_total);
+        $this->data['status'] = $payment_status['status'];
+        $this->data['class'] = $payment_status['class'];
+        $this->data['paid'] = $payment_status['amount'];
+        $this->data['balance'] = $sale->grand_total - $payment_status['amount'];
+        $this->data['sale'] = $sale;
+        $this->data['title'] = 'PAYMENT RECEIPT';
+        $this->data['reference'] =  $payment->reference;
+        $this->data['payment'] = $payment;
+        $this->data['in_words'] = number_to_words($payment->amount);
+        $this->data['show_payment'] = 'yes';
+        $this->data['sale_reference']  = "<li>Sales Reference: &nbsp;&nbsp;&nbsp;<strong>" . $sale->reference . "</strong></li>";
+        $this->data['date'] = $payment->date;
+        $this->data['heading'] = "Received By:";
+        $this->data['name'] = $payment->user->name;
+        $this->data['qr'] = generateQr($payment->id, '');
+        return view('sales.preview', $this->data);
+
+        //   $pdf = PDF::loadView('sales.invoice', $this->data);
     }
 }

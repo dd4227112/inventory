@@ -39,4 +39,39 @@ class CustomerController extends Controller
     {
         customers();
     }
+    public function fetchcustomer($uuid)
+    {
+        $customer = Customer::where('uuid', $uuid)->first();
+        if (empty($customer)) {
+            abort(404);
+        }
+        $this->data['customer'] = $customer;
+        return view('customer.edit', $this->data);
+    }
+    public function updatecustomer(Request $request)
+    {
+        $id = $request->customer_id;
+        $data = $request->except(['customer_id', '_token']);
+        $customer = Customer::find($id);
+        if (!empty($customer) && $customer->update($data)) {
+            return redirect()->route('list_customer')->with('success', "Customer Updated Successfully");
+        } else {
+            return redirect()->back()->with('error', "Failed to update Customer.");
+        }
+    }
+
+    public function deletecustomer(Request $request){
+        $customer = Customer::find($request->id);
+        if (empty($customer)) {
+            $response = ['message' => 'Error!! Customer not found'];
+            exit;
+        }
+
+        if ($customer->delete()) {
+            $response = ['message' => 'Deleleted Successfully'];
+        } else {
+            $response = ['message' => 'Failed to delete this sale'];
+        }
+        echo json_encode($response);
+    }
 }

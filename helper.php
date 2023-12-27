@@ -58,7 +58,7 @@ function supplier()
 
     echo $output;
 }
-function products($key)
+function searchSaleProduct($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
         ->where(function ($query) use ($key) {
@@ -68,6 +68,8 @@ function products($key)
         ->latest()
         ->take(10)
         ->get();
+    // From the search result filter only which its remaining balance is greater than 0
+    $products = Product::whereIn('id', overallProductBalance($products))->get();
 
     $output = '';
     if (!$products->isEmpty()) {
@@ -130,6 +132,18 @@ function product_balance($product)
     $sold = SaleProduct::where('product_id', $product)->sum('quantity');
     return ['purchased' => $purchased, 'sold' => $sold, 'balance' => ($purchased - $sold)];
 }
+function overallProductBalance($products = [])
+{
+    $product_ids  = [];
+    foreach ($products as $product) {
+        $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
+        $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
+        if ($purchased - $sold > 0) {
+            $product_ids[] = $product->id;
+        }
+    }
+    return $product_ids;
+}
 function remove_comma($number)
 {
     return str_replace(',', '', $number);
@@ -137,8 +151,8 @@ function remove_comma($number)
 
 function sale_payment_status($table, $id, $grand_total)
 {
-   $result = Sale::where('id', $id)->first();
-  //  dd($table, $id, $grand_total, $result);
+    $result = Sale::where('id', $id)->first();
+    //  dd($table, $id, $grand_total, $result);
     $amount = $result->payment->sum('amount');
     if ($grand_total == $amount) {
         $status = "Completed";
@@ -150,14 +164,14 @@ function sale_payment_status($table, $id, $grand_total)
         $status = "Pending";
         $class = "text-danger";
     }
-    return ['status'=>$status, 'class' =>$class, 'amount'=>$amount];
+    return ['status' => $status, 'class' => $class, 'amount' => $amount];
 }
 function site_address()
 {
     $shop = Shop::find(session('shop_id'));
     $address = "";
     $address .= "<p>";
-    $address .= "<b>".$shop->name."</b><br>";
+    $address .= "<b>" . $shop->name . "</b><br>";
     $address .= $shop->address . "<br>";
     $address .= $shop->location . "<br>";
     $address .= $shop->phone . "<br>";
@@ -261,4 +275,27 @@ function generateQr($id, $format)
     return $output;
 }
 
-
+function searchPurchaseProduct($key)
+{
+    $products = Product::where('shop_id', session('shop_id'))
+        ->where(function ($query) use ($key) {
+            $query->where('name', 'like', "%$key%")
+                ->orWhere('code', 'like', "%$key%");
+        })
+        ->latest()
+        ->take(10)
+        ->get();
+    $output = '';
+    if (!$products->isEmpty()) {
+        $output .= "<table class='table table-bordered mb-0'>";
+        $output .= "<tbody>";
+        foreach ($products as $key => $product) {
+            $output .= "<tr class='add-icon pick_product' id ='" . $product->id . "'><td>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td></tr>";
+        }
+        $output .= "</tbody>";
+        $output .= "</table>";
+    } else {
+        echo "No product found";
+    }
+    echo $output;
+}

@@ -4,7 +4,7 @@ use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 //sales
 Route::middleware(['auth', 'verify_shop'])->group(function () {
-   Route::get('/sales', [SaleController::class, 'index'])->name('list_sale');
+   Route::get('/list_sale', [SaleController::class, 'index'])->name('list_sale');
    Route::get('/addsale', [SaleController::class, 'addsale'])->name('add_sale');
    Route::post('/storesale', [SaleController::class, 'store'])->name('store_sale');
    Route::get('/viewsale/{id}', [SaleController::class, 'viewsale'])->name('view_sale');

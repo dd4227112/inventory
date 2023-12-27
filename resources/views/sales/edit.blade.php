@@ -224,7 +224,7 @@
         if (seachkey.length >= 2) {
             $.ajax({
                 method: 'GET',
-                url: "{{url('getProduct')}}" + "/" + seachkey,
+                url: "{{url('getSaleProduct')}}" +"/"+ seachkey,
                 dataType: "html",
                 success: function(response) {
                     $('#searchResult').html(response);
@@ -234,6 +234,7 @@
             $('#searchResult').html('');
         }
     });
+
 
     $(document).ready(search);
 
