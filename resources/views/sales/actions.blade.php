@@ -131,6 +131,7 @@
                                 <div class="form-group">
                                     <label>Email</label>
                                     <input type="email" class="form-control" name="email">
+                                    <input type="hidden" name="shop_id" value="{{ session('shop_id')}}" >
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12">
