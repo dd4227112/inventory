@@ -42,9 +42,9 @@
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/time.svg')}}" alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="purchaseorderreport.html">Products report</a></li>
-                        <li><a href="inventoryreport.html">Inventory Report</a></li>
-                        <li><a href="salesreport.html">Sales Report</a></li>
+                        <li><a href="{{route('productreport')}} ">Products report</a></li>
+                        <li><a href="{{route('inventoryreport')}}">Inventory Report</a></li>
+                        <li><a href="{{route('salesreport')}}">Sales Report</a></li>
 
                     </ul>
                 </li>
