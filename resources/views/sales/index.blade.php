@@ -236,7 +236,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: 'deletepayment',
+                    url: "{{url('deletepayment')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -260,7 +260,7 @@
         var id = $(this).attr('id');
         $.ajax({
             type: 'POST',
-            url: 'getsinglepayment',
+            url: "{{url('getsinglepayment')}}",
             dataType: 'json',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),

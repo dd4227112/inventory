@@ -97,7 +97,7 @@
                                                 </li>
                                                 @endif
                                                 <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showpayment"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
+                                                    <a href="javascript:void(0);" class="dropdown-item showpayment" id="{{ $purchase->id}}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
                                                 </li>
                                                 @if(($payments[$purchase->id] < $purchase->grand_total))
                                                     <li>
@@ -111,7 +111,7 @@
                                                     @endif
                                                     @if($payments[$purchase->id] == 0)
                                                     <li>
-                                                        <a href="javascript:void(0);" class="dropdown-item confirm-text"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete purchase</a>
+                                                        <a href="javascript:void(0);" class="dropdown-item delete" id="{{$purchase->id}}"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete purchase</a>
                                                     </li>
                                                     @endif
                                             </ul>
@@ -203,6 +203,131 @@
         </form>
     </div>
 </div>
-
+@include('purchases.actions');
 @include('authentication.footer')
 <script src="{{ asset('/assets/js/purchases.js')}}"></script>
+<script>
+        $(document).on("click", ".delete", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this purchase!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('deletepurchase')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    show_payment = $('.showpayment').on('click', function() {
+        var sale_id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('singlePurchasePayment')}}",
+            dataType: 'html',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: sale_id
+            },
+            success: function(response) {
+                $('#payment').html(response);
+                $('#showpayment').modal('show');
+            }
+        });
+
+    });
+    $(document).ready(show_payment);
+
+    $(document).on("click", ".deletePayment", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this payment!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-danger",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('deletepurchasepayment')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on("click", ".getPayment", function() {
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('getSinglePurchasePayment')}}",
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: id
+            },
+            success: function(response) {
+                $('#amounts').val(response.amount);
+                $('#suppliers').val(response.supplier);
+                $('#payment_id').val(response.payment_id);
+                $('#reference').val(response.reference);
+                $('#description').val(response.description);
+                $('#date').val(response.date);
+                $('#balance').val(response.balance);
+
+                $('#editpayment').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+</script>

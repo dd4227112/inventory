@@ -8,7 +8,7 @@
 <div class="page-wrapper">
     <div class="content">
         
-    <h1>Incomming Soon</h1>         
+    <h1>Comming Soon</h1>         
             
     </div>
 </div>

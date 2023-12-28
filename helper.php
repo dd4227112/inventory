@@ -258,11 +258,11 @@ function decrypt_code($number)
     $number = str_replace($replace, $key, $number);
     return $number;
 }
-function generateQr($id, $format)
+function generateQr($id, $format, $controller)
 {
     $append = random_int(100, 999);
     $payment_code = encrypt_code($id) . $append;
-    $code = url('previewpayment?payment=' . $payment_code);
+    $code = url($controller.'?payment=' . $payment_code);
     $qrCode = QrCode::generate(
         $code
     );
@@ -298,4 +298,23 @@ function searchPurchaseProduct($key)
         echo "No product found";
     }
     echo $output;
+}
+
+
+function purchase_payment_status($table, $id, $grand_total)
+{
+    $result = Purchase::where('id', $id)->first();
+    //  dd($table, $id, $grand_total, $result);
+    $amount = $result->payment->sum('amount');
+    if ($grand_total == $amount) {
+        $status = "Completed";
+        $class = "text-success";
+    } elseif (($amount < $grand_total) && ($amount > 0)) {
+        $status = "Partial";
+        $class = "text-warning";
+    } else {
+        $status = "Pending";
+        $class = "text-danger";
+    }
+    return ['status' => $status, 'class' => $class, 'amount' => $amount];
 }

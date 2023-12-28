@@ -12,4 +12,13 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
    Route::post('/updatepurchase', [PurchaseController::class, 'updatepurchase'])->name('update_purchase');
    Route::post('/deletepurchase', [PurchaseController::class, 'deletepurchase'])->name('delete_purchase');
    Route::post('/fetch_purchase', [PurchaseController::class, 'fetch_purchase'])->name('get_purchase'); //get selected product on adding purchase via ajax request
+   Route::post('/singlePurchasePayment', [PurchaseController::class, 'singlePurchasePayment']);
+   Route::post('/purchase_payment_receipt', [PurchaseController::class, 'purchase_payment_receipt']);
+
+
+   
+
+
+   
+   
 });

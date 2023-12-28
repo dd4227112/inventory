@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\Shop;
@@ -64,5 +65,54 @@ class PurchaseController extends Controller
     public function fetch_purchase(Request $request)
     {
         fetch_purchase($request);
+    }
+    public function deletepurchase(Request $request)
+    {
+
+        if (Purchase::find($request->id)->delete()) {
+            purchaseProduct::where('purchase_id', $request->id)->delete();
+            Payment::where('purchase_id', $request->id)->delete();
+            $response = ['message' => 'Deleleted Successfully'];
+        } else {
+            $response = ['message' => 'Failed to delete this purchase'];
+        }
+        echo json_encode($response);
+    }
+    public function singlePurchasePayment(Request $request)
+    {
+        $id  = $request->id;
+        $purchase = Purchase::find($id);
+        $payments = Payment::where('purchase_id', $request->id)->get();
+        $html = " ";
+        if (!$payments->isEmpty()) {
+            foreach ($payments as $key => $payment) {
+                $html .=  "<tr class='bor-b1'>";
+                $html  .= "<td>" . $payment->date . "</td>";
+                $html  .= "<td>" . $purchase->supplier->name . "</td>";
+                $html  .= "<td>" . $payment->reference . "</td>";
+                $html  .= "<td>" . number_format($payment->amount, 2) . " </td>";
+                $html  .= "<td>Cash</td>";
+                $html  .= "<td>" . $payment->description . " </td>";
+                $html  .= "<td>" . $payment->user->name . " </td>";
+                $html  .= "<td>
+                    <a class='me-2' href='".route('purchase_payment_receipt', $payment->uuid)."'>
+                        <img src='" . url('assets/img/icons/printer.svg') . "' alt='img'>
+                    </a>
+                    <a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
+                        data-bs-dismiss='modal'>
+                        <img src= '" . url('assets/img/icons/edit.svg') . "' alt='img'>
+                    </a>
+                    <a class='me-2 deletePayment' id = '" . $payment->id . "' href='javascript:void(0);'>
+                        <img src='" . url('assets/img/icons/delete.svg') . "' alt='img'>
+                    </a>
+                </td>
+            </tr>";
+            }
+        }
+        echo $html;
+    } 
+
+    public function purchase_payment_receipt(){
+        
     }
 }

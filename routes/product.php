@@ -13,11 +13,6 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::post('/fetch_product', [ProductController::class, 'fetch_product']);
     Route::get('/edit_product/{product}', [ProductController::class, 'edit'])->name('edit_product');
     Route::get('/getPurchaseProduct/{search}', [ProductController::class, 'getPurchaseProduct']);
-
-
-    
-
-
-
+    Route::post('/updateProduct', [ProductController::class, 'updateProduct'])->name('updateProduct');
 
 });
