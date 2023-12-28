@@ -199,7 +199,7 @@
                             </td>
                             <td class="text-right">
                                 <h4><strong>From:</strong></h4>
-                                {!! site_address() !!}
+                                {!! site_address($sale->shop_id) !!}
                             </td>
 
                         </tr>

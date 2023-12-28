@@ -166,9 +166,16 @@ function sale_payment_status($table, $id, $grand_total)
     }
     return ['status' => $status, 'class' => $class, 'amount' => $amount];
 }
-function site_address()
+function site_address($shop = null)
 {
-    $shop = Shop::find(session('shop_id'));
+    if (isset($shop) && $shop != null) {
+        $id = $shop;
+    }
+    else{
+        $id = session('shop_id');
+    }
+   
+    $shop = Shop::find($id);
     $address = "";
     $address .= "<p>";
     $address .= "<b>" . $shop->name . "</b><br>";
