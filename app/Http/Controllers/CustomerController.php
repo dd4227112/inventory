@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -11,14 +12,14 @@ class CustomerController extends Controller
 
     public function index()
     {
-        $this->data['customers'] = Customer::where('status', 1)->get();
+        $this->data['customers'] = Customer::where(['status'=> 1, 'shop_id'=>session('shop_id')])->get();
         return view('customer.index', $this->data);
     }
 
     public function addcustomer()
     {
-
-        return view('customer.add');
+        $this->data['shops'] = Shop::latest()->get();
+        return view('customer.add',$this->data);
     }
     public function store(Request $request)
     {
@@ -45,6 +46,7 @@ class CustomerController extends Controller
         if (empty($customer)) {
             abort(404);
         }
+        $this->data['shops'] = Shop::latest()->get();
         $this->data['customer'] = $customer;
         return view('customer.edit', $this->data);
     }

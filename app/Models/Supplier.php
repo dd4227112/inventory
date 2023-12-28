@@ -13,5 +13,10 @@ class Supplier extends BasicModel
         'email',
         'address',
         'status',
+        'shop_id',
     ];
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
+    }
 }

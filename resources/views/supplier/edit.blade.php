@@ -49,6 +49,22 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Shop</label>
+                                <select class="select" name="shop_id">
+                                    <option>--Select--</option>
+                                    @if(!$shops->isEmpty())
+                                    @foreach($shops as $shop)
+                                    <option <?= $shop->id == $supplier->shop_id ? 'selected' : '' ?> value="{{ $shop->id}}"> {{ $shop->name}}</option>
+                                    @endforeach
+                                    @endif
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
 
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-submit me-2">Update</button>

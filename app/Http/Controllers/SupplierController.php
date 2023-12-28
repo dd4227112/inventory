@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,14 +14,15 @@ class SupplierController extends Controller
 
     public function index()
     {
-        $this->data['suppliers'] = Supplier::where('status', 1)->get();
+        $this->data['suppliers'] = Supplier::where(['status'=> 1, 'shop_id'=>session('shop_id')])->get();
         return view('supplier.index', $this->data);
     }
     
     public function addsupplier()
     {
+        $this->data['shops'] = Shop::latest()->get();
+        return view('supplier.add',$this->data);
        
-        return view('supplier.add');
     }
     public function store(Request $request)
     {
@@ -44,6 +46,7 @@ class SupplierController extends Controller
         if (empty($supplier)) {
             abort(404);
         }
+        $this->data['shops'] = Shop::latest()->get();
         $this->data['supplier'] = $supplier;
         return view('supplier.edit', $this->data);
     }

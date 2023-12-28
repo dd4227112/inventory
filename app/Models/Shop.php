@@ -30,5 +30,12 @@ class Shop extends BasicModel
     public function sales(){
         return $this->hasMany(Sale::class);
     }
+    public function customer(){
+        return $this->hasMany(Customer::class);
+    }
+    public function supplier(){
+        return $this->hasMany(Supplier::class);
+    }
+
 
 }

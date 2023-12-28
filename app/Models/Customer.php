@@ -13,8 +13,12 @@ class Customer extends BasicModel
         'email',
         'address',
         'status',
+        'shop_id'
     ];
     public function sale(){
         return $this->hasMany(Sale::class);
+    }
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 }
