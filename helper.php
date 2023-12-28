@@ -261,6 +261,9 @@ function decrypt_code($number)
 {
     $replace = ['A', 'e_', 'jk', 'F{', 'rgc', 'Db', 'm$', 'Z-', 'd', 'xY'];
     $key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    if (!in_array($number, $replace)) {
+       abort(403);
+    }
 
     $number = str_replace($replace, $key, $number);
     return $number;
