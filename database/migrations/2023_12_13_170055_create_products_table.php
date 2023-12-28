@@ -33,6 +33,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->unique(['code', 'name', 'shop_id']);
             $table->unique(['code', 'shop_id']);
+            $table->softDeletes();
         });
     }
     /**

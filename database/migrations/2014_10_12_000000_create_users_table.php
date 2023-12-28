@@ -27,6 +27,7 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

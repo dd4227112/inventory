@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->timestamps();
             $table->uuid('uuid');
+            $table->softDeletes();
         });
     }
 
