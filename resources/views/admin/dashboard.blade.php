@@ -304,10 +304,7 @@
                                     @foreach($purchases as $key => $purchase)
                                     <tr>
                                         <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
+                                            {{ ++$key }}
                                         </td>
                                         <td>{{ $purchase->date }}</td>
                                         <td> {{ $purchase->supplier->name}}</td>
