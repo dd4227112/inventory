@@ -21,24 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/changepassword', [Admin::class, 'changepassword'])->name('admin.changepassword');
     Route::get('/password', [Admin::class, 'password'])->name('password');
-
-    Route::get('/salesreport', [Admin::class, 'salesreport'])->name('salesreport');
-    Route::get('/purchasereport', [Admin::class, 'purchasereport'])->name('purchasereport');
-    Route::get('/inventoryreport', [Admin::class, 'inventoryreport'])->name('inventoryreport');
-    Route::get('/productreport', [Admin::class, 'productreport'])->name('productreport');
-
-
-
-
-    
-
-
-    
-
-    
-
-
-    
+   
 
     //customers
     Route::get('/customers', [CustomerController::class, 'index'])->name('list_customer');

@@ -366,16 +366,4 @@ class Admin extends Controller
             return  redirect()->back()->with('error', "Unable to Change Password");
         }
     } 
-    public function salesreport(){
-        return view('admin.incomming');
-    }
-    public function purchasereport(){
-        return view('admin.incomming');
-    }
-    public function inventoryreport(){
-        return view('admin.incomming');
-    }
-    public function productreport(){
-        return view('admin.incomming');
-    }
 }
