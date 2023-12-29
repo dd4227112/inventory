@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table  datanew">
+                    <table class="table ">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -82,7 +82,7 @@
                     <h4>Product Sales Reports</h4>
                 </div>
                 <div class="table-responsive">
-                    <table class="table filterPurchase">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>#</th>
