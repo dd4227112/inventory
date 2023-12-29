@@ -6,7 +6,7 @@ $(document).ready(function () {
 function getsupplier() {
     $.ajax({
         type: 'GET',
-        url: "{{url'getsupplier')}}",
+        url: "{{url('getsupplier')}}",
         dataType: "html",
         success: function (response) {
             $('#getSupplier').html(response);
