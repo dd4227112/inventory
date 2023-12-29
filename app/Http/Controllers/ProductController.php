@@ -66,7 +66,8 @@ class ProductController extends Controller
         $this->data['product'] = $product;
         return view('products.edit', $this->data);
     }
-    public function updateProduct(Request $request){
+    public function updateProduct(Request $request)
+    {
         $product = Product::find($request->product_id);
         if (empty($product)) {
             abort(403);
@@ -77,5 +78,16 @@ class ProductController extends Controller
         } else {
             return redirect()->back()->with('error', "Failed to update product.");
         }
+    }
+
+    public function  deleteproduct(Request $request)
+    {
+        if (Product::find($request->id)->delete()) {
+          
+            $response = ['message' => 'Deleleted Successfully'];
+        } else {
+            $response = ['message' => 'Failed to delete this product'];
+        }
+        echo json_encode($response);
     }
 }

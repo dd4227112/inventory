@@ -8,6 +8,7 @@ use App\Models\Sale;
 use App\Models\SaleProduct;
 use App\Models\Shop;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function upload_file($file, $subpath)
@@ -94,7 +95,7 @@ function fetch_sale($request)
     if (!empty($product)) {
         $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td>";
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'>";
-        $output .= "<td><input type ='number' id='quantity' max='" . $product->quantity . "' name ='quantity[]' value ='1'></td>";
+        $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance']. "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
         $output .= "<td><a href='javascript:void(0);' id='remove'><img src='assets/img/icons/delete.svg' alt='svg' title='remove this items'></a></td></tr>";
@@ -112,7 +113,7 @@ function fetch_purchase($request)
     if (!empty($product)) {
         $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description;
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'></td>";
-        $output .= "<td><input type ='number' id='quantity' max='" . $product->quantity . "' name ='quantity[]' value ='1'></td>";
+        $output .= "<td><input type ='number' id='quantity' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->cost . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
         $output .= "<td><a href='javascript:void(0);' id='remove'><img src='{{ asset('assets/img/icons/delete.svg')}}' alt='svg' title='remove this items'></a></td></tr>";
@@ -139,6 +140,32 @@ function overallProductBalance($products = [])
         $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
         $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
         if ($purchased - $sold > 0) {
+            $product_ids[] = $product->id;
+        }
+    }
+    return $product_ids;
+}
+function inStockProducts()
+{
+    $products  = Product::where('shop_id', session('shop_id'))->get();
+    $product_ids =[];
+    foreach ($products as $product) {
+        $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
+        $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
+        if ($purchased - $sold > 0) {
+            $product_ids[] = $product->id;
+        }
+    }
+    return $product_ids;
+}
+function outStockProducts()
+{
+    $products  = Product::where('shop_id', session('shop_id'))->get();
+    $product_ids =[];
+    foreach ($products as $product) {
+        $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
+        $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
+        if ($purchased - $sold <= 0) {
             $product_ids[] = $product->id;
         }
     }
@@ -327,4 +354,12 @@ function purchase_payment_status($table, $id, $grand_total)
         $class = "text-danger";
     }
     return ['status' => $status, 'class' => $class, 'amount' => $amount];
+}
+function most_sold(){
+   $product_ids =[];
+    $products = DB::select("select product_id, count(product_id) as count from sale_products where deleted_at is null and sale_id in (select id from sales where shop_id =".session('shop_id')." and deleted_at is null ) GROUP by product_id order by count  desc limit 5");
+    foreach ($products as $key => $product) {
+        $product_ids[] = $product->product_id;
+    }
+    return  $product_ids;
 }

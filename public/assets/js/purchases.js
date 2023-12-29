@@ -6,7 +6,7 @@ $(document).ready(function () {
 function getsupplier() {
     $.ajax({
         type: 'GET',
-        url: "getsupplier",
+        url: "{{url'getsupplier')}}",
         dataType: "html",
         success: function (response) {
             $('#getSupplier').html(response);
@@ -20,7 +20,7 @@ search = $('#serchProduct').keyup(function () {
     if (seachkey.length >= 2) {
         $.ajax({
             method: 'GET',
-            url: "getPurchaseProduct/" + seachkey,
+            url: "{{url('getPurchaseProduct')}}"+"/" + seachkey,
             dataType: "html",
             success: function (response) {
                 $('#searchResult').html(response);
@@ -39,7 +39,7 @@ $(document).on("click", ".pick_product", function () {
     var id = $(this).attr('id');
     $.ajax({
         type: 'POST',
-        url: 'fetch_purchase',
+        url: "{{url('fetch_purchase')}}",
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             product_id: id
