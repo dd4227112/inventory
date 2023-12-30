@@ -87,13 +87,12 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="purchases-details.html" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">purchase
+                                                    <a href="{{ route('view_purchase', $purchase->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">Purchase
                                                         Detail</a>
                                                 </li>
                                                 @if($payments[$purchase->id] == 0)
                                                 <li>
-                                                    <a href="edit-purchases.html" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit
-                                                        purchase</a>
+                                                    <a href="{{ route('edit_purchase', $purchase->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit Purchase</a>
                                                 </li>
                                                 @endif
                                                 <li>

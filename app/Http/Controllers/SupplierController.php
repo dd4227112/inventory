@@ -29,6 +29,11 @@ class SupplierController extends Controller
         $data = $request->except('_token');
         
         if (Supplier::create($data)) {
+            if ($request->add_ajax) {
+                $message = ['message' => "Supplier Added Successfully"];
+                echo json_encode($message);
+                exit;
+            }
             return redirect()->route('list_supplier')->with('success', "Supplier Added Successfully");
         }else{
             return redirect()->back()->with('error', "Failed to add new Supplier.");

@@ -9,6 +9,7 @@ use App\Models\Sale;
 use App\Models\SaleProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 
 class Reports extends Controller
@@ -17,12 +18,72 @@ class Reports extends Controller
 
     public function salesreport()
     {
-        return view('reports.sales');
+        $products = Product::where('shop_id', session('shop_id'))->latest()->get();
+        $summary = [];
+        $balance =[];
+        if (!$products->isEmpty()) {
+            foreach ($products as $key => $product) {
+                $summary[$product->id] = $this->sold($product->id);
+                $balance[$product->id] = product_balance($product->id);
+            }
+        }
+        $this->data['summary'] = $summary;
+        $this->data['balance'] = $balance;
+        $this->data['products'] = $products;
+        return view('reports.sales', $this->data);
+    }
+    public function sold($product)
+    {
+        $summary = DB::select("SELECT coalesce(sum(quantity),0) as quantity, coalesce(sum(total), 0) as total from  sale_products where product_id =" . $product . " and deleted_at is null");
+        if (!empty($summary)) {
+            $result = [
+                'sold' => $summary[0]->quantity,
+                'amount' => $summary[0]->total
+            ];
+        } 
+        else {
+            $result = [
+                'sold' => 0,
+                'amount' => 0
+            ];
+        }
+        return $result;
     }
 
     public function purchasereport()
     {
-        return view('reports.purchases');
+        $products = Product::where('shop_id', session('shop_id'))->latest()->get();
+        $summary = [];
+        $balance =[];
+        if (!$products->isEmpty()) {
+            foreach ($products as $key => $product) {
+                $summary[$product->id] = $this->purchase($product->id);
+                $balance[$product->id] = product_balance($product->id);
+            }
+        }
+        $this->data['summary'] = $summary;
+        $this->data['balance'] = $balance;
+        $this->data['products'] = $products;
+
+        return view('reports.purchases', $this->data);
+    }
+
+    public function purchase($product)
+    {
+        $summary = DB::select("SELECT coalesce(sum(quantity),0) as quantity, coalesce(sum(total), 0) as total from  purchase_products where product_id =" . $product . " and deleted_at is  null");
+        if (!empty($summary)) {
+            $result = [
+                'purchased' => $summary[0]->quantity,
+                'amount' => $summary[0]->total
+            ];
+        } 
+        else {
+            $result = [
+                'purchased' => 0,
+                'amount' => 0
+            ];
+        }
+        return $result;
     }
 
     public function inventoryreport()

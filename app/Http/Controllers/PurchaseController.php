@@ -115,4 +115,33 @@ class PurchaseController extends Controller
     public function purchase_payment_receipt(){
         
     }
+    public function viewpurchase($uuid){
+        $purchase = Purchase::where('uuid', $uuid)->first();
+        if (empty($purchase)) {
+            abort(403);
+        }
+        $payment_status = purchase_payment_status("purchase", $purchase->id, $purchase->grand_total);
+        $this->data['status'] = $payment_status['status'];
+        $this->data['class'] = $payment_status['class'];
+        $this->data['paid'] = $payment_status['amount'];
+        $this->data['balance'] = $purchase->grand_total - $payment_status['amount'];
+        $this->data['purchase'] = $purchase;
+        return view('purchases.details', $this->data);
+
+    }
+    public function editpurchase($uuid){
+        $purchase = Purchase::where('uuid', $uuid)->first();
+        if (empty($purchase)) {
+            abort(403);
+        } echo "here";
+    }
+
+    public function printpurchase($uuid){
+        $purchase = Purchase::where('uuid', $uuid)->first();
+        if (empty($purchase)) {
+            abort(403);
+        } echo "here";
+    }
+
+
 }

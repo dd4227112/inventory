@@ -123,6 +123,8 @@
                                 <div class="form-group">
                                     <label>Phone</label>
                                     <input type="text" name="phone" class="form-control">
+                                    <input type="hidden" name="shop_id" value="{{ session('shop_id')}}" >
+                                    <input type="hidden" name="add_ajax" value="add_ajax">
                                 </div>
                             </div>
                         </div>
