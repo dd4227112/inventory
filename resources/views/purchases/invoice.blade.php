@@ -215,7 +215,7 @@
                             <td>
                                 @if($show_payment == 'yes')
                                 <ul class="list-unstyled">
-                                    <li>Payed To: &nbsp;&nbsp;&nbsp;<strong> {{$purchase->supplier->name }} - {{$purchase->supplier->phone }}</strong> </li>
+                                    <li>Paid To: &nbsp;&nbsp;&nbsp;<strong> {{$purchase->supplier->name }} - {{$purchase->supplier->phone }}</strong> </li>
                                     <li>Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TZS {{ number_format($payment->amount,2) }}/=</strong></li>
                                     <li>Amount in Word: &nbsp;&nbsp;&nbsp;<strong>Tanzania Shilings {{ $in_words}} Only.</strong></li>
                                     <li>Payment Reference:&nbsp;&nbsp;&nbsp;<strong> {{ $payment->reference }}</strong></li>

@@ -59,12 +59,7 @@
                             @if(!$sales->isEmpty())
                             @foreach($sales as $key => $sale)
                             <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
+                                <td>{{ ++ $key}}</td>
                                 <td>{{ $sale->date }}</td>
                                 <td> {{ $sale->customer->name}}</td>
                                 <td>{{ $sale->reference }}</td>

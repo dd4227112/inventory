@@ -10,8 +10,7 @@
 
     }
 
-    input[type="number"],
-    input[type="text"] {
+    input[type="number"], input[type="text"] {
         border: none;
         background-color: inherit;
     }
@@ -20,28 +19,28 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4> Sale Management</h4>
-                <h6>Add sale</h6>
+                <h4> Purchase Management</h4>
+                <h6>Edit Purchase</h6>
             </div>
         </div>
-        <form action="{{ route('update_sale')}}" method="POST">
+        <form action="{{ route('update_purchase')}}" method="POST">
             @csrf
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Customer</label>
+                                <label>Supplier</label>
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
-                                        <select class="select2" id="getCustomer" required name="customer_id">
-                                            <option value="{{ $sale->customer->id}}" selected>{{ $sale->customer->name}}</option>
+                                        <select class="select2" id="getSupplier" required name="supplier_id">
+                                        <option value="{{ $purchase->supplier->id}}" selected>{{ $purchase->supplier->name}}</option>
                                         </select>
-                                        <input type="hidden" value="{{ $sale->id}}" name="sale_id">
                                     </div>
+                                    <input type="hidden" value="{{ $purchase->id}}" name="purchase_id">
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">
                                         <div class="add-icon">
-                                            <span class="add_customer"><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
+                                            <span class="add_supplier"><img src="{{ asset('assets/img/icons/plus1.svg')}}" alt="img"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +50,7 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="date" class="form-control" value="{{ $sale->date }}" name="date">
+                                    <input type="date" class="form-control" value="{{ date('Y-m-d')}}" name="date">
                                     <!-- <div class="addonset">
                                     <img src="{{ asset('assets/img/icons/calendars.svg')}}" alt="img">
                                 </div> -->
@@ -61,7 +60,7 @@
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Reference/Invoice No.</label>
-                                <input type="text" name="reference" value="{{ $sale->reference }} " readonly>
+                                <input type="text" name="reference" value="{{ $purchase->reference }}" readonly>
                             </div>
                         </div>
                     </div>
@@ -95,7 +94,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="selectedProduct">
-                                    @foreach ($items as $item)
+                                @foreach ($items as $item)
                                     <tr>
                                         <td class=" ">{{ $item->product->name }} ( {{ $item->product->code }} ) - {{ $item->product->description }}</td>
                                         <input class="" type='hidden' id='product_id' name='product_id[]' value="{{ $item->product->id }}">
@@ -121,11 +120,11 @@
                                     <ul>
                                         <li>
                                             <h4>Quantity</h4>
-                                            <h5 id="total_items"></h5>
+                                            <h5 id="total_items">0</h5>
                                         </li>
                                         <li>
                                             <h4>Sub Total</h4>
-                                            <h5 id="grand_sub_total"> {{$sale->grand_total }}</h5>
+                                            <h5 id="grand_sub_total"></h5>
                                         </li>
                                         <li>
                                             <h4>Tax</h4>
@@ -134,7 +133,7 @@
                                         <li class="total">
                                             <input type="hidden" name="grand_total" value="" id="grand_sub">
                                             <h4>Grand Total</h4>
-                                            <h5 id="grand_total">{{$sale->grand_total}}</h5>
+                                            <h5 id="grand_total"></h5>
                                         </li>
                                     </ul>
                                 </div>
@@ -142,7 +141,7 @@
                         </div>
                         <div class="col-lg-12 align-right">
                             <button type="submit" class="btn btn-submit me-2">Update</button>
-                            <a href="{{ route('list_sale')}}" class="btn btn-cancel">Cancel</a>
+                            <a href="{{ route('list_purchase')}}" class="btn btn-cancel">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -151,24 +150,23 @@
     </div>
 </div>
 
-<!-- page end  -->
-
-@include('sales.actions');
+<!-- page end -->
+@include('purchases.actions');
 @include('authentication.footer')
-<script src="{{ asset('/assets/js/sales.js')}}"></script>
+<script src="{{ asset('/assets/js/purchases.js')}}"></script>
 <script>
     $(document).ready(function() {
-        getcustomer();
+        getsupplier();
     });
 
 
-    function getcustomer() {
+    function getsupplier() {
         $.ajax({
             type: 'GET',
-            url: "{{ url('getcustomer/') }}",
+            url: "{{url('getsupplier')}}",
             dataType: "html",
             success: function(response) {
-                $('#getCustomer').append(response);
+                $('#getSupplier').append(response);
             }
         });
 
@@ -179,7 +177,7 @@
         if (seachkey.length >= 2) {
             $.ajax({
                 method: 'GET',
-                url: "{{url('getSaleProduct')}}" +"/"+ seachkey,
+                url: "{{url('getPurchaseProduct')}}" + "/" + seachkey,
                 dataType: "html",
                 success: function(response) {
                     $('#searchResult').html(response);
@@ -193,11 +191,12 @@
 
     $(document).ready(search);
 
+
     $(document).on("click", ".pick_product", function() {
         var id = $(this).attr('id');
         $.ajax({
             type: 'POST',
-            url: "{{url('fetch_product')}}",
+            url: "{{url('fetch_purchase')}}",
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 product_id: id
@@ -216,109 +215,21 @@
         });
 
     });
-    $(document).ready(function() {
-        getTotalItems();
-        grand_sub_total();
-        calculteTotalAmount();
 
-    });
-    show_payment = $('.showpayment').on('click', function() {
-        var sale_id = $(this).attr('id');
-        $.ajax({
-            type: 'POST',
-            url: "{{url('singleSalePayment')}}",
-            dataType: 'html',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: sale_id
-            },
-            success: function(response) {
-                $('#payment').html(response);
-                $('#showpayment').modal('show');
-            }
-        });
-
-    });
-    $(document).ready(show_payment);
-
-    $(document).on("click", ".deletePayment", function() {
-        var id = $(this).attr('id');
-
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You want to delete this payment!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-            confirmButtonClass: "btn btn-danger",
-            cancelButtonClass: "btn btn-secondary ml-1",
-            buttonsStyling: false
-        }).then(function(t) {
-            if (t.value && t.dismiss !== "cancel") {
-                $.ajax({
-                    type: 'POST',
-                    url: 'deletepayment',
-                    dataType: 'json',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        id: id
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            type: "success",
-                            title: "Deleted!",
-                            text: response.message,
-                            confirmButtonClass: "btn btn-success"
-                        }).then(function() {
-                            window.location.reload();
-                        });
-                    }
-                });
-            }
-        });
-    });
-    $(document).on("click", ".getPayment", function() {
-        var id = $(this).attr('id');
-        $.ajax({
-            type: 'POST',
-            url: "{{url('getsinglepayment')}}",
-            dataType: 'json',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: id
-            },
-            success: function(response) {
-                $('#amounts').val(response.amount);
-                $('#customers').val(response.customer);
-                $('#payment_id').val(response.payment_id);
-                $('#reference').val(response.reference);
-                $('#description').val(response.description);
-                $('#date').val(response.date);
-                $('#balance').val(response.balance);
-
-                $('#editpayment').modal('show');
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
-    add_customer = $('.add_customer').on('click', function() {
+    add_supplier = $('.add_supplier').on('click', function() {
         var sale_id = $(this).attr('id');
 
-        $('#add_customer').modal('show');
+        $('#add_supplier').modal('show');
     });
-    $(document).ready(add_customer);
+    $(document).ready(add_supplier);
 
-    save_customer = $('#save_customer').on('submit', function(e) {
+    save_supplier = $('#save_supplier').on('submit', function(e) {
         e.preventDefault();
 
-        var data = $('#save_customer').serialize();
+        var data = $('#save_supplier').serialize();
         $.ajax({
             type: 'POST',
-            url: "{{url('storecustomer')}}",
+            url: "{{url('storesupplier')}}",
             dataType: 'json',
             data: data,
             success: function(response) {
@@ -328,15 +239,14 @@
                     text: response.message,
                     confirmButtonClass: "btn btn-success"
                 }).then(function() {
-                    $('#add_customer').modal('hide');
-                    $('#save_customer')[0].reset();
-                    $('#getCustomer').html('');
-                    getcustomer();
+                    $('#add_supplier').modal('hide');
+                    $('#save_supplier')[0].reset();
+                    $('#getSupplier').html('');
+                    getsupplier();
                 });
-
             }
         });
 
     });
-    $(document).ready(save_customer);
+    $(document).ready(save_supplier);
 </script>

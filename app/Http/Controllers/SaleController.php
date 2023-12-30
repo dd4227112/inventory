@@ -39,7 +39,7 @@ class SaleController extends Controller
 
         $data = [
             'reference' => $request->reference,
-            'grand_total' => str_replace(',', '', $request->grand_total),
+            'grand_total' => remove_comma($request->grand_total),
             'date' => $request->date,
             'user_id' => Auth::user()->id,
             'shop_id' => session('shop_id'),
@@ -64,6 +64,9 @@ class SaleController extends Controller
         }
         // add payement if posted
         if ($request->payment_amount != ' ' && $request->payment_amount  > 0) {
+            if (remove_comma($request->payment_amount) > remove_comma($request->grand_total)) {
+                return redirect()->route('list_sale')->with('warning', "Sale Added but Payment not added because greater amount posted");
+            }
             $data = [
                 'amount' => remove_comma($request->payment_amount),
                 'reference' => $request->payment_reference,
@@ -77,7 +80,7 @@ class SaleController extends Controller
             ];
             Payment::create($data);
         }
-        return redirect()->route('list_sale')->with('success', "Sale Added Successfully");
+        return redirect()->route('view_sale', $sale->uuid)->with('success', "Sale Added Successfully");
     }
     public function salepayment(Request $request)
     {
@@ -152,16 +155,17 @@ class SaleController extends Controller
             abort(403);
         }
         $sale_items = SaleProduct::where('sale_id', $sale->id)->get();
-        $payment_count = Payment::where('sale_id', $sale->id)->count();
+        //$payment_count = Payment::where('sale_id', $sale->id)->count();
         // we have multiple payment records, we set payment = multiple, then will edit payment in other way
-        if ($payment_count > 1) {
-            $this->data['payment'] = 'multiple';
-        } else {
-            $payment = Payment::where('sale_id', $sale->id)->first();
-            if (!empty($payment)) {
-                $this->data['payment'] =  $payment;
-            }
-        }
+        // if ($payment_count > 1) {
+        //     $this->data['payment'] = 'multiple';
+        // } else {
+        //     $payment = Payment::where('sale_id', $sale->id)->first();
+        //     if (!empty($payment)) {
+        //         $this->data['payment'] =  $payment;
+        //     }
+        // }
+        // we removed edit payment record during edit sale because payment has its own edit method
         $this->data['sale'] = $sale;
         $this->data['items'] = $sale_items;
         return view('sales.edit', $this->data);
@@ -178,7 +182,8 @@ class SaleController extends Controller
             'customer_id' => $request->customer_id,
             'status' => 1,
         ];
-        Sale::find($sale_id)->update($data);
+        $sale = Sale::find($sale_id);
+        $sale->update($data);
         SaleProduct::where('sale_id', $sale_id)->delete();
         $size  = sizeof($request->product_id);
         for ($i = 0; $i < $size; $i++) {
@@ -192,7 +197,7 @@ class SaleController extends Controller
             ];
             SaleProduct::create($product);
         }
-        return redirect()->route('list_sale')->with('success', "Sale Updated Successfully");
+        return redirect()->route('view_sale', $sale->uuid)->with('success', "Sale Updated Successfully");
     }
     public function singleSalePayment(Request $request)
     {
@@ -211,7 +216,7 @@ class SaleController extends Controller
                 $html  .= "<td>" . $payment->description . " </td>";
                 $html  .= "<td>" . $payment->user->name . " </td>";
                 $html  .= "<td>
-                    <a class='me-2' href='".route('sale_payment_receipt', $payment->uuid)."'>
+                    <a class='me-2' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
                         <img src='" . url('assets/img/icons/printer.svg') . "' alt='img'>
                     </a>
                     <a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
@@ -241,14 +246,14 @@ class SaleController extends Controller
         $this->data['sale'] = $sale;
         $this->data['title'] = 'SALES INVOICE';
         $this->data['reference'] =  $sale->reference;
-        $this->data['sale_reference']  ='';
+        $this->data['sale_reference']  = '';
         $this->data['date'] = $sale->date;
         $this->data['heading'] = "Created By:";
 
         $this->data['name'] = $sale->user->name;
 
 
-        
+
         // check the number of payment per sale
         $count = Payment::where('sale_id', $sale->id)->count();
         if ($count > 1) {
@@ -262,14 +267,13 @@ class SaleController extends Controller
                 $this->data['show_payment'] = 'yes';
                 $this->data['payment'] = $payment;
                 $this->data['in_words'] = number_to_words($payment->amount);
-                $this->data['qr'] = generateQr($payment->id, 'pdf');
+                $this->data['qr'] = generateQr($payment->id, 'pdf', 'previewpayment');
             }
         }
 
         $pdf = PDF::loadView('sales.invoice', $this->data);
         $pdf->setPaper('A4');
         // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('sales_'.$sale->reference . '.pdf');
+        return $pdf->download('sales_' . $sale->reference . '.pdf');
     }
-
 }

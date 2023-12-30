@@ -18,6 +18,9 @@
                     <h2>Sale Detail : {{$sale->reference }}</h2>
                     <ul>
                         <li>
+                            <a href="{{ route('list_sale') }}" class="btn btn-sm btn-primary">Back</a>
+                        </li>
+                        <li>
                             <a href="{{ route('edit_sale', $sale->uuid) }}"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
                         </li>
                         <li>
@@ -26,8 +29,13 @@
                         <li>
                             <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
                         </li>
+                        @if($status != 'Completed')
                         <li>
-                            <a href="javascript:void(0);"  class = "delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img"></a>
+                            <a href="javascript:void(0);" title="Add Payment" class="createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" alt="img"></a>
+                        </li>
+                        @endif
+                        <li>
+                            <a href="javascript:void(0);" class="delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img"></a>
                         </li>
 
                     </ul>
@@ -208,6 +216,81 @@
 </div>
 
 <!-- page end  -->
+<!-- add payemnt modal -->
+<div class="modal fade" id="createpayment" tabindex="-1" aria-labelledby="createpayment" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <form action="{{ route('store_sale_payment') }}" method="POST">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Customer</label>
+                                <div class="input-groupicon">
+                                    <input type="text" value="" id="customer" readonly class="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <div class="input-groupicon">
+                                    <input type="date" required value="{{date('Y-m-d')}}" name="date" class="form-control">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Reference</label>
+                                <input type="text" name="reference" readonly value="{{reference() }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <input type="text" id="purchase_amount" name="balance" readonly value="0.00">
+                                <input type="hidden" id="sale_id" name="sale_id" value="0.00">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Paying Amount</label>
+                                <input type="text" value="" id="amount" required name="amount" min="1">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select class="select" name="payment_method">
+                                    <option value="1">Cash</option>
+                                    <option value="2">Bank</option>
+                                    <option value="3">Credit Card</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group mb-0">
+                                <label>Description</label>
+                                <textarea class="form-control" name="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-submit">Submit</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ asset('/assets/js/sales.js')}}"></script>
 @include('authentication.footer')
 <script>
     $(document).ready(function() {
@@ -249,4 +332,30 @@
             });
         });
     });
+
+    // add payment modal
+    add_payment = $('.createpayment').click(function() {
+        var uuid = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('getsalepayment')}}",
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                uuid: uuid
+            },
+            success: function(response) {
+                $('#purchase_amount').val(response.balance);
+                $('#amount').val(response.balance);
+                $('#customer').val(response.customer);
+                $('#sale_id').val(response.sale_id);
+                $('#createpayment').modal('show');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+    });
+    $(document).ready(add_payment);
 </script>

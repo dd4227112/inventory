@@ -59,12 +59,7 @@
                             @if(!$purchases->isEmpty())
                                 @foreach($purchases as $key => $purchase)
                                 <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
+                                    <td>{{ ++ $key}}</td>
                                     <td>{{ $purchase->date }}</td>
                                     <td> {{ $purchase->supplier->name}}</td>
                                     <td>{{ $purchase->reference }}</td>
@@ -105,7 +100,7 @@
                                                     @endif
                                                     @if($payments[$purchase->id] !=0)
                                                     <li>
-                                                        <a href="javascript:void(0);" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
+                                                        <a href="{{ route('print_purchase', $purchase->uuid ) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
                                                     </li>
                                                     @endif
                                                     @if($payments[$purchase->id] == 0)

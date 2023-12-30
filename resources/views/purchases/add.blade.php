@@ -127,10 +127,45 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12 align-right">
-                            <button type="submit" class="btn btn-submit me-2">Submit</button>
-                            <a href="{{ route('list_purchase')}}" class="btn btn-cancel">Cancel</a>
+                    </div>
+                    <div class="row">
+                        <h5 class="modal-title">Add Payment</h5>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Reference</label>
+                                        <input type="text" name="payment_reference" readonly value="{{reference() }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Amount</label>
+                                        <input type="text" id="payment_amount" name="payment_amount" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Payment Method</label>
+                                        <select class="select" name="payment_method">
+                                            <option value="1">Cash</option>
+                                            <option value="2">Bank</option>
+                                            <option value="3">Credit Card</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-0">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-lg-12 align-right">
+                        <button type="submit" class="btn btn-submit me-2">Submit</button>
+                        <a href="{{ route('list_purchase')}}" class="btn btn-cancel">Cancel</a>
                     </div>
                 </div>
             </div>
