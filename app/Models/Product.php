@@ -41,4 +41,7 @@ class Product extends BasicModel
     public function sale_product(){
         return $this->hasMany(SaleProduct::class);
     }
+    public function purchase_product(){
+        return $this->hasMany(PurchaseProduct::class);
+    }
 }

@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/users', [Admin::class, 'user'])->name('admin.list_user');
     Route::post('/store', [Admin::class, 'store'])->name('admin.store_user');
 
@@ -44,5 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/updatesupplier', [SupplierController::class, 'updatesupplier'])->name('update_supplier');
     Route::post('/deletesupplier', [SupplierController::class, 'deletesupplier'])->name('delete_supplier');
     Route::get('/fetchsupplier/{supplier}', [supplierController::class, 'fetchsupplier'])->name('fetchsupplier');
+
+    Route::get('/user_permission', [Admin::class, 'user_permission'])->name('user_permission');
+    Route::get('/manage_permission/{user}', [Admin::class, 'manage_permission'])->name('manage_permission');
+    Route::post('/update_permission', [Admin::class, 'update_permission'])->name('update_permission');
+
+
+
+    
+
+
+
+
 
 });

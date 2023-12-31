@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Permissions;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Role;
@@ -10,6 +11,7 @@ use App\Models\Sale;
 use App\Models\Shop;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\UserPermissions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -47,33 +49,32 @@ class Admin extends Controller
         $date = date('Y-m-d');
         $this->data['total_purchases'] = Purchase::where('shop_id', $shop_id)->sum('grand_total');
         $this->data['total_sales'] = Sale::where('shop_id', $shop_id)->sum('grand_total');
-        $this->data['number_purchases'] = Purchase::where(['shop_id'=>$shop_id, 'date'=>$date])->count();
-        $this->data['number_sales'] = Sale::where(['shop_id'=>$shop_id, 'date'=>$date])->count();
-        $this->data['today_purchases'] = Purchase::where(['shop_id'=>$shop_id, 'date'=>$date])->sum('grand_total');
-        $this->data['today_sales'] = Sale::where(['shop_id'=>$shop_id, 'date'=>$date])->sum('grand_total');
+        $this->data['number_purchases'] = Purchase::where(['shop_id' => $shop_id, 'date' => $date])->count();
+        $this->data['number_sales'] = Sale::where(['shop_id' => $shop_id, 'date' => $date])->count();
+        $this->data['today_purchases'] = Purchase::where(['shop_id' => $shop_id, 'date' => $date])->sum('grand_total');
+        $this->data['today_sales'] = Sale::where(['shop_id' => $shop_id, 'date' => $date])->sum('grand_total');
         $this->data['customers'] = Customer::where('shop_id', $shop_id)->count();
         $this->data['suppliers'] = Supplier::where('shop_id', $shop_id)->count();
         $this->data['all_product'] = Product::where('shop_id', $shop_id)->count();
         $this->data['in_stock'] = Product::where('shop_id', $shop_id)->whereIn('id', inStockProducts())->count();
         $this->data['out_stock'] = Product::where('shop_id', $shop_id)->whereIn('id', outStockProducts())->count();
         $this->data['most_solds'] =  Product::where('shop_id', $shop_id)->whereIn('id', most_sold())->get();
-       
+
         $months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        $sales =[];
-        $purchases =[];
+        $sales = [];
+        $purchases = [];
         $year = date('Y');
-        foreach($months as $i=>$value){
-            $sale = DB::select("select coalesce(sum(grand_total),0) as sales from sales where extract(YEAR from date) = ".$year." and extract(MONTH from date) =".$value." and shop_id =".$shop_id." and deleted_at is null");
-            $purchase = DB::select("select coalesce(sum(grand_total),0) as purchases from purchases where extract(YEAR from date) = ".$year." and extract(MONTH from date) =".$value." and shop_id =".$shop_id." and deleted_at is null");
-          
+        foreach ($months as $i => $value) {
+            $sale = DB::select("select coalesce(sum(grand_total),0) as sales from sales where extract(YEAR from date) = " . $year . " and extract(MONTH from date) =" . $value . " and shop_id =" . $shop_id . " and deleted_at is null");
+            $purchase = DB::select("select coalesce(sum(grand_total),0) as purchases from purchases where extract(YEAR from date) = " . $year . " and extract(MONTH from date) =" . $value . " and shop_id =" . $shop_id . " and deleted_at is null");
+
             $sales[] = (int)$sale[0]->sales;
-          
+
             $purchases[] = (int)$purchase[0]->purchases;
-           
         }
-        $this->data['sales_chart'] = implode(',' , $sales);
-               
-        $this->data['purchases_chart'] = implode(',' , $purchases);
+        $this->data['sales_chart'] = implode(',', $sales);
+
+        $this->data['purchases_chart'] = implode(',', $purchases);
         //recent five sales with their payments
         $this->data['sales'] = $sales = Sale::where('shop_id', session('shop_id'))->latest()->take(5)->get();
         $payment = [];
@@ -83,7 +84,7 @@ class Admin extends Controller
             }
         }
         $this->data['payments'] = $payment;
-         //recent five sales with their payments
+        //recent five sales with their payments
         $purchases = Purchase::where('shop_id', session('shop_id'))->latest()->take(5)->get();
         $purchase_payment = [];
         if (!$purchases->isEmpty()) {
@@ -94,8 +95,8 @@ class Admin extends Controller
         $this->data['purchase_payment'] = $purchase_payment;
         $this->data['purchases'] = $purchases;
 
-       return view('admin.dashboard', $this->data);
-    //    return view('admin.incomming');
+        return view('admin.dashboard', $this->data);
+        //    return view('admin.incomming');
     }
 
     // USERS
@@ -330,12 +331,13 @@ class Admin extends Controller
             return  redirect()->back()->with('error', "Unable to Update  User Photo");
         }
     }
-    public function updateprofile(Request $request){
+    public function updateprofile(Request $request)
+    {
         $user  =  $user = User::find(Auth::user()->id);
         $data = [
-            'name' =>$request->name,
-            'email' =>$request->email,
-            'phone' =>$request->phone,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
         ];
         if ($user->update($data)) {
             return redirect()->route('profile')->with('success', "Profile Updated Successfully");
@@ -343,10 +345,12 @@ class Admin extends Controller
             return  redirect()->back()->with('error', "Unable to Update  User Profile");
         }
     }
-    public function password(){
+    public function password()
+    {
         return view('admin.password');
     }
-    public function changepassword(Request $request){ 
+    public function changepassword(Request $request)
+    {
         $user   = User::find(Auth::user()->id);
         $current = $request->current_password;
         $new = $request->new_password;
@@ -360,10 +364,62 @@ class Admin extends Controller
         if ($currentPassword != $user->password) {
             return  redirect()->back()->with('warning', "Incorrect current/old Password");
         }
-        if ($user->update(['password'=>$new])) {
+        if ($user->update(['password' => $new])) {
             return redirect()->route('profile')->with('success', "Password Changed Successfully");
-        }else {
+        } else {
             return  redirect()->back()->with('error', "Unable to Change Password");
         }
-    } 
+    }
+    public function user_permission()
+    {
+        $this->data['users'] = User::latest()->get();
+        return view('admin.permissions', $this->data);
+    }
+    public function manage_permission($uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+        if (empty($user)) {
+            abort(404);
+        }
+        $permissions = Permissions::all();
+        $user_permissions = UserPermissions::where('user_id', $user->id)->get();
+
+
+        $checked = [];
+        $given_permissions = [];
+        if (!$user_permissions->isEmpty()) {
+            foreach ($user_permissions as $key => $user_permission) {
+                $given_permissions[] =  $user_permission->permission_id;
+            }
+        }
+        foreach ($permissions as $key => $permission) {
+            if (in_array($permission->id, $given_permissions)) {
+                $checked[$permission->id] = "checked";
+            } else {
+                $checked[$permission->id] = "";
+            }
+        }
+        $this->data['user'] = $user;
+        $this->data['permissions'] = $permissions;
+        $this->data['checked'] = $checked;
+        return view('admin.manage_permissions', $this->data);
+    }
+
+    public function update_permission(Request $request)
+    {
+        $user_id = $request->user_id;
+        $permission  = $request->id;
+        $value = $request->checked;
+        if ($value == 'false') {
+            $user_permission = UserPermissions::where(['user_id' => $user_id, 'permission_id' => $permission])->first();
+            $user_permission->delete();
+            $message = ['message' => 'Permission Denied', 'class'=>'warning'];
+        } elseif ($value == 'true') {
+            UserPermissions::create(['user_id' => $user_id, 'permission_id' => $permission]);
+            $message = ['message' => 'Permission Granted', 'class'=>'success'];
+        } else {
+            $message = ['message' => 'Error!! ', 'class'=>'error'];
+        }
+        echo json_encode($message);
+    }
 }

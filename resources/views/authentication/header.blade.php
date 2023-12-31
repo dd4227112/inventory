@@ -29,6 +29,8 @@
 
     <link rel="stylesheet" href="{{ asset('/assets/plugins/fontawesome/css/all.min.css')}}">
 
+    <link rel="stylesheet" href="{{ asset('/assets/plugins/alertify/alertify.min.css')}}">
+
     <link rel="stylesheet" href="{{ asset('/assets/css/style.css')}}">
 </head>
 

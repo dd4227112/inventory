@@ -12,9 +12,11 @@
                 <h4>shop Management</h4>
                 <h6>List shops</h6>
             </div>
+            @if(can_access('add_shop'))
             <div class="page-btn">
                 <a href="{{route('admin.add_shop')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add Shop</a>
             </div>
+            @endif
         </div>
 
         <div class="card">
@@ -65,12 +67,16 @@
                                 <td>{{ $shop->location}}</td>
                                 <td>{{ $shop->description}}</td>
                                 <td>
+                                @if(can_access('edit_shop'))
                                     <a class="me-3" href="{{route('admin.fetchshop', $shop->uuid)}}">
                                         <img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img">
                                     </a>
+                                    @endif
+                                    @if(can_access('delete_shop'))
                                     <a class="me-3 delete" id="{{$shop->id }}" href="javascript:void(0);">
                                         <img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img">
                                     </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

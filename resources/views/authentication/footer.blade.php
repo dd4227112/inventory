@@ -29,6 +29,10 @@
 
 <script src="{{ asset('/assets/plugins/sweetalert/sweetalerts.min.js')}}"></script>
 
+<script src="{{ asset('/assets/plugins/alertify/alertify.min.js')}}"></script>
+
+<script src="{{ asset('/assets/plugins/alertify/custom-alertify.min.js')}}"></script>
+
 <script src="{{ asset('/assets/js/script.js')}}"></script>
 
 
@@ -36,12 +40,12 @@
 @if (session()->has('success'))
 <script>
     $(document).ready(function() {
-            toastr.success("{{ session('success') }}", "Success", {
-                closeButton: !0,
-                tapToDismiss: !1,
-                progressBar: !0,
-                
-            })
+        toastr.success("{{ session('success') }}", "Success", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            progressBar: !0,
+
+        })
     });
 </script>
 @endif
@@ -49,12 +53,12 @@
 @if (session()->has('warning'))
 <script>
     $(document).ready(function() {
-        toastr.warning("{{ session('warning') }}",  "Warning", {
-                closeButton: !0,
-                tapToDismiss: !1,
-                progressBar: !0,
-                
-            })
+        toastr.warning("{{ session('warning') }}", "Warning", {
+            closeButton: !0,
+            tapToDismiss: !1,
+            progressBar: !0,
+
+        })
     });
 </script>
 @endif
@@ -63,11 +67,11 @@
 <script>
     $(document).ready(function() {
         toastr.error("{{ session('error') }}", "Error", {
-                closeButton: !0,
-                tapToDismiss: !1,
-                progressBar: !0,
-                
-            })
+            closeButton: !0,
+            tapToDismiss: !1,
+            progressBar: !0,
+
+        })
     });
 </script>
 @endif
@@ -77,11 +81,11 @@
 <script>
     $(document).ready(function() {
         toastr.success("{{ $message['message']}}", "Success", {
-                closeButton: !0,
-                tapToDismiss: !1,
-                progressBar: !0,
-                
-            })
+            closeButton: !0,
+            tapToDismiss: !1,
+            progressBar: !0,
+
+        })
     });
 </script>
 @endif

@@ -9,11 +9,11 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Product Management</h4>
-                <h6>List Products</h6> 
+            <h4>User Management</h4>
+                <h6>List Users</h6>
             </div>
             <div class="page-btn">
-                <a href="{{route('add_product')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add Product</a>
+                <a href="{{route('admin.add_user')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add User</a>
             </div>
         </div>
 
@@ -47,40 +47,31 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Code </th>
+                                <th>Photo</th>
                                 <th>Name </th>
-                                <th>Description</th>
-                                <th>Unit </th>
-                                <th>Category</th>
-                                <th>Quantity</th>
-                                <th>Cost</th>
-                                <th>Price</th>
-                                <th>Shop</th>
-                                <th>Created By</th>
-                                <th>Action</th>
+                                <th>Phone</th>
+                                <th>email</th>
+                                <th>Role</th>
+                                <th>Permission</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!$products->isEmpty())
-                            @foreach($products as $key => $product)
+                            @if(!$users->isEmpty())
+                            @foreach($users as $key => $user)
                             <tr>
                                 <td>{{ ++$key}} </td>
-                                <td>{{ $product->code}}</td>
-                                <td>{{ $product->name}}</td>
-                                <td>{{ $product->description}}</td>
-                                <td>{{ $product->unit->name}}</td>
-                                <td>{{ $product->category->name}}</td>
-                                <td>{{ number_format(product_balance($product->id)['balance'])}}</td>
-                                <td>{{ number_format($product->cost, 2)}}</td>
-                                <td>{{ number_format($product->price, 2)}}</td>
-                                <td>{{ $product->shop->name}}</td>
-                                <td>{{ $product->user->name}}</td>
-                                <td>
-                                    <a class="me-3" href="{{route('edit_product', $product->uuid) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img">
+                                <td class="productimgname">
+                                    <a href="javascript:void(0);" class="product-img">
+                                        <img src="{{ asset('uploads/profiles/'.$user->photo)}}" alt="">
                                     </a>
-                                    <a class="me-3 deleteProduct" id="{{$product->id }}" href="javascript:void(0);">
-                                        <img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img">
+                                </td>
+                                <td>{{ $user->name}}</td>
+                                <td>{{ $user->phone}}</td>
+                                <td>{{ $user->email}}</td>
+                                <td>{{ $user->role->name}}</td>
+                                <td>
+                                    <a class="me-3" title ="View/Edit user permissions" href="{{ route('manage_permission', $user->uuid)}}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg')}}"   alt="img">
                                     </a>
                                 </td>
                             </tr>
@@ -99,12 +90,12 @@
 
 @include('authentication.footer')
 <script>
-      $(document).on("click", ".deleteProduct", function() {
+    $(document).on("click", ".delete", function() {
         var id = $(this).attr('id');
 
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this Product!",
+            text: "You want to delete this User!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -117,7 +108,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deleteproduct')}}",
+                    url: "{{url('deleteuser')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -131,6 +122,43 @@
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
                             window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on("click", ".reset", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to reset password for this User!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, reset it!",
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('resetuser')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: "Deleted!",
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
                         });
                     }
                 });

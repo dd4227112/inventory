@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\Permissions;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
@@ -8,6 +9,8 @@ use App\Models\Sale;
 use App\Models\SaleProduct;
 use App\Models\Shop;
 use App\Models\Supplier;
+use App\Models\UserPermissions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -363,4 +366,18 @@ function most_sold(){
         $product_ids[] = $product->product_id;
     }
     return  $product_ids;
+}
+function can_access($name){
+    $user_id = Auth::user()->id;
+    $user_permissions = UserPermissions::where('user_id', $user_id)->get();
+    $permisions = [];
+    foreach ($user_permissions as $key => $user_permission) {
+         $permision = Permissions::find($user_permission->permission_id);
+         $permisions[] = $permision->name;
+    }
+    
+    if (in_array($name, $permisions)) {
+        return true;
+    }
+    return false;
 }
