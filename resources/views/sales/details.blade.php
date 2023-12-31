@@ -17,27 +17,39 @@
                 <div class="card-sales-split">
                     <h2>Sale Detail : {{$sale->reference }}</h2>
                     <ul>
+                        @if(can_access('list_sales'))
                         <li>
                             <a href="{{ route('list_sale') }}" class="btn btn-sm btn-primary">Back</a>
                         </li>
+                        @endif
+                        @if(can_access('edit_sale'))
                         <li>
                             <a href="{{ route('edit_sale', $sale->uuid) }}"><img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img"></a>
                         </li>
+                        @endif
+                        @if(can_access('print_sale'))
                         <li>
                             <a href="{{ route('print_sale', $sale->uuid ) }}"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
+                        @endif
+
                         <li>
                             <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
                         </li>
                         @if($status != 'Completed')
+
+                        @if(can_access('add_sale_payment'))
                         <li>
                             <a href="javascript:void(0);" title="Add Payment" class="createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" alt="img"></a>
                         </li>
                         @endif
+                        @endif
+
+                        @if(can_access('delete_sale'))
                         <li>
                             <a href="javascript:void(0);" class="delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img"></a>
                         </li>
-
+                        @endif
                     </ul>
                 </div>
                 <div class="invoice-box table-height" style="max-width: 1600px;width:100%;overflow: auto;margin:15px auto;padding: 0;font-size: 14px;line-height: 24px;color: #555;">

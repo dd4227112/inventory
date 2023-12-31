@@ -9,7 +9,7 @@
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/product.svg')}}" alt="img"><span> Product</span> <span class="menu-arrow"></span></a>
                     <ul>
-                        @if(can_access('list_product'))
+                        @if(can_access('list_products'))
                         <li><a href="{{ route('list_product')}}">Product List</a></li>
                         @endif
                         @if(can_access('add_product'))

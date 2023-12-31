@@ -11,9 +11,11 @@
                 <h4>Sales Management</h4>
                 <h6>List Sales</h6>
             </div>
+            @if(can_access('add_sale'))
             <div class="page-btn">
                 <a href=" {{ route('add_sale')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-1">Add Sales</a>
             </div>
+            @endif
         </div>
 
         <div class="card">
@@ -80,26 +82,39 @@
                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                         </a>
                                         <ul class="dropdown-menu">
+                                       
+                                            @if(can_access('view_sale'))
                                             <li>
                                                 <a href="{{ route('view_sale',   $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">Sale
                                                     Detail</a>
                                             </li>
+                                            @endif
+                                            @if(can_access('edit_sale'))
                                             <li>
                                                 <a href="{{ route('edit_sale', $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit
                                                     Sale</a>
                                             </li>
+                                            @endif
+                                            @if(can_access('view_sale_payment'))
                                             <li>
                                                 <a href="javascript:void(0);" class="dropdown-item showpayment" id="{{ $sale->id}}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
                                             </li>
+                                            @endif
+                                            @if(can_access('add_sale_payment'))
                                             <li>
                                                 <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/plus-circle.svg')}}" class="me-2" alt="img">Add Payment</a>
                                             </li>
+                                            @endif
+                                            @if(can_access('print_sale'))
                                             <li>
                                                 <a href="{{ route('print_sale', $sale->uuid ) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
                                             </li>
+                                            @endif
+                                            @if(can_access('edit_sale'))
                                             <li>
                                                 <a href="javascript:void(0);" class="dropdown-item delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete Sale</a>
                                             </li>
+                                            @endif
                                         </ul>
                                     </td>
                             </tr>

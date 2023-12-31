@@ -215,18 +215,24 @@ class SaleController extends Controller
                 $html  .= "<td>Cash</td>";
                 $html  .= "<td>" . $payment->description . " </td>";
                 $html  .= "<td>" . $payment->user->name . " </td>";
-                $html  .= "<td>
-                    <a class='me-2' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
+                $html  .= "<td>";
+                if (can_access('print_sale_payment')) {
+                    $html  .= "<a class='me-2' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
                         <img src='" . url('assets/img/icons/printer.svg') . "' alt='img'>
-                    </a>
-                    <a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
+                    </a>";
+                }
+                if (can_access('edit_sale_payment')) {
+                $html  .= "<a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
                         data-bs-dismiss='modal'>
                         <img src= '" . url('assets/img/icons/edit.svg') . "' alt='img'>
-                    </a>
-                    <a class='me-2 deletePayment' id = '" . $payment->id . "' href='javascript:void(0);'>
+                    </a>";
+                }
+                if (can_access('delete_sale_payment')) {
+                    $html  .= " <a class='me-2 deletePayment' id = '" . $payment->id . "' href='javascript:void(0);'>
                         <img src='" . url('assets/img/icons/delete.svg') . "' alt='img'>
-                    </a>
-                </td>
+                    </a>";
+                }
+                $html  .= "</td>
             </tr>";
             }
         }

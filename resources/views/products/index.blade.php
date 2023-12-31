@@ -12,9 +12,11 @@
                 <h4>Product Management</h4>
                 <h6>List Products</h6> 
             </div>
+            @if(can_access('add_product'))
             <div class="page-btn">
                 <a href="{{route('add_product')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add Product</a>
             </div>
+            @endif
         </div>
 
         <div class="card">
@@ -76,12 +78,16 @@
                                 <td>{{ $product->shop->name}}</td>
                                 <td>{{ $product->user->name}}</td>
                                 <td>
+                                @if(can_access('edit_product'))
                                     <a class="me-3" href="{{route('edit_product', $product->uuid) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg')}}" alt="img">
                                     </a>
+                                    @endif
+                                    @if(can_access('delete_product'))
                                     <a class="me-3 deleteProduct" id="{{$product->id }}" href="javascript:void(0);">
                                         <img src="{{ asset('assets/img/icons/delete.svg')}}" alt="img">
                                     </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
