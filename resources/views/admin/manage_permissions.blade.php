@@ -36,7 +36,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Grand/Deny Permission</th>
+                                <th>Grant/Deny Permission</th>
                             </tr>
                         </thead>
                         <tbody>
