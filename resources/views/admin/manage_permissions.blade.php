@@ -9,7 +9,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Manage User Permission</h4>
+                <h4>Manage User Permissions</h4>
                 <hr>
                 <h4>{{ $user->name }} - ({{$user->role->name }})</h4>
             </div>
@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                           
+
 
                             @if(!$permissions->isEmpty())
                             @foreach($permissions as $permission)
@@ -58,17 +58,6 @@
                             </tr>
                             @endforeach
                             @endif
-                            <!-- <tr>
-                                <td>Newyork </td>
-                                <td>USA</td>
-                                <td>
-                                    <div class="status-toggle d-flex justify-content-between align-items-center">
-                                        <input type="checkbox" id="user2" class="check" checked="">
-                                        <label for="user2" class="checktoggle">checkbox</label>
-                                    </div>
-                                </td>
-
-                            </tr> -->
                         </tbody>
                     </table>
                     <input type="hidden" value="{{ $user->id }}" name="user_id" id="user_id">
@@ -91,23 +80,20 @@
         }
         var user_id = $('#user_id').val();
         $.ajax({
-                    type: 'POST',
-                    url: "{{url('update_permission')}}",
-                    dataType: 'json',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        id: id,
-                        user_id:user_id,
-                        checked: checked
-                    },
-                    success: function(response) {
-                        alertify[response.class](response.message)
-                       
-                    }
-                });
+            type: 'POST',
+            url: "{{url('update_permission')}}",
+            dataType: 'json',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: id,
+                user_id: user_id,
+                checked: checked
+            },
+            success: function(response) {
+                alertify[response.class](response.message)
 
-
-
+            }
+        });
     });
     $(document).ready(checktoggle);
 </script>

@@ -9,11 +9,8 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-            <h4>User Management</h4>
-                <h6>List Users</h6>
-            </div>
-            <div class="page-btn">
-                <a href="{{route('admin.add_user')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add User</a>
+            <h4>User Permission Management</h4>
+                <h6>Click on eye icon to manage user permissions</h6>
             </div>
         </div>
 
@@ -28,17 +25,7 @@
                         </div>
                     </div>
                     <div class="wordset">
-                        <ul>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
-                            </li>
-                        </ul>
+                       
                     </div>
                 </div>
 
