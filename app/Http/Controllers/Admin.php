@@ -359,9 +359,8 @@ class Admin extends Controller
         if ($new != $confirm) {
             return  redirect()->back()->with('warning', "Passwords not match");
         }
-        $currentPassword = Hash::make($current);
         $new = Hash::make($new);
-        if ($currentPassword != $user->password) {
+        if(!Hash::check($current, $user->password )){
             return  redirect()->back()->with('warning', "Incorrect current/old Password");
         }
         if ($user->update(['password' => $new])) {
