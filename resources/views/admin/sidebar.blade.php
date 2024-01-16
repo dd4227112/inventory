@@ -114,6 +114,9 @@
                         @if(can_access('user_permission'))
                         <li><a href="{{route('user_permission') }}">User Permissions</a></li>
                         @endif
+                        @if(can_access('manage_trash'))
+                        <li><a href="{{route('admin.trash') }}">Trash</a></li>
+                        @endif
                     </ul>
                 </li>
                 @endif

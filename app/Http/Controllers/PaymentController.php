@@ -56,7 +56,9 @@ class PaymentController extends Controller
 
     public function deletepayment(Request $request)
     {
-        if (Payment::find($request->id)->delete()) {
+        $payment = Payment::find($request->id);
+        if ($payment->delete()) {
+            $payment->update(['deleted_by'=>Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];
@@ -174,7 +176,9 @@ class PaymentController extends Controller
     }
     public function deletepurchasepayment(Request $request)
     {
-        if (Payment::find($request->id)->delete()) {
+        $payment = Payment::find($request->id);
+        if ($payment->delete()) {
+            $payment->update(['deleted_by'=>Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];

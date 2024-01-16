@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
             $table->uuid('uuid');
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->softDeletes();
         });
     }

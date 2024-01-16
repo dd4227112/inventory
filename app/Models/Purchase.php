@@ -16,6 +16,7 @@ class Purchase extends BasicModel
         'shop_id',
         'supplier_id',
         'status',
+        'deleted_by'
     ];
 
     public function purchase_product(){
@@ -35,5 +36,8 @@ class Purchase extends BasicModel
     } 
     public function payment(){
         return $this->hasMany(Payment::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 }

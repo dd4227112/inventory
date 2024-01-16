@@ -29,6 +29,8 @@ return new class extends Migration
             $table->foreign('unit_id')->references('id')->on('units')->OnDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->OnDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->uuid('uuid');
             $table->unique(['code', 'name', 'shop_id']);

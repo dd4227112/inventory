@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('location');
             $table->string('description')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->uuid('uuid');
             $table->softDeletes();

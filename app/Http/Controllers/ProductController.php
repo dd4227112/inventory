@@ -82,8 +82,9 @@ class ProductController extends Controller
 
     public function  deleteproduct(Request $request)
     {
-        if (Product::find($request->id)->delete()) {
-          
+        $product = Product::find($request->id);
+        if ($product->delete()) {
+            $product->update(['deleted_by'=>Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this product'];

@@ -16,6 +16,7 @@ class Sale extends BasicModel
         'customer_id',
         'status',
         'uuid',
+        'deleted_by'
 
     ];
     public function sale_product(){
@@ -32,5 +33,8 @@ class Sale extends BasicModel
     }
     public function payment(){
         return $this->hasMany(Payment::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 }

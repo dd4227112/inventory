@@ -14,20 +14,19 @@ class SupplierController extends Controller
 
     public function index()
     {
-        $this->data['suppliers'] = Supplier::where(['status'=> 1, 'shop_id'=>session('shop_id')])->get();
+        $this->data['suppliers'] = Supplier::where(['status' => 1, 'shop_id' => session('shop_id')])->get();
         return view('supplier.index', $this->data);
     }
-    
+
     public function addsupplier()
     {
         $this->data['shops'] = Shop::latest()->get();
-        return view('supplier.add',$this->data);
-       
+        return view('supplier.add', $this->data);
     }
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        
+
         if (Supplier::create($data)) {
             if ($request->add_ajax) {
                 $message = ['message' => "Supplier Added Successfully"];
@@ -35,11 +34,11 @@ class SupplierController extends Controller
                 exit;
             }
             return redirect()->route('list_supplier')->with('success', "Supplier Added Successfully");
-        }else{
+        } else {
             return redirect()->back()->with('error', "Failed to add new Supplier.");
         }
     }
-    
+
     public function getsupplier()
     {
         supplier();
@@ -68,8 +67,9 @@ class SupplierController extends Controller
     }
 
 
-    
-     public function deletesupplier(Request $request){
+
+    public function deletesupplier(Request $request)
+    {
         $supplier = Supplier::find($request->id);
         if (empty($supplier)) {
             $response = ['message' => 'Error!! supplier not found'];
@@ -77,6 +77,7 @@ class SupplierController extends Controller
         }
 
         if ($supplier->delete()) {
+            $supplier->update(['deleted_by' => Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];

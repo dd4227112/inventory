@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -70,6 +71,7 @@ class CustomerController extends Controller
         }
 
         if ($customer->delete()) {
+            $customer->update(['deleted_by'=>Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];

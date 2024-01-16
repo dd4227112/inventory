@@ -19,7 +19,8 @@ class Shop extends BasicModel
         'name',
         'address',
         'description',
-        'location'
+        'location',
+        'deleted_by'
     ];
     public function user(){
         return $this->belongsTo(User::class);
@@ -35,6 +36,9 @@ class Shop extends BasicModel
     }
     public function supplier(){
         return $this->hasMany(Supplier::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 
 

@@ -87,10 +87,13 @@ class PurchaseController extends Controller
     }
     public function deletepurchase(Request $request)
     {
-
-        if (Purchase::find($request->id)->delete()) {
+        $purchase =Purchase::find($request->id);
+        if ($purchase->delete()) {
+            $purchase->update(['deleted_by'=>Auth::user()->id]);
             purchaseProduct::where('purchase_id', $request->id)->delete();
+            Payment::where('purchase_id', $request->id)->update(['deleted_by'=>Auth::user()->id]);
             Payment::where('purchase_id', $request->id)->delete();
+
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this purchase'];

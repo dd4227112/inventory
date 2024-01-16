@@ -218,6 +218,7 @@ class Admin extends Controller
         }
         delete_file($user->photo, 'profiles');
         if ($user->delete()) {
+            $user->update(['deleted_by' => Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];
@@ -273,6 +274,7 @@ class Admin extends Controller
             exit;
         }
         if ($shop->delete()) {
+            $shop->update(['deleted_by' => Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this shop'];
@@ -360,7 +362,7 @@ class Admin extends Controller
             return  redirect()->back()->with('warning', "Passwords not match");
         }
         $new = Hash::make($new);
-        if(!Hash::check($current, $user->password )){
+        if (!Hash::check($current, $user->password)) {
             return  redirect()->back()->with('warning', "Incorrect current/old Password");
         }
         if ($user->update(['password' => $new])) {
@@ -412,13 +414,104 @@ class Admin extends Controller
         if ($value == 'false') {
             $user_permission = UserPermissions::where(['user_id' => $user_id, 'permission_id' => $permission])->first();
             $user_permission->delete();
-            $message = ['message' => 'Permission Denied', 'class'=>'warning'];
+            $message = ['message' => 'Permission Denied', 'class' => 'warning'];
         } elseif ($value == 'true') {
             UserPermissions::create(['user_id' => $user_id, 'permission_id' => $permission]);
-            $message = ['message' => 'Permission Granted', 'class'=>'success'];
+            $message = ['message' => 'Permission Granted', 'class' => 'success'];
         } else {
-            $message = ['message' => 'Error!! ', 'class'=>'error'];
+            $message = ['message' => 'Error!! ', 'class' => 'error'];
         }
         echo json_encode($message);
+    }
+    public function trash()
+    {
+        $items = [
+            ['name' => 'Products', 'model' => 'Product'],
+            ['name' => 'Shops', 'model' => 'Shop'],
+            ['name' => 'Sales', 'model' => 'Sale'],
+            ['name' => 'Purchases', 'model' => 'Purchase'],
+            ['name' => 'Users', 'model' => 'User'],
+            ['name' => 'Customers', 'model' => 'Customer'],
+            ['name' => 'Suppliers', 'model' => 'Supplier']
+        ];
+        $this->data['items'] = $items;
+        return view('restore.trash', $this->data);
+    }
+
+    public function restore($item)
+    {
+
+        $items = [
+            'Product',
+            'Shop',
+            'Sale',
+            'Purchase',
+            'User',
+            'Customer',
+            'Supplier'
+        ];
+        if (!in_array($item, $items)) {
+            abort(403);
+        } else {
+            switch ($item) {
+                case 'Product':
+                    $products = Product::where('shop_id', session('shop_id'))->onlyTrashed()->get();
+                    $this->data['products'] = $products;
+                    return view('restore.product', $this->data);
+                    break;
+
+                case 'Shop':
+                    $shops = Shop::onlyTrashed()->get();
+                    $this->data['shops'] = $shops;
+                    return view('restore.shop', $this->data);
+                    break;
+
+                case 'Sale':
+                    $sales = sale::where('shop_id', session('shop_id'))->onlyTrashed()->get();
+                    $this->data['sales'] = $sales;
+                    $payment = [];
+                    if (!$sales->isEmpty()) {
+                        foreach ($sales as $key => $sale) {
+                            $payment[$sale->id] =  $sale->payment->sum('amount');
+                        }
+                    }
+                    $this->data['payments'] = $payment;
+                    return view('restore.sales', $this->data);
+                    break;
+
+                case 'Purchase':
+                    $purchases = Purchase::where('shop_id', session('shop_id'))->onlyTrashed()->get();
+                    $payment = [];
+                    if (!$purchases->isEmpty()) {
+                        foreach ($purchases as $key => $purchase) {
+                            $payment[$purchase->id] =  $purchase->payment->sum('amount');
+                        }
+                    }
+                    $this->data['payments'] = $payment;
+                    $this->data['purchases'] = $purchases;
+                    return view('restore.purchases', $this->data);
+                    break;
+
+                case 'User':
+                    $users = User::onlyTrashed()->get();
+                    $this->data['users'] = $users;
+                    return view('restore.users', $this->data);
+                    break;
+
+                case 'Customer':
+                    $this->data['customers'] = Customer::where(['shop_id' => session('shop_id')])->onlyTrashed()->get();
+                    return view('restore.customers', $this->data);
+                    break;
+
+                case 'Supplier':
+                    $this->data['suppliers'] = Supplier::where(['shop_id' => session('shop_id')])->onlyTrashed()->get();
+                    return view('restore.suppliers', $this->data);
+                    break;
+
+                default:
+                    return view('errors.404');
+                    break;
+            }
+        }
     }
 }

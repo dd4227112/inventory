@@ -10,8 +10,12 @@ class Category extends BasicModel
     protected $fillable = [
         'name',
         'description',
+        'deleted_by'
     ];
     public function product(){
         return $this->belongsTo(Product::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 }

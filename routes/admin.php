@@ -7,6 +7,11 @@ use App\Http\Controllers\SupplierController;
 Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/users', [Admin::class, 'user'])->name('admin.list_user');
     Route::post('/store', [Admin::class, 'store'])->name('admin.store_user');
+    Route::get('/trash', [Admin::class, 'trash'])->name('admin.trash');
+    Route::get('/restore/{item}', [Admin::class, 'restore'])->name('restore');
+
+    
+
 
     Route::get('/addUser', [Admin::class, 'addUser'])->name('admin.add_user');
     Route::post('/viewUser', [Admin::class, 'viewUser'])->name('admin.view_user');

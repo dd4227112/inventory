@@ -17,7 +17,8 @@ class Payment extends BasicModel
         'sale_id',
         'purchase_id',
         'status',
-        'payment_method'
+        'payment_method',
+        'deleted_by'
     ];
     public function sale(){
         return $this->belongsTo(Sale::class);
@@ -28,5 +29,8 @@ class Payment extends BasicModel
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 }

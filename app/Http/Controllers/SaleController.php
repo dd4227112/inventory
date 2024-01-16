@@ -138,10 +138,13 @@ class SaleController extends Controller
     }
     public function destroy(Request $request)
     {
-
-        if (Sale::find($request->id)->delete()) {
+        $sale = Sale::find($request->id);
+        if ($sale->delete()) {
+            $sale->update(['deleted_by' => Auth::user()->id]);
             SaleProduct::where('sale_id', $request->id)->delete();
+            Payment::where('sale_id', $request->id)->update(['deleted_by' => Auth::user()->id]);
             Payment::where('sale_id', $request->id)->delete();
+
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];
@@ -222,7 +225,7 @@ class SaleController extends Controller
                     </a>";
                 }
                 if (can_access('edit_sale_payment')) {
-                $html  .= "<a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
+                    $html  .= "<a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
                         data-bs-dismiss='modal'>
                         <img src= '" . url('assets/img/icons/edit.svg') . "' alt='img'>
                     </a>";

@@ -14,9 +14,13 @@ class Supplier extends BasicModel
         'address',
         'status',
         'shop_id',
+        'deleted_by'
     ];
 
     public function shop(){
         return $this->belongsTo(Shop::class);
+    }
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deleted_by' );
     }
 }
