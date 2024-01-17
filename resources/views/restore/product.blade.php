@@ -74,7 +74,7 @@
                                 <td>{{ $product->deletedBy->name}}</td>
                                 <td>
                                     @if(can_access('edit_product'))
-                                    <a class="me-3" href="{{route('edit_product', $product->uuid) }}">
+                                    <a class="me-3 restoreProduct" id="{{$product->id }}" href="javascript:void(0);">
                                         <i class="fa fa-undo text-success"></i>
                                     </a>
                                     @endif
@@ -82,6 +82,8 @@
                                     <a class="me-3 deleteProduct" id="{{$product->id }}" href="javascript:void(0);">
                                         <i class="fa fa-trash text-danger"></i>
                                     </a>
+
+                                    
                                     @endif
                                 </td>
                             </tr>
@@ -100,12 +102,13 @@
 
 @include('authentication.footer')
 <script>
+    //delete payment forever
     $(document).on("click", ".deleteProduct", function() {
         var id = $(this).attr('id');
 
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this Product!",
+            text: "You want to delete this Product! Can't be Restored again!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -118,7 +121,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deleteproduct')}}",
+                    url: "{{url('delete_product')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -127,15 +130,61 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
-                            window.location.reload();
+                            if (response.title =='Deleted!') {
+                                window.location.reload();
+                            }
                         });
                     }
                 });
             }
         });
     });
+//  restore payment
+$(document).on("click", ".restoreProduct", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to Restore  this Product!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, restore it!",
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('restoreProduct')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: response.title,
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            if (response.title =='Restored!') {
+                                window.location.reload();
+                            }
+                            
+                        });
+                    }
+                });
+            }
+        });
+    });
+    
+
 </script>

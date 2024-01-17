@@ -51,6 +51,8 @@ require __DIR__ . '/sales.php';
 require __DIR__ . '/purchases.php';
 require __DIR__ . '/payments.php';
 require __DIR__ . '/reports.php';
+require __DIR__ . '/restore.php';
+
 
 
 // Could not move the file "/tmp/phpMCtLGE" to "/var/www/html/Inventory_Management/public/uploads/profiles/Screenshot from 2023-12-27 16-28-17.png" (move_uploaded_file(): Unable to move &quot;/tmp/phpMCtLGE&quot; to

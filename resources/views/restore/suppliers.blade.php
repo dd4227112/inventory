@@ -63,10 +63,10 @@
                                 <td>{{ $supplier->address}}</td>
                                 <td>{{ $supplier->deletedBy->name}}</td>
                                 <td>
-                                    <a class="me-3" href="{{route('fetchsupplier', $supplier->uuid)}}">
+                                    <a class="me-3 restoreSupplier" id="{{$supplier->id }}" href="javascript:void(0);">
                                         <i class="fa fa-undo text-success"></i>
                                     </a>
-                                    <a class="me-3 delete" id="{{$supplier->id }}" href="javascript:void(0);">
+                                    <a class="me-3 deleteSupplier" id="{{$supplier->id }}" href="javascript:void(0);">
                                         <i class="fa fa-trash text-danger"></i>
                                     </a>
                                 </td>
@@ -86,12 +86,12 @@
 
 @include('authentication.footer')
 <script>
-    $(document).on("click", ".delete", function() {
+    //delete Supplier forever
+    $(document).on("click", ".deleteSupplier", function() {
         var id = $(this).attr('id');
-
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this Supplier!",
+            text: "You want to delete this Supplier! Can't be Restored again!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -104,7 +104,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deletesupplier')}}",
+                    url: "{{url('delete_supplier')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -113,11 +113,55 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
-                            window.location.reload();
+                            if (response.title == 'Deleted!') {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+    //  restore payment
+    $(document).on("click", ".restoreSupplier", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to Restore  this Supplier!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, restore it!",
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('restoreSupplier')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: response.title,
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            if (response.title == 'Restored!') {
+                                window.location.reload();
+                            }
+
                         });
                     }
                 });

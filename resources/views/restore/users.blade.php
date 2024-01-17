@@ -71,10 +71,10 @@
                                 <td>{{ $user->role->name}}</td>
                                 <td>{{ $user->deletedBy->name}}</td>
                                 <td>
-                                    <a class="me-3" href="{{ route('admin.get_user', $user->uuid)}}">
+                                    <a class="me-3 restoreUser" id="{{$user->id }}" href="javascript:void(0);">
                                         <i class="fa fa-undo text-success"></i>
                                     </a>
-                                    <a class="me-3 delete" id="{{$user->id }}" href="javascript:void(0);">
+                                    <a class="me-3 deleteUser" id="{{$user->id }}" href="javascript:void(0);">
                                         <i class="fa fa-trash text-danger"></i>
                                     </a>
                                 </td>
@@ -93,13 +93,15 @@
 <!-- page content end -->
 
 @include('authentication.footer')
+
 <script>
-    $(document).on("click", ".delete", function() {
+    //delete payment forever
+    $(document).on("click", ".deleteUser", function() {
         var id = $(this).attr('id');
 
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this User!",
+            text: "You want to delete this User! Can't be Restored again!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -112,7 +114,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deleteuser')}}",
+                    url: "{{url('delete_user')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -121,37 +123,39 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
-                            window.location.reload();
+                            if (response.title == 'Deleted!') {
+                                window.location.reload();
+                            }
                         });
                     }
                 });
             }
         });
     });
-
-    $(document).on("click", ".reset", function() {
+    //  restore payment
+    $(document).on("click", ".restoreUser", function() {
         var id = $(this).attr('id');
 
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to reset password for this User!",
+            text: "You want to Restore  this User!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, reset it!",
-            confirmButtonClass: "btn btn-primary",
+            confirmButtonText: "Yes, restore it!",
+            confirmButtonClass: "btn btn-success",
             cancelButtonClass: "btn btn-secondary ml-1",
             buttonsStyling: false
         }).then(function(t) {
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('resetuser')}}",
+                    url: "{{url('restoreUser')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -160,9 +164,14 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            if (response.title == 'Restored!') {
+                                window.location.reload();
+                            }
+
                         });
                     }
                 });

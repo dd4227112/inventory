@@ -77,12 +77,12 @@
                                     <td>{{ $sale->deletedBy->name }}</td>
                                     <td>
                                         @if(can_access('edit_product'))
-                                        <a class="me-3" href="{{route('edit_product', $sale->uuid) }}">
+                                        <a class="me-3 restoreSale" id="{{$sale->id }}" href="javascript:void(0);">
                                             <i class="fa fa-undo text-success"></i>
                                         </a>
                                         @endif
                                         @if(can_access('delete_product'))
-                                        <a class="me-3 deleteProduct" id="{{$sale->id }}" href="javascript:void(0);">
+                                        <a class="me-3 deleteSale" id="{{$sale->id }}" href="javascript:void(0);">
                                             <i class="fa fa-trash text-danger"></i>
                                         </a>
                                         @endif
@@ -101,109 +101,15 @@
 </div>
 <!-- page end -->
 
-<!-- add payemnt modal -->
-<div class="modal fade" id="createpayment" tabindex="-1" aria-labelledby="createpayment" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <form action="{{ route('store_sale_payment') }}" method="POST">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Payment</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Customer</label>
-                                <div class="input-groupicon">
-                                    <input type="text" value="" id="customer" readonly class="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Date</label>
-                                <div class="input-groupicon">
-                                    <input type="date" required value="{{date('Y-m-d')}}" name="date" class="form-control">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Reference</label>
-                                <input type="text" name="reference" readonly value="{{reference() }}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Amount</label>
-                                <input type="text" id="purchase_amount" name="balance" readonly value="0.00">
-                                <input type="hidden" id="sale_id" name="sale_id" value="0.00">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Paying Amount</label>
-                                <input type="text" value="" id="amount" required name="amount" min="1">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Payment Method</label>
-                                <select class="select" name="payment_method">
-                                    <option value="1">Cash</option>
-                                    <option value="2">Bank</option>
-                                    <option value="3">Credit Card</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group mb-0">
-                                <label>Description</label>
-                                <textarea class="form-control" name="description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-submit">Submit</button>
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-@include('sales.actions');
 @include('authentication.footer')
-<script src="{{ asset('/assets/js/sales.js')}}"></script>
+
 <script>
-    show_payment = $('.showpayment').on('click', function() {
-        var sale_id = $(this).attr('id');
-        $.ajax({
-            type: 'POST',
-            url: "{{url('singleSalePayment')}}",
-            dataType: 'html',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: sale_id
-            },
-            success: function(response) {
-                $('#payment').html(response);
-                $('#showpayment').modal('show');
-            }
-        });
-
-    });
-    $(document).ready(show_payment);
-
-    $(document).on("click", ".deletePayment", function() {
+    //delete Sale forever
+    $(document).on("click", ".deleteSale", function() {
         var id = $(this).attr('id');
-
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this payment!",
+            text: "You want to delete this Sale! Can't be Restored again!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -216,7 +122,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deletepayment')}}",
+                    url: "{{url('delete_sale')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -225,40 +131,58 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
-                            window.location.reload();
+                            if (response.title == 'Deleted!') {
+                                window.location.reload();
+                            }
                         });
                     }
                 });
             }
         });
     });
-    $(document).on("click", ".getPayment", function() {
+    //  restore sale
+    $(document).on("click", ".restoreSale", function() {
         var id = $(this).attr('id');
-        $.ajax({
-            type: 'POST',
-            url: "{{url('getsinglepayment')}}",
-            dataType: 'json',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: id
-            },
-            success: function(response) {
-                $('#amounts').val(response.amount);
-                $('#customers').val(response.customer);
-                $('#payment_id').val(response.payment_id);
-                $('#reference').val(response.reference);
-                $('#description').val(response.description);
-                $('#date').val(response.date);
-                $('#balance').val(response.balance);
 
-                $('#editpayment').modal('show');
-            },
-            error: function(error) {
-                console.log(error);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to Restore  this Sale!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, restore it!",
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('restoreSale')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: response.title,
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            if (response.title == 'Restored!') {
+                                window.location.reload();
+                            }
+
+                        });
+                    }
+                });
             }
         });
     });

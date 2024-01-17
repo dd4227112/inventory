@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Permissions;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\PurchaseProduct;
 use App\Models\Role;
 use App\Models\Sale;
+use App\Models\SaleProduct;
 use App\Models\Shop;
 use App\Models\Supplier;
 use App\Models\User;
@@ -513,5 +516,326 @@ class Admin extends Controller
                     break;
             }
         }
+    }
+
+    public function restoreProduct(Request $request)
+    {
+        $id = $request->id;
+        $product = Product::withTrashed()->find($id);
+        if (!empty($product)) {
+            $product->restore();
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+
+        echo json_encode($response);
+    }
+    public function delete_product(Request $request)
+    {
+        $id = $request->id;
+        $product = Product::withTrashed()->find($id);
+        if (!empty($product)) {
+            $product->forceDelete();
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response =
+                [
+                    'title' => 'Failed!',
+                    'message' => 'Error!!'
+                ];
+        }
+        echo json_encode($response);
+    }
+
+    public function restoreShop(Request $request)
+    {
+        $id = $request->id;
+        $shop = Shop::withTrashed()->find($id);
+        if (!empty($shop)) {
+            $shop->restore();
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_shop(Request $request)
+    {
+        $id = $request->id;
+        $shop = Shop::withTrashed()->find($id);
+        if (!empty($shop)) {
+            $shop->forceDelete();
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response =
+                [
+                    'title' => 'Failed!',
+                    'message' => 'Error!!'
+                ];
+        }
+        echo json_encode($response);
+    }
+
+    public function restoreUser(Request $request)
+    {
+        $id = $request->id;
+        $User = User::withTrashed()->find($id);
+        if (!empty($User)) {
+            $User->restore();
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_user(Request $request)
+    {
+        $id = $request->id;
+        $User = User::withTrashed()->find($id);
+        if (!empty($User)) {
+            $User->forceDelete();
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response =
+                [
+                    'title' => 'Failed!',
+                    'message' => 'Error!!'
+                ];
+        }
+        echo json_encode($response);
+    }
+
+    public function restoreCustomer(Request $request)
+    {
+        $id = $request->id;
+        $customer = Customer::withTrashed()->find($id);
+        if (!empty($customer)) {
+            $customer->restore();
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_customer(Request $request)
+    {
+        $id = $request->id;
+        $customer = Customer::withTrashed()->find($id);
+        if (!empty($customer)) {
+            $customer->forceDelete();
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+
+    public function restoreSupplier(Request $request)
+    {
+        $id = $request->id;
+        $supplier = Supplier::withTrashed()->find($id);
+        if (!empty($supplier)) {
+            $supplier->restore();
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_supplier(Request $request)
+    {
+        $id = $request->id;
+        $supplier = Supplier::withTrashed()->find($id);
+        if (!empty($supplier)) {
+            $supplier->forceDelete();
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function restorePurchase(Request $request)
+    {
+        $id = $request->id;
+        $purchase = Purchase::withTrashed()->find($id);
+        if (!empty($purchase)) {
+            $purchase->restore();
+            $products = PurchaseProduct::where('purchase_id', $purchase->id)->withTrashed()->get();
+            if (!$products->isEmpty()) {
+               foreach ($products as $key => $product) {
+                $product->restore();
+               }
+            }
+
+            $payments = Payment::where('purchase_id', $purchase->id)->withTrashed()->get();
+            if (!$payments->isEmpty()) {
+               foreach ($payments as $key => $payment) {
+                $payment->restore();
+               }
+            }
+
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_purchase(Request $request)
+    {
+        $id = $request->id;
+        $purchase = Purchase::withTrashed()->find($id);
+        if (!empty($purchase)) {
+            $purchase->forceDelete();
+            $products = PurchaseProduct::where('purchase_id', $purchase->id)->withTrashed()->get();
+            if (!$products->isEmpty()) {
+               foreach ($products as $key => $product) {
+                $product->forceDelete();
+               }
+            }
+            $payments = Payment::where('purchase_id', $purchase->id)->withTrashed()->get();
+            if (!$payments->isEmpty()) {
+               foreach ($payments as $key => $payment) {
+                $payment->forceDelete();
+               }
+            }
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function restoreSale(Request $request)
+    {
+        $id = $request->id;
+        $sale = Sale::withTrashed()->find($id);
+        if (!empty($sale)) {
+            $sale->restore();
+            $products = SaleProduct::where('sale_id', $sale->id)->withTrashed()->get();
+            if (!$products->isEmpty()) {
+               foreach ($products as $key => $product) {
+                $product->restore();
+               }
+            }
+            $payments = Payment::where('sale_id', $sale->id)->withTrashed()->get();
+            if (!$payments->isEmpty()) {
+               foreach ($payments as $key => $payment) {
+                $payment->restore();
+               }
+            }
+            $response = [
+                'title' => 'Restored!',
+                'message' => 'Restored Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    public function delete_sale(Request $request)
+    {
+        $id = $request->id;
+        $sale = Sale::withTrashed()->find($id);
+        if (!empty($sale)) {
+            $sale->forceDelete();
+            $products = SaleProduct::where('sale_id', $sale->id)->withTrashed()->get();
+            if (!$products->isEmpty()) {
+               foreach ($products as $key => $product) {
+                $product->forceDelete();
+               }
+            }
+            $payments = Payment::where('sale_id', $sale->id)->withTrashed()->get();
+            if (!$payments->isEmpty()) {
+               foreach ($payments as $key => $payment) {
+                $payment->forceDelete();
+               }
+            }
+
+            $response = [
+                'title' => 'Deleted!',
+                'message' => 'Deleted Successfully'
+            ];
+        } else {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Error!!'
+            ];
+        }
+        echo json_encode($response);
     }
 }

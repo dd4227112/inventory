@@ -64,10 +64,10 @@
                                 <td>{{ $customer->deletedBy->name}}</td>
 
                                 <td>
-                                    <a class="me-3" href="{{route('fetchcustomer', $customer->uuid)}}">
+                                    <a class="me-3 restoreCustomer" id="{{$customer->id }}" href="javascript:void(0);">
                                     <i class="fa fa-undo text-success"></i>
                                     </a>
-                                    <a class="me-3 delete" id="{{$customer->id }}" href="javascript:void(0);">
+                                    <a class="me-3 deleteCustomer" id="{{$customer->id }}" href="javascript:void(0);">
                                     <i class="fa fa-trash text-danger"></i>
                                     </a>
                                 </td>
@@ -87,12 +87,13 @@
 
 @include('authentication.footer')
 <script>
-    $(document).on("click", ".delete", function() {
+    //delete payment forever
+    $(document).on("click", ".deleteCustomer", function() {
         var id = $(this).attr('id');
 
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this customer!",
+            text: "You want to delete this Customer! Can't be Restored again!",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -105,7 +106,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deletecustomer')}}",
+                    url: "{{url('delete_customer')}}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -114,15 +115,61 @@
                     success: function(response) {
                         Swal.fire({
                             type: "success",
-                            title: "Deleted!",
+                            title: response.title,
                             text: response.message,
                             confirmButtonClass: "btn btn-success"
                         }).then(function() {
-                            window.location.reload();
+                            if (response.title =='Deleted!') {
+                                window.location.reload();
+                            }
                         });
                     }
                 });
             }
         });
     });
+//  restore payment
+$(document).on("click", ".restoreCustomer", function() {
+        var id = $(this).attr('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to Restore  this Customer!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, restore it!",
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-secondary ml-1",
+            buttonsStyling: false
+        }).then(function(t) {
+            if (t.value && t.dismiss !== "cancel") {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('restoreCustomer')}}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            type: "success",
+                            title: response.title,
+                            text: response.message,
+                            confirmButtonClass: "btn btn-success"
+                        }).then(function() {
+                            if (response.title =='Restored!') {
+                                window.location.reload();
+                            }
+                            
+                        });
+                    }
+                });
+            }
+        });
+    });
+    
+
 </script>
