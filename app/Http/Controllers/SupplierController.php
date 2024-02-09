@@ -15,12 +15,14 @@ class SupplierController extends Controller
     public function index()
     {
         $this->data['suppliers'] = Supplier::where(['status' => 1, 'shop_id' => session('shop_id')])->get();
+        $this->data['active'] = 'list_supplier';
         return view('supplier.index', $this->data);
     }
 
     public function addsupplier()
     {
         $this->data['shops'] = Shop::latest()->get();
+        $this->data['active'] = 'add_supplier';
         return view('supplier.add', $this->data);
     }
     public function store(Request $request)
@@ -52,6 +54,7 @@ class SupplierController extends Controller
         }
         $this->data['shops'] = Shop::latest()->get();
         $this->data['supplier'] = $supplier;
+        $this->data['active'] = 'list_supplier';
         return view('supplier.edit', $this->data);
     }
     public function updatesupplier(Request $request)

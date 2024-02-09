@@ -21,7 +21,11 @@
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" required class="form-control">
+                                <input type="text" name="name" required class="form-control" value="{{ old('name') }}">
+                                @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-4 col-12">
@@ -34,7 +38,7 @@
                         <div class="col-lg-4 col-sm-4 col-12">
                             <div class="form-group">
                                 <label>Location</label>
-                                <input type="text" class="form-control"  required name="location">
+                                <input type="text" class="form-control" required name="location">
                             </div>
                         </div>
                     </div>
@@ -44,7 +48,7 @@
                                 <label>Description</label>
                                 <div class="pass-group">
                                     <textarea name="description" rows="3"></textarea>
-                                    
+
                                 </div>
                             </div>
                         </div>

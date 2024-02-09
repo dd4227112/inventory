@@ -14,12 +14,14 @@ class CustomerController extends Controller
     public function index()
     {
         $this->data['customers'] = Customer::where(['status'=> 1, 'shop_id'=>session('shop_id')])->get();
+        $this->data['active'] = 'list_customer';
         return view('customer.index', $this->data);
     }
 
     public function addcustomer()
     {
         $this->data['shops'] = Shop::latest()->get();
+        $this->data['active'] = 'add_customer';
         return view('customer.add',$this->data);
     }
     public function store(Request $request)
@@ -49,6 +51,7 @@ class CustomerController extends Controller
         }
         $this->data['shops'] = Shop::latest()->get();
         $this->data['customer'] = $customer;
+        $this->data['active'] = 'list_customer';
         return view('customer.edit', $this->data);
     }
     public function updatecustomer(Request $request)

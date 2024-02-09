@@ -9,7 +9,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>shop Management</h4>
+                <h4>Shop Management</h4>
                 <h6>List shops</h6>
             </div>
             @if(can_access('add_shop'))

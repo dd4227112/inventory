@@ -30,11 +30,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
        
+       
         if (Auth::user()->role->name =='Admin' || Auth::user()->role->name =='Auditor' ) {
             return redirect()->intended(RouteServiceProvider::HOME);
         }else {
             Session::put('shop_id', Auth::user()->shop_id);
-            return redirect()->intended(RouteServiceProvider::SALES);
+            return redirect()->intended(RouteServiceProvider::DASHBOARD);
             
         }
 

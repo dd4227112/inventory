@@ -1,3 +1,7 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+?>
 @include('authentication.header')
 
 @include('admin.top_bar')
@@ -50,7 +54,7 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="date" class="form-control" value="{{ date('Y-m-d')}}" name="date">
+                                    <input type="date" class="form-control" <?=Auth::user()->role->name =='Admin'?'':'readonly'?> value="{{ date('Y-m-d', strtotime($purchase->date))}}" name="date">
                                     <!-- <div class="addonset">
                                     <img src="{{ asset('assets/img/icons/calendars.svg')}}" alt="img">
                                 </div> -->
@@ -61,7 +65,7 @@
                             <div class="form-group">
                                 <label>Reference/Invoice No.</label>
                                 <input type="text" name="reference" value="{{ $purchase->reference }}" readonly>
-                            </div>
+                            </div>J
                         </div>
                     </div>
                     <div class="row">

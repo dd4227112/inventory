@@ -60,7 +60,7 @@
                                 <td>{{ ++$key}} </td>
                                 <td>{{ $product->name}} ({{ $product->code}})</td>
                                 <td>{{ $product->description}}</td>
-                                <td>{{ $report->date}}</td>
+                                <td style="font-weight: bold;">{{ $report->date}}</td>
                                 <td>{{ $sale[$report->id]->reference}}</td>
                                 <td>{{ $sale[$report->id]->customer->name}}</td>
                                 <td>{{ number_format($report->quantity)}}</td>
@@ -79,7 +79,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="page-title">
-                    <h4>Product Sales Reports</h4>
+                    <h4>Product Purchase Reports</h4>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -104,7 +104,7 @@
                                 <td>{{ ++$key}} </td>
                                 <td>{{ $product->name}} ({{ $product->code}})</td>
                                 <td>{{ $product->description}}</td>
-                                <td>{{ $report->date}}</td>
+                                <td style="font-weight: bold;">{{ $report->date}}</td>
                                 <td>{{ $purchase[$report->id]->reference}}</td>
                                 <td>{{ $purchase[$report->id]->supplier->name}}</td>
                                 <td>{{ number_format($report->quantity)}}</td>

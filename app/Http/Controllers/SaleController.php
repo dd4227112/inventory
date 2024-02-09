@@ -26,12 +26,14 @@ class SaleController extends Controller
             }
         }
         $this->data['payments'] = $payment;
+        $this->data['active'] = 'list_sale';
         return view('sales.index', $this->data);
     }
 
     public function  addsale()
     {
         $this->data['shops'] = Shop::all();
+        $this->data['active'] = 'add_sale';
         return view('sales.add', $this->data);
     }
     public function store(Request $request)
@@ -134,6 +136,7 @@ class SaleController extends Controller
         $this->data['paid'] = $payment_status['amount'];
         $this->data['balance'] = $sale->grand_total - $payment_status['amount'];
         $this->data['sale'] = $sale;
+        $this->data['active'] = 'list_sale';
         return view('sales.details', $this->data);
     }
     public function destroy(Request $request)
@@ -171,6 +174,7 @@ class SaleController extends Controller
         // we removed edit payment record during edit sale because payment has its own edit method
         $this->data['sale'] = $sale;
         $this->data['items'] = $sale_items;
+        $this->data['active'] = 'list_sale';
         return view('sales.edit', $this->data);
     }
     public function updatesale(Request $request)
@@ -221,18 +225,18 @@ class SaleController extends Controller
                 $html  .= "<td>";
                 if (can_access('print_sale_payment')) {
                     $html  .= "<a class='me-2' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
-                        <img src='" . url('assets/img/icons/printer.svg') . "' alt='img'>
+                        <img src='" . asset('assets/img/icons/printer.svg') . "' alt='img'>
                     </a>";
                 }
                 if (can_access('edit_sale_payment')) {
                     $html  .= "<a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
                         data-bs-dismiss='modal'>
-                        <img src= '" . url('assets/img/icons/edit.svg') . "' alt='img'>
+                        <img src= '" . asset('assets/img/icons/edit.svg') . "' alt='img'>
                     </a>";
                 }
                 if (can_access('delete_sale_payment')) {
                     $html  .= " <a class='me-2 deletePayment' id = '" . $payment->id . "' href='javascript:void(0);'>
-                        <img src='" . url('assets/img/icons/delete.svg') . "' alt='img'>
+                        <img src='" . asset('assets/img/icons/delete.svg') . "' alt='img'>
                     </a>";
                 }
                 $html  .= "</td>
@@ -284,5 +288,9 @@ class SaleController extends Controller
         $pdf->setPaper('A4');
         // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
         return $pdf->download('sales_' . $sale->reference . '.pdf');
+    }
+    public function pos(){
+        $this->data['active'] = 'pos';
+        return view('sales.pos');
     }
 }

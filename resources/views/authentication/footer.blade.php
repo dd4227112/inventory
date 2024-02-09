@@ -23,6 +23,8 @@
 
 <script src="{{ asset('/assets/js/moment.min.js')}}"></script>
 
+<script src="{{ asset('/assets/plugins/owlcarousel/owl.carousel.min.js')}}"></script>
+
 <script src="{{ asset('/assets/js/bootstrap-datetimepicker.min.js')}}"></script>
 
 <script src="{{ asset('/assets/plugins/sweetalert/sweetalert2.all.min.js')}}"></script>

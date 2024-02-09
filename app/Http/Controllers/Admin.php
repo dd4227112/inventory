@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class Admin extends Controller
 {
@@ -32,6 +33,7 @@ class Admin extends Controller
     public function index()
     {
         $this->data['shops'] = Shop::latest()->get();
+        $this->data['active'] = 'switch_shop';
         return view('admin.index', $this->data);
     }
     public function home(Request $request)
@@ -97,6 +99,8 @@ class Admin extends Controller
         }
         $this->data['purchase_payment'] = $purchase_payment;
         $this->data['purchases'] = $purchases;
+        $this->data['active'] = 'dashbaord';
+
 
         return view('admin.dashboard', $this->data);
         //    return view('admin.incomming');
@@ -107,6 +111,7 @@ class Admin extends Controller
     {
         $users = User::where('status', 1)->latest()->get();
         $this->data['users'] = $users;
+        $this->data['active'] = 'list_user';
         return view('admin.user', $this->data);
     }
 
@@ -114,6 +119,7 @@ class Admin extends Controller
     {
         $this->data['shops'] = Shop::latest()->get();
         $this->data['roles'] = Role::all();
+        $this->data['active'] = 'add_user';
         return view('admin.add_user', $this->data);
     }
     public function store(Request $request)
@@ -167,6 +173,7 @@ class Admin extends Controller
         $this->data['user'] = $user;
         $this->data['shops'] = Shop::latest()->get();
         $this->data['roles'] = Role::all();
+        $this->data['active'] = 'list_user';
         return view('admin.edit_user', $this->data);
     }
 
@@ -250,15 +257,25 @@ class Admin extends Controller
     {
         $shops = Shop::all();
         $this->data['shops'] = $shops;
+        $this->data['active'] = 'list_shop';
         return view('admin.shop', $this->data);
     }
 
     public function  addshop()
     {
-        return view('admin.add_shop');
+        $this->data['active'] = 'add_shop';
+        return view('admin.add_shop', $this->data);
     }
     public function store_shop(Request $request)
     {
+        // $request->validate([
+        //     'name' => 'string|required|min:5|max:50|unique:name'
+        // ]);
+
+        $request->validate([
+            'name' => ['required', 'string', 'min:5', 'max:50', 'unique:shops'],
+
+        ]);
         $data = $request->except('_token');
         if (Shop::create($data)) {
             return redirect()->route('admin.list_shop')->with('success', "Shop Added Successfully");
@@ -292,6 +309,7 @@ class Admin extends Controller
             abort(404);
         }
         $this->data['shop'] = $shop;
+        $this->data['active'] = 'list_shop';
         return view('admin.edit_shop', $this->data);
     }
     public function updateshop(Request $request)
@@ -307,7 +325,8 @@ class Admin extends Controller
     }
     public function profile()
     {
-        return view('admin.profile');
+        $this->data['active'] = 'profile';
+        return view('admin.profile', $this->data);
     }
     public function profilephoto(Request $request)
     {
@@ -352,7 +371,8 @@ class Admin extends Controller
     }
     public function password()
     {
-        return view('admin.password');
+        $this->data['active'] = 'password';
+        return view('admin.password', $this->data);
     }
     public function changepassword(Request $request)
     {
@@ -377,6 +397,7 @@ class Admin extends Controller
     public function user_permission()
     {
         $this->data['users'] = User::latest()->get();
+        $this->data['active'] = 'user_permission';
         return view('admin.permissions', $this->data);
     }
     public function manage_permission($uuid)
@@ -406,6 +427,7 @@ class Admin extends Controller
         $this->data['user'] = $user;
         $this->data['permissions'] = $permissions;
         $this->data['checked'] = $checked;
+        $this->data['active'] = 'setting';
         return view('admin.manage_permissions', $this->data);
     }
 
@@ -429,15 +451,26 @@ class Admin extends Controller
     public function trash()
     {
         $items = [
-            ['name' => 'Products', 'model' => 'Product'],
-            ['name' => 'Shops', 'model' => 'Shop'],
-            ['name' => 'Sales', 'model' => 'Sale'],
-            ['name' => 'Purchases', 'model' => 'Purchase'],
-            ['name' => 'Users', 'model' => 'User'],
-            ['name' => 'Customers', 'model' => 'Customer'],
-            ['name' => 'Suppliers', 'model' => 'Supplier']
+            ['name' => 'Products', 'model' => 'products'],
+            ['name' => 'Shops', 'model' => 'shops'],
+            ['name' => 'Sales', 'model' => 'sales'],
+            ['name' => 'Purchases', 'model' => 'purchases'],
+            ['name' => 'Users', 'model' => 'users'],
+            ['name' => 'Customers', 'model' => 'customers'],
+            ['name' => 'Suppliers', 'model' => 'suppliers']
         ];
+        $count =[];
+        foreach($items as $key => $item){
+            if ($item['name'] == 'Shops' || $item['name'] == 'Users' ) {
+               $where = '';
+            }else {
+                $where = 'AND shop_id ='.session('shop_id'); 
+            }
+           $count[$item['name']] = DB::select(" select count(*) as count from ".$item['model']." where deleted_at is not null ".$where);
+        }
+        $this->data['count'] = $count;
         $this->data['items'] = $items;
+        $this->data['active'] = 'trash';
         return view('restore.trash', $this->data);
     }
 
@@ -445,31 +478,31 @@ class Admin extends Controller
     {
 
         $items = [
-            'Product',
-            'Shop',
-            'Sale',
-            'Purchase',
-            'User',
-            'Customer',
-            'Supplier'
+            'Products',
+            'Shops',
+            'Sales',
+            'Purchases',
+            'Users',
+            'Customers',
+            'Suppliers'
         ];
         if (!in_array($item, $items)) {
             abort(403);
         } else {
             switch ($item) {
-                case 'Product':
+                case 'Products':
                     $products = Product::where('shop_id', session('shop_id'))->onlyTrashed()->get();
                     $this->data['products'] = $products;
                     return view('restore.product', $this->data);
                     break;
 
-                case 'Shop':
+                case 'Shops':
                     $shops = Shop::onlyTrashed()->get();
                     $this->data['shops'] = $shops;
                     return view('restore.shop', $this->data);
                     break;
 
-                case 'Sale':
+                case 'Sales':
                     $sales = sale::where('shop_id', session('shop_id'))->onlyTrashed()->get();
                     $this->data['sales'] = $sales;
                     $payment = [];
@@ -482,7 +515,7 @@ class Admin extends Controller
                     return view('restore.sales', $this->data);
                     break;
 
-                case 'Purchase':
+                case 'Purchases':
                     $purchases = Purchase::where('shop_id', session('shop_id'))->onlyTrashed()->get();
                     $payment = [];
                     if (!$purchases->isEmpty()) {
@@ -495,18 +528,18 @@ class Admin extends Controller
                     return view('restore.purchases', $this->data);
                     break;
 
-                case 'User':
+                case 'Users':
                     $users = User::onlyTrashed()->get();
                     $this->data['users'] = $users;
                     return view('restore.users', $this->data);
                     break;
 
-                case 'Customer':
+                case 'Customers':
                     $this->data['customers'] = Customer::where(['shop_id' => session('shop_id')])->onlyTrashed()->get();
                     return view('restore.customers', $this->data);
                     break;
 
-                case 'Supplier':
+                case 'Suppliers':
                     $this->data['suppliers'] = Supplier::where(['shop_id' => session('shop_id')])->onlyTrashed()->get();
                     return view('restore.suppliers', $this->data);
                     break;
@@ -720,16 +753,16 @@ class Admin extends Controller
             $purchase->restore();
             $products = PurchaseProduct::where('purchase_id', $purchase->id)->withTrashed()->get();
             if (!$products->isEmpty()) {
-               foreach ($products as $key => $product) {
-                $product->restore();
-               }
+                foreach ($products as $key => $product) {
+                    $product->restore();
+                }
             }
 
             $payments = Payment::where('purchase_id', $purchase->id)->withTrashed()->get();
             if (!$payments->isEmpty()) {
-               foreach ($payments as $key => $payment) {
-                $payment->restore();
-               }
+                foreach ($payments as $key => $payment) {
+                    $payment->restore();
+                }
             }
 
             $response = [
@@ -753,15 +786,15 @@ class Admin extends Controller
             $purchase->forceDelete();
             $products = PurchaseProduct::where('purchase_id', $purchase->id)->withTrashed()->get();
             if (!$products->isEmpty()) {
-               foreach ($products as $key => $product) {
-                $product->forceDelete();
-               }
+                foreach ($products as $key => $product) {
+                    $product->forceDelete();
+                }
             }
             $payments = Payment::where('purchase_id', $purchase->id)->withTrashed()->get();
             if (!$payments->isEmpty()) {
-               foreach ($payments as $key => $payment) {
-                $payment->forceDelete();
-               }
+                foreach ($payments as $key => $payment) {
+                    $payment->forceDelete();
+                }
             }
             $response = [
                 'title' => 'Deleted!',
@@ -784,15 +817,15 @@ class Admin extends Controller
             $sale->restore();
             $products = SaleProduct::where('sale_id', $sale->id)->withTrashed()->get();
             if (!$products->isEmpty()) {
-               foreach ($products as $key => $product) {
-                $product->restore();
-               }
+                foreach ($products as $key => $product) {
+                    $product->restore();
+                }
             }
             $payments = Payment::where('sale_id', $sale->id)->withTrashed()->get();
             if (!$payments->isEmpty()) {
-               foreach ($payments as $key => $payment) {
-                $payment->restore();
-               }
+                foreach ($payments as $key => $payment) {
+                    $payment->restore();
+                }
             }
             $response = [
                 'title' => 'Restored!',
@@ -815,15 +848,15 @@ class Admin extends Controller
             $sale->forceDelete();
             $products = SaleProduct::where('sale_id', $sale->id)->withTrashed()->get();
             if (!$products->isEmpty()) {
-               foreach ($products as $key => $product) {
-                $product->forceDelete();
-               }
+                foreach ($products as $key => $product) {
+                    $product->forceDelete();
+                }
             }
             $payments = Payment::where('sale_id', $sale->id)->withTrashed()->get();
             if (!$payments->isEmpty()) {
-               foreach ($payments as $key => $payment) {
-                $payment->forceDelete();
-               }
+                foreach ($payments as $key => $payment) {
+                    $payment->forceDelete();
+                }
             }
 
             $response = [
@@ -837,5 +870,73 @@ class Admin extends Controller
             ];
         }
         echo json_encode($response);
+    }
+    public function depreciation()
+    {
+        // cost of item = 1,000,000
+        $cost = 1000000;
+        //    depreciation percentage = 10%
+        $percentage = 10;
+        $depreciation_percentage = ($percentage / 100);
+        //    date of purchase = '2022-04-15';
+
+        $date_purchase = '2022-04-15';
+        // number of years from the date of purchase
+        // since we count from the start and end of the year
+        $year = date('Y', strtotime($date_purchase));
+        $startDate = $year . '-01-01';
+        $endDate = date('Y-12-31');
+
+
+        $startDate = Carbon::createFromDate($startDate);
+
+        $numberOfYears = $startDate->diffInYears($endDate);
+        //  we add one to get exact number of years between date range
+        $numberOfYears = $numberOfYears + 1;
+        //  at starting point
+        $depreciation = 0;
+        $nbv = 0;
+        //  Loop through number of years to calculate depreciation and NBV
+        for ($i = 1; $i <= $numberOfYears; $i++) {
+            $depreciation += $cost * $depreciation_percentage;
+            $nbv = ($cost - $depreciation);
+        }
+        return [
+            'origin cost' => $cost,
+            'accumulative depreciation' => $depreciation,
+            'net book value' => $nbv
+        ];
+    }
+
+    public function calculate_depreciation($cost, $percentage, $date_purchase = null, $after_years = null)
+    {
+        $depreciation_percentage = ($percentage / 100);
+        if ($after_years != NULL) {
+            $numberOfYears = $after_years;
+           
+        } else {
+            $year = date('Y', strtotime($date_purchase));
+            $startDate = $year . '-01-01';
+            $endDate = date('Y-12-31');
+
+
+            $startDate = Carbon::createFromDate($startDate);
+
+            $numberOfYears = $startDate->diffInYears($endDate);
+            //  we add one to get exact number of years between date range
+            $numberOfYears = $numberOfYears + 1;
+        }
+
+        $depreciation = 0;
+        $nbv = 0;
+        for ($i = 1; $i <= $numberOfYears; $i++) {
+            $depreciation += $cost * $depreciation_percentage;
+            $nbv = ($cost - $depreciation);
+        }
+        return [
+            'origin cost' => $cost,
+            'accumulative depreciation' => $depreciation,
+            'net book value' => $nbv
+        ];
     }
 }

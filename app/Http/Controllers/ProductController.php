@@ -19,6 +19,7 @@ class ProductController extends Controller
     {
         $products = Product::where('shop_id', session('shop_id'))->get();
         $this->data['products'] = $products;
+        $this->data['active'] = 'list_product';
         return view('products.index', $this->data);
     }
 
@@ -27,6 +28,7 @@ class ProductController extends Controller
         $this->data['shops'] = Shop::all();
         $this->data['categories'] = Category::all();
         $this->data['units'] = Unit::all();
+        $this->data['active'] = 'add_product';
         return view('products.add_product', $this->data);
     }
     public function store_product(Request $request)
@@ -64,6 +66,7 @@ class ProductController extends Controller
         $this->data['categories'] = Category::all();
         $this->data['units'] = Unit::all();
         $this->data['product'] = $product;
+        $this->data['active'] = 'list_product';
         return view('products.edit', $this->data);
     }
     public function updateProduct(Request $request)

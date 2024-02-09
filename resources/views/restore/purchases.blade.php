@@ -106,7 +106,7 @@
         var id = $(this).attr('id');
         Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete this Purchase! Can't be Restored again!",
+            text: "You want to delete this Purchase! Can't be Restored again!",pul
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",

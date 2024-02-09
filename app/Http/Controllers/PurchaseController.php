@@ -17,19 +17,31 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::where('shop_id', session('shop_id'))->get();
         $payment = [];
+        $method = [];
+        $availabale_method = [
+            '1' => 'Cash',
+            '2' => 'Bank',
+            '3' => 'Credit Card',
+            '4' => 'PayPal'
+        ];
         if (!$purchases->isEmpty()) {
             foreach ($purchases as $key => $purchase) {
                 $payment[$purchase->id] =  $purchase->payment->sum('amount');
+                $payment_method = Payment::where('purchase_id', $purchase->id)->first();
+                $method[$purchase->id] = !empty($payment_method)?$availabale_method[$payment_method->payment_method]:' - ';
             }
         }
+        $this->data['method'] = $method;
         $this->data['payments'] = $payment;
         $this->data['purchases'] = $purchases;
+        $this->data['active'] = 'list_purchase';
         return view('purchases.index', $this->data);
     }
 
     public function  addpurchase()
     {
         $this->data['shops'] = Shop::all();
+        $this->data['active'] = 'add_purchase';
         return view('purchases.add', $this->data);
     }
     public function store(Request $request)
@@ -77,7 +89,7 @@ class PurchaseController extends Controller
             ];
             Payment::create($data);
         }
-        return redirect()->route('view_purchase', $purchase->uuid)->with('success', "purchase Added Successfully");
+        return redirect()->route('view_purchase', $purchase->uuid)->with('success', "Purchase Added Successfully");
     }
 
     //get selected product on adding purchase via ajax request
@@ -87,11 +99,11 @@ class PurchaseController extends Controller
     }
     public function deletepurchase(Request $request)
     {
-        $purchase =Purchase::find($request->id);
+        $purchase = Purchase::find($request->id);
         if ($purchase->delete()) {
-            $purchase->update(['deleted_by'=>Auth::user()->id]);
+            $purchase->update(['deleted_by' => Auth::user()->id]);
             purchaseProduct::where('purchase_id', $request->id)->delete();
-            Payment::where('purchase_id', $request->id)->update(['deleted_by'=>Auth::user()->id]);
+            Payment::where('purchase_id', $request->id)->update(['deleted_by' => Auth::user()->id]);
             Payment::where('purchase_id', $request->id)->delete();
 
             $response = ['message' => 'Deleleted Successfully'];
@@ -118,14 +130,14 @@ class PurchaseController extends Controller
                 $html  .= "<td>" . $payment->user->name . " </td>";
                 $html  .= "<td>
                     <a class='me-2' href='" . route('purchase_payment_receipt', $payment->uuid) . "'>
-                        <img src='" . url('assets/img/icons/printer.svg') . "' alt='img'>
+                        <img src='" . asset('assets/img/icons/printer.svg') . "' alt='img'>
                     </a>
                     <a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
                         data-bs-dismiss='modal'>
-                        <img src= '" . url('assets/img/icons/edit.svg') . "' alt='img'>
+                        <img src= '" . asset('assets/img/icons/edit.svg') . "' alt='img'>
                     </a>
                     <a class='me-2 deletePayment' id = '" . $payment->id . "' href='javascript:void(0);'>
-                        <img src='" . url('assets/img/icons/delete.svg') . "' alt='img'>
+                        <img src='" . asset('assets/img/icons/delete.svg') . "' alt='img'>
                     </a>
                 </td>
             </tr>";
@@ -149,6 +161,7 @@ class PurchaseController extends Controller
         $this->data['paid'] = $payment_status['amount'];
         $this->data['balance'] = $purchase->grand_total - $payment_status['amount'];
         $this->data['purchase'] = $purchase;
+        $this->data['active'] = 'list_purchase';
         return view('purchases.details', $this->data);
     }
     public function editpurchase($uuid)
@@ -171,6 +184,7 @@ class PurchaseController extends Controller
         // we removed edit payment record during edit purchase because payment has its own edit method
         $this->data['purchase'] = $purchase;
         $this->data['items'] = $purchase_items;
+        $this->data['active'] = 'list_purchase';
         return view('purchases.edit', $this->data);
     }
 
@@ -214,7 +228,6 @@ class PurchaseController extends Controller
         $pdf->setPaper('A4');
         // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
         return $pdf->download('purchases_' . $purchase->reference . '.pdf');
-    
     }
     public function updatepurchase(Request $request)
     {

@@ -35,6 +35,7 @@
                             <tr class="text-center">
                                 <th>#</th>
                                 <th>Group</th>
+                                <th>Count</th>
                                 <th>View Items</th>
 
                             </tr>
@@ -45,8 +46,9 @@
                             <tr>
                                 <td class="text-center">{{ ++$key}} </td>
                                 <td>{{ $item['name']}}</td>
+                                <td class="text-center">{{ $count[$item['name']][0]->count}}</td>
                                 <td class="text-center">
-                                    <a class="me-3" title ="View/Edit user permissions" href="{{ route('restore', $item['model'])}}">
+                                    <a class="me-3" title ="View/Edit user permissions" href="{{ route('restore', $item['name'])}}">
                                         <img src="{{ asset('assets/img/icons/eye.svg')}}"   alt="img">
                                     </a>
                                 </td>

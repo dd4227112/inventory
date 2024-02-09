@@ -48,6 +48,7 @@
                                 <th>Reference</th>
                                 <th>Status</th>
                                 <th>Payment</th>
+                                <th>Payment Method</th>
                                 <th>Total</th>
                                 <th>Paid</th>
                                 <th>Due</th>
@@ -71,6 +72,7 @@
                                         @else
                                         <td><span class="badges bg-lightred">Pending</span></td>
                                         @endif
+                                        <td style="text-align: right;">{{ $method[$purchase->id] }}</td>
                                         <td style="text-align: right;">{{ number_format($purchase->grand_total,2) }}</td>
                                         <td style="text-align: right;">{{ number_format($payments[$purchase->id], 2) }}</td>
                                         <td style="text-align: right;">{{ number_format(($purchase->grand_total - $payments[$purchase->id]), 2) }}</td>

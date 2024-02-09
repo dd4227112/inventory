@@ -23,6 +23,10 @@
 
     <link rel="stylesheet" href="{{ asset('/assets/plugins/toastr/toatr.css')}}">
 
+    <link rel="stylesheet" href="{{ asset('/assets/plugins/owlcarousel/owl.carousel.min.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('/assets/plugins/owlcarousel/owl.theme.default.min.css')}}">
+
     <link rel="stylesheet" href="{{ asset('/assets/plugins/select2/css/select2.min.css')}}">
 
     <link rel="stylesheet" href="{{ asset('/assets/css/bootstrap-datetimepicker.min.css')}}">

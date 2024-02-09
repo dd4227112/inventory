@@ -30,6 +30,7 @@ class Reports extends Controller
         $this->data['summary'] = $summary;
         $this->data['balance'] = $balance;
         $this->data['products'] = $products;
+        $this->data['active'] = 'sale_report';
         return view('reports.sales', $this->data);
     }
     public function sold($product)
@@ -64,6 +65,7 @@ class Reports extends Controller
         $this->data['summary'] = $summary;
         $this->data['balance'] = $balance;
         $this->data['products'] = $products;
+        $this->data['active'] = 'purchase_report';
 
         return view('reports.purchases', $this->data);
     }
@@ -102,6 +104,7 @@ class Reports extends Controller
         }
         $this->data['summary'] = $summary;
         $this->data['products'] = $products;
+        $this->data['active'] = 'product_report';
         return view('reports.products', $this->data);
     }
     public function productSale($id)
@@ -121,6 +124,7 @@ class Reports extends Controller
         $this->data['product']  = $product;
         $this->data['reports']  = $reports;
         $this->data['sale']  = $sale;
+        $this->data['active'] = 'sale_report';
         return view('reports.productsale', $this->data);
     }
 
@@ -142,6 +146,7 @@ class Reports extends Controller
         $this->data['product']  = $product;
         $this->data['reports']  = $reports;
         $this->data['purchase']  = $purchase;
+        $this->data['active'] = 'purchase_report';
         return view('reports.productpurchase', $this->data);
     }
     public function combinedProduct($id)
@@ -175,7 +180,7 @@ class Reports extends Controller
         }
         $this->data['salesreports']  = $salesreports;
         $this->data['sale']  = $sale;
-
+        $this->data['active'] = 'product_report';
         return view('reports.combinedproduct', $this->data);
     }
 }

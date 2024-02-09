@@ -101,7 +101,7 @@ function fetch_sale($request)
         $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance']. "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
-        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".url('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".asset('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
@@ -119,7 +119,7 @@ function fetch_purchase($request)
         $output .= "<td><input type ='number' id='quantity' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->cost . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->cost * 1) . "'></td>";
-        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".url('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".asset('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
