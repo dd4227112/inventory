@@ -489,6 +489,7 @@ class Admin extends Controller
         if (!in_array($item, $items)) {
             abort(403);
         } else {
+            $this->data['active'] = 'trash';
             switch ($item) {
                 case 'Products':
                     $products = Product::where('shop_id', session('shop_id'))->onlyTrashed()->get();
