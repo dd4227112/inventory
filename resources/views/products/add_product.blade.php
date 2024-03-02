@@ -45,13 +45,13 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Cost</label>
-                                <input type="text"  class="form-control" required name="cost">
+                                <input type="number"  class="form-control" required name="cost">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Price</label>
-                                <input type="text"  class="form-control" required name="price">
+                                <input type="number"  class="form-control" required name="price">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">

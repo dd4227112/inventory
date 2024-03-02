@@ -52,6 +52,8 @@ require __DIR__ . '/purchases.php';
 require __DIR__ . '/payments.php';
 require __DIR__ . '/reports.php';
 require __DIR__ . '/restore.php';
+require __DIR__ . '/units.php';
+require __DIR__ . '/category.php';
 
 Route::get('depreciation', [Admin::class, 'depreciation']);
 

@@ -112,6 +112,12 @@
                         <li><a href="{{route('admin.trash') }}" class="{{$active=='trash'?'active':''}}">Trash</a></li>
                         @endif
                         @if(Auth::user()->role->name =='Admin' || Auth::user()->role->name =='Auditor')
+                        <li><a href="{{route('admin.list_units') }}" class="{{$active=='units'?'active':''}}">Units</a></li>
+                        @endif
+                        @if(Auth::user()->role->name =='Admin' || Auth::user()->role->name =='Auditor')
+                        <li><a href="{{route('admin.list_category') }}" class="{{$active=='categories'?'active':''}}">Categories</a></li>
+                        @endif
+                        @if(Auth::user()->role->name =='Admin' || Auth::user()->role->name =='Auditor')
                         <li><a href="{{route('admin') }}" class="{{$active=='switch_shop'?'active':''}}">Switch Shop</a></li>
                         @endif
                     </ul>

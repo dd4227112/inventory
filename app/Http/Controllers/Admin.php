@@ -21,6 +21,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use App\Models\Unit;
+use App\Models\Category;
+
+
+
 
 class Admin extends Controller
 {
@@ -459,14 +464,14 @@ class Admin extends Controller
             ['name' => 'Customers', 'model' => 'customers'],
             ['name' => 'Suppliers', 'model' => 'suppliers']
         ];
-        $count =[];
-        foreach($items as $key => $item){
-            if ($item['name'] == 'Shops' || $item['name'] == 'Users' ) {
-               $where = '';
-            }else {
-                $where = 'AND shop_id ='.session('shop_id'); 
+        $count = [];
+        foreach ($items as $key => $item) {
+            if ($item['name'] == 'Shops' || $item['name'] == 'Users') {
+                $where = '';
+            } else {
+                $where = 'AND shop_id =' . session('shop_id');
             }
-           $count[$item['name']] = DB::select(" select count(*) as count from ".$item['model']." where deleted_at is not null ".$where);
+            $count[$item['name']] = DB::select(" select count(*) as count from " . $item['model'] . " where deleted_at is not null " . $where);
         }
         $this->data['count'] = $count;
         $this->data['items'] = $items;
@@ -914,7 +919,6 @@ class Admin extends Controller
         $depreciation_percentage = ($percentage / 100);
         if ($after_years != NULL) {
             $numberOfYears = $after_years;
-           
         } else {
             $year = date('Y', strtotime($date_purchase));
             $startDate = $year . '-01-01';
@@ -939,5 +943,166 @@ class Admin extends Controller
             'accumulative depreciation' => $depreciation,
             'net book value' => $nbv
         ];
+    }
+
+    // units
+    public function units()
+    {
+        $this->data['active'] = 'units';
+        return view('admin.units', $this->data);
+    }
+    public function get_units()
+    {
+        $this->data['units'] = Unit::orderBy('name')->get();
+        return view('admin.unit_content', $this->data);
+    }
+
+    public function addunit()
+    {
+        $data = request()->except(['_token', 'unit_id']);
+        $unit =  Unit::create($data);
+        if ($unit) {
+            $response = [
+                'type' => "Success",
+                'title' => 'Success!',
+                'message' => 'Unit Added Successfully'
+            ];
+        } else {
+            $response = [
+                'type' => "Error",
+                'title' => 'Failed!',
+                'message' => 'Unit not Added'
+            ];
+        }
+        echo json_encode($response);
+    }
+    public function deleteunit()
+    {
+        $id = request('unit_id');
+        $unit = Unit::find($id);
+        if (count($unit->product) > 0) {
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'There are some products that are measured in this unit, This this unit can\'t be deleted. You need to delete those products first'
+            ];
+        } else {
+
+            $deleted = $unit->delete();
+            if ($deleted) {
+                $response = [
+                    'title' => 'Success!',
+                    'message' => 'Unit Deleted Successfully'
+                ];
+            } else {
+                $response = [
+                    'title' => 'Failed!',
+                    'message' => 'Unit not deleted'
+                ];
+            }
+        }
+        echo json_encode($response);
+    }
+    public function fetchunit()
+    {
+        $id = $_GET['id'];
+        $unit = Unit::find($id);
+        if (!empty($unit)) {
+            echo json_encode($unit);
+        }
+    }
+
+    public function updateunit()
+    {
+        $id = request('unit_id');
+        $unit = Unit::find($id);
+        if (!empty($unit)) {
+            $data = request()->except(['_token', 'unit_id']);
+            $unit->update($data);
+            $response = [
+                'type' => "Success",
+                'title' => 'Success!',
+                'message' => 'Unit Updated Successfully'
+            ];
+        } else {
+            $response = [
+                'type' => "Error",
+                'title' => 'Failed!',
+                'message' => 'Unit not Updated'
+            ];
+        }
+        echo json_encode($response);
+    }
+
+    //categories
+    public function Category()
+    {
+        $this->data['categories'] = Category::orderBy('name')->get();
+        $this->data['active'] = 'categories';
+        return view('admin.category', $this->data);
+    }
+
+    public function addCategory()
+    {
+        $data = request()->except(['_token', 'category_id']);
+        $category =  Category::create($data);
+        if ($category) {
+            $response = [
+                'type' => "Success",
+                'title' => 'Success!',
+                'message' => 'Category Added Successfully'
+            ];
+        } else {
+            $response = [
+                'type' => "Error",
+                'title' => 'Failed!',
+                'message' => 'Category not Added'
+            ];
+        }
+        echo json_encode($response);
+    }
+    public function deleteCategory()
+    {
+        $id = request('category_id');
+        $deleted = Category::where('id', $id)->delete();
+        if ($deleted) {
+            $response = [
+                'message' => 'Category Deleted Successfully'
+            ];
+        } else {
+            $response = [
+                'message' => 'Category not deleted'
+            ];
+        }
+        echo json_encode($response);
+    }
+    public function fetchCategory()
+    {
+        $id = $_GET['id'];
+        $category = Category::find($id);
+        if (!empty($category)) {
+            echo json_encode($category);
+        }
+    }
+
+    public function updateCategory()
+    {
+        $id = request('category_id');
+        $category = Category::find($id);
+        if (!empty($category)) {
+            $data = request()->except(['_token', 'category_id']);
+            $category->update($data);
+            $response = [
+                'type' => "Success",
+                'title' => 'Success!',
+                'message' => 'Category Updated Successfully'
+            ];
+        } else {
+            $response = [
+                'type' => "Error",
+                'title' => 'Failed!',
+                'message' => 'Category not Updated'
+            ];
+        }
+        echo json_encode($response);
     }
 }

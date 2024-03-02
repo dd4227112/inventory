@@ -1,10 +1,10 @@
 <div class="header">
 
     <div class="header-left active">
-        <a href="index.html" class="logo">
+        <a href="{{url('/dashboard')}}" class="logo">
             <img src="{{ asset('assets/img/logo.png')}}" alt="">
         </a>
-        <a href="index.html" class="logo-small">
+        <a href="{{url('/dashboard')}}" class="logo-small">
             <img src="{{ asset('assets/img/logo-small.png')}}" alt="">
         </a>
         <a id="toggle_btn" href="javascript:void(0);">
@@ -57,7 +57,6 @@
                     </div>
                     <hr class="m-0">
                     <a class="dropdown-item" href="{{route('profile')}}"> <i class="me-2" data-feather="user"></i> My Profile</a>
-                    <!-- <a class="dropdown-item" href="generalsettings.html"><i class="me-2" data-feather="settings"></i>Settings</a> -->
                     <hr class="m-0">
                     <a class="dropdown-item logout pb-0" href="{{ route('logout') }}"><img src="{{ asset('assets/img/icons/log-out.svg')}}" class="me-2" alt="img">Logout</a>
                 </div>
