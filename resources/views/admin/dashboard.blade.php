@@ -162,6 +162,7 @@
                 <div class="card flex-fill">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Most Sold Products</h4>
+                        @if (can_access('manage_products'))
                         <div class="dropdown">
                             <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
                                 <i class="fa fa-ellipsis-v"></i>
@@ -175,6 +176,7 @@
                                 </li>
                             </ul>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body">
                         <div class="table-responsive dataview">
@@ -215,6 +217,7 @@
                 <div class="card flex-fill">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0"> 5 Recent Sales</h4>
+                        @if (can_access('manage_sale'))
                         <div class="dropdown">
                             <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
                                 <i class="fa fa-ellipsis-v"></i>
@@ -228,6 +231,7 @@
                                 </li>
                             </ul>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body">
                         <div class="table-responsive dataview">
@@ -272,6 +276,7 @@
                 <div class="card flex-fill">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0"> 5 Recent Purchases</h4>
+                        @if (can_access('manage_purchase'))
                         <div class="dropdown">
                             <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
                                 <i class="fa fa-ellipsis-v"></i>
@@ -285,6 +290,7 @@
                                 </li>
                             </ul>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body">
                         <div class="table-responsive dataview">

@@ -53,15 +53,4 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/manage_permission/{user}', [Admin::class, 'manage_permission'])->name('manage_permission');
     Route::post('/update_permission', [Admin::class, 'update_permission'])->name('update_permission');
 
-
-// Units
-
-
-
-    
-
-
-
-
-
 });

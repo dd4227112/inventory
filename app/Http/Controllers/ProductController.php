@@ -17,6 +17,7 @@ class ProductController extends Controller
 
     public function index()
     {
+        $this->checkPermission('list_products');
         $products = Product::where('shop_id', session('shop_id'))->get();
         $this->data['products'] = $products;
         $this->data['active'] = 'list_product';
@@ -25,6 +26,8 @@ class ProductController extends Controller
 
     public function  addproduct()
     {
+        $this->checkPermission('add_product');
+    
         $this->data['shops'] = Shop::all();
         $this->data['categories'] = Category::all();
         $this->data['units'] = Unit::all();
@@ -58,6 +61,7 @@ class ProductController extends Controller
     }
     public function edit($uuid)
     {
+        $this->checkPermission('edit_product');
         $product = Product::where('uuid', $uuid)->first();
         if (empty($product)) {
             abort(403);

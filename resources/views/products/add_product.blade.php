@@ -57,7 +57,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Unit</label>
-                                <select class="select" name="unit_id" required>
+                                <select class="select2" name="unit_id" required>
                                     <option>--Select--</option>
                                     @if(!$units->isEmpty())
                                     @foreach($units as $unit)
@@ -70,7 +70,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Category</label>
-                                <select class="select" name="category_id" required>
+                                <select class="select2" name="category_id" required>
                                     <option>--Select--</option>
                                     @if(!$categories->isEmpty())
                                     @foreach($categories as $category)
@@ -84,7 +84,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>
-                                <select class="select" name="shop_id">
+                                <select class="select2" name="shop_id">
                                         <option>--Select--</option>
                                         @if(!$shops->isEmpty())
                                         @foreach($shops as $shop)

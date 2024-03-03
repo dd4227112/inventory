@@ -34,7 +34,7 @@
         <div class="error-box">
             <h1>403</h1>
             <h3 class="h2 mb-3"><i class="fas fa-exclamation-circle"></i> Oops! Forbidden Access !</h3>
-            <p class="h4 font-weight-normal">The page you requested can not be accessed</p>
+            <p class="h4 font-weight-normal">You don't have access on this page. Please contact system administrator</p>
             <a href="{{ route('admin.dashboard')}}" class="btn btn-primary">Back to Home</a>
         </div>
     </div>

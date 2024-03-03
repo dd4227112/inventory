@@ -19,6 +19,9 @@ Route::get('/', function () {
     return view('authentication.login');
 });
 
+Route::get('/unauthorized', [Admin::class, 'unauthorized'])->name('unauthorized');
+
+
 Route::get('/sales', function () {
     return view('sales.dashboard');
 })->middleware(['auth', 'verified'])->name('sales');

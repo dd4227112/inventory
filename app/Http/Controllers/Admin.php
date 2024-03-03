@@ -35,6 +35,10 @@ class Admin extends Controller
     public function __construct()
     {
     }
+    public function unauthorized()
+    {
+        return view('errors.403');
+    }
     public function index()
     {
         $this->data['shops'] = Shop::latest()->get();
@@ -104,11 +108,10 @@ class Admin extends Controller
         }
         $this->data['purchase_payment'] = $purchase_payment;
         $this->data['purchases'] = $purchases;
-        $this->data['active'] = 'dashbaord';
+        $this->data['active'] = 'dashboard';
 
 
         return view('admin.dashboard', $this->data);
-        //    return view('admin.incomming');
     }
 
     // USERS
@@ -260,6 +263,7 @@ class Admin extends Controller
     //SHOPS
     public function shop()
     {
+        $this->checkPermission('list_shops');
         $shops = Shop::all();
         $this->data['shops'] = $shops;
         $this->data['active'] = 'list_shop';
@@ -953,8 +957,11 @@ class Admin extends Controller
     }
     public function get_units()
     {
-        $this->data['units'] = Unit::orderBy('name')->get();
-        return view('admin.unit_content', $this->data);
+        $units = Unit::orderBy('name')->get();
+        return response()->json([
+            'data' => $units,
+        ]);
+        // return view('admin.unit_content', $this->data);
     }
 
     public function addunit()
@@ -983,7 +990,7 @@ class Admin extends Controller
         if (count($unit->product) > 0) {
             $response = [
                 'title' => 'Failed!',
-                'message' => 'There are some products that are measured in this unit, This this unit can\'t be deleted. You need to delete those products first'
+                'message' => 'There are some products that are measured in this unit, This unit can\'t be deleted. You need to delete those products first'
             ];
         } else {
 

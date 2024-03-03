@@ -15,5 +15,6 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/getPurchaseProduct/{search}', [ProductController::class, 'getPurchaseProduct']);
     Route::post('/updateProduct', [ProductController::class, 'updateProduct'])->name('updateProduct');
     Route::post('/deleteproduct', [ProductController::class, 'deleteproduct']); 
+    
 
 });

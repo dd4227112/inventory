@@ -10,7 +10,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fetchunit', [Admin::class, 'fetchunit'])->name('admin.fetchunit');
     Route::post('/updateunit', [Admin::class, 'updateunit'])->name('admin.update_unit');
     Route::post('/deleteunit', [Admin::class, 'deleteunit'])->name('admin.deleteunit');
-    Route::get('/get_units', [Admin::class, 'get_units'])->name('admin.get_units');
+    Route::get('get_units', [Admin::class, 'get_units']);
 
     
 });
