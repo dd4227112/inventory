@@ -9,8 +9,8 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>User Management</h4>
-                <h6>Add User</h6>
+                <h4>Product Management</h4>
+                <h6>Add Product</h6>
             </div>
         </div>
         <form action=" {{ route('store_product') }}" method="post" enctype="multipart/form-data">

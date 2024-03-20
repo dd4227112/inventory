@@ -156,8 +156,8 @@
             ajax: "{{url('get_units')}}",
             columns: [{
                     "data": null,
-                    render: function(data, row, type, m) {
-                        return m.row + 1;
+                    render: function(data, row, type, meta) {
+                        return meta.row + 1;
                     }
                 },
                 {
