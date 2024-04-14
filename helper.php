@@ -98,10 +98,10 @@ function fetch_sale($request)
     if (!empty($product)) {
         $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td>";
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'>";
-        $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance']. "' name ='quantity[]' value ='1'></td>";
+        $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance'] . "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->price * 1) . "'></td>";
-        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".asset('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='" . asset('assets/img/icons/delete.svg') . "' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
@@ -119,7 +119,7 @@ function fetch_purchase($request)
         $output .= "<td><input type ='number' id='quantity' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->cost . "'></td>";
         $output .= "<td><input type ='text' id='sub_total' readonly name ='sub_total[]' value ='" . ($product->cost * 1) . "'></td>";
-        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='".asset('assets/img/icons/delete.svg')."' alt='svg' title='remove this items'></a></td></tr>";
+        $output .= "<td><a href='javascript:void(0);' id='remove'><img src='" . asset('assets/img/icons/delete.svg') . "' alt='svg' title='remove this items'></a></td></tr>";
     } else {
         $output .= "Error!!";
     }
@@ -151,7 +151,7 @@ function overallProductBalance($products = [])
 function inStockProducts()
 {
     $products  = Product::where('shop_id', session('shop_id'))->get();
-    $product_ids =[];
+    $product_ids = [];
     foreach ($products as $product) {
         $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
         $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
@@ -164,7 +164,7 @@ function inStockProducts()
 function outStockProducts()
 {
     $products  = Product::where('shop_id', session('shop_id'))->get();
-    $product_ids =[];
+    $product_ids = [];
     foreach ($products as $product) {
         $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
         $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
@@ -200,11 +200,10 @@ function site_address($shop = null)
 {
     if (isset($shop) && $shop != null) {
         $id = $shop;
-    }
-    else{
+    } else {
         $id = session('shop_id');
     }
-   
+
     $shop = Shop::find($id);
     $address = "";
     $address .= "<p>";
@@ -292,7 +291,7 @@ function decrypt_code($number)
     $replace = ['A', 'e_', 'jk', 'F{', 'rgc', 'Db', 'm$', 'Z-', 'd', 'xY'];
     $key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
     if (!in_array($number, $replace)) {
-       abort(403);
+        abort(403);
     }
 
     $number = str_replace($replace, $key, $number);
@@ -303,7 +302,7 @@ function generateQr($id, $format, $controller)
 {
     $append = random_int(100, 999);
     $payment_code = encrypt_code($id) . $append;
-    $code = url($controller.'?payment=' . $payment_code);
+    $code = url($controller . '?payment=' . $payment_code);
     $qrCode = QrCode::generate(
         $code
     );
@@ -359,24 +358,21 @@ function purchase_payment_status($table, $id, $grand_total)
     }
     return ['status' => $status, 'class' => $class, 'amount' => $amount];
 }
-function most_sold(){
-   $product_ids =[];
-    $products = DB::select("select product_id, count(product_id) as count from sale_products where deleted_at is null and sale_id in (select id from sales where shop_id =".session('shop_id')." and deleted_at is null ) GROUP by product_id order by count  desc limit 5");
+function most_sold()
+{
+    $product_ids = [];
+    $products = DB::select("select product_id, count(product_id) as count from sale_products where deleted_at is null and sale_id in (select id from sales where shop_id =" . session('shop_id') . " and deleted_at is null ) GROUP by product_id order by count  desc limit 5");
     foreach ($products as $key => $product) {
         $product_ids[] = $product->product_id;
     }
     return  $product_ids;
 }
-function can_access($name){
+function can_access($name)
+{
     $user_id = Auth::user()->id;
-    $user_permissions = UserPermissions::where('user_id', $user_id)->get();
-    $permisions = [];
-    foreach ($user_permissions as $key => $user_permission) {
-         $permision = Permissions::find($user_permission->permission_id);
-         $permisions[] = $permision->name;
-    }
-    
-    if (in_array($name, $permisions)) {
+    $user_permission = UserPermissions::where('user_id', $user_id)->where('permission_id', Permissions::where('name', $name)->value('id'))->first();
+
+    if (!empty($user_permission)) {
         return true;
     }
     return false;

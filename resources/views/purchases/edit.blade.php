@@ -65,7 +65,7 @@ use Illuminate\Support\Facades\Auth;
                             <div class="form-group">
                                 <label>Reference/Invoice No.</label>
                                 <input type="text" name="reference" value="{{ $purchase->reference }}" readonly>
-                            </div>J
+                            </div>
                         </div>
                     </div>
                     <div class="row">
