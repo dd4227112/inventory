@@ -16,7 +16,8 @@ class Sale extends BasicModel
         'customer_id',
         'status',
         'uuid',
-        'deleted_by'
+        'deleted_by',
+        'description'
 
     ];
     public function sale_product(){

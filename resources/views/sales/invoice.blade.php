@@ -189,12 +189,15 @@
                     <table class="nomargin" style="width: 100%; padding: 10px;">
                         <tr>
                             <td class="text-left">
-                                <h4><strong>To:</strong> </h4>
+                                @if (isset($sale->customer))
+                                    <h4><strong>To:</strong> </h4>
 
-                                {{$sale->customer->name}} <br>
-                                {{$sale->customer->address}} <br>
-                                {{$sale->customer->email}}<br>
-                                {{$sale->customer->phone}}<br>
+                                    {{ $sale->customer->name }} <br>
+                                    {{ $sale->customer->address }} <br>
+                                    {{ $sale->customer->email }}<br>
+                                    {{ $sale->customer->phone }}<br>
+                                @endif
+
 
                             </td>
                             <td class="text-right">
@@ -215,12 +218,13 @@
                             <td>
                                 @if($show_payment == 'yes')
                                 <ul class="list-unstyled">
-                                    <li>Received From: &nbsp;&nbsp;&nbsp;<strong> {{$sale->customer->name }} - {{$sale->customer->phone }}</strong> </li>
+                                    @if (isset($sale->customer)) <li>Received From: &nbsp;&nbsp;&nbsp;<strong> {{$sale->customer->name }} - {{$sale->customer->phone }}</strong> </li>@endif
                                     <li>Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TZS {{ number_format($payment->amount,2) }}/=</strong></li>
                                     <li>Amount in Word: &nbsp;&nbsp;&nbsp;<strong>Tanzania Shilings {{ $in_words}} Only.</strong></li>
                                     <li>Payment Reference:&nbsp;&nbsp;&nbsp;<strong> {{ $payment->reference }}</strong></li>
                                     <li>Payment Date: &nbsp;&nbsp;&nbsp;<strong> {{ $payment->date }}</strong></li>
                                     {!! $sale_reference !!}
+                                    <li>Sale Description:&nbsp;&nbsp;&nbsp; {{ $sale->description }}</li>
                                     <li>Payment For: &nbsp;&nbsp;&nbsp;<strong> Being Payment for following products below:-</strong></li>
 
                                 </ul>
@@ -250,7 +254,7 @@
                             <tr>
                                 <td>{{++$key}}</td>
                                 <td>
-                                    <strong>{{ $item->product->name }} - {{ $item->product->description }}</strong>
+                                    <strong> {!! wordwrap($item->product->name.' -'. $item->product->description, 15, "<br>\n") !!}</strong>
                                 </td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>{{ number_format($item->price,2) }}</td>
@@ -277,9 +281,9 @@
                                 <td class="text-right">
                                     <div>
                                         <ul class="list-unstyled">
-                                            <li><strong> Grand Total:</strong> {{number_format($sale->grand_total, 2) }}</li>
-                                            <li><strong>Total Paid:</strong> {{ number_format($paid, 2) }} </li>
-                                            <li><strong>Balance</strong> {{ number_format($balance, 2)  }}</li>
+                                            <li><strong> Grand Total: </strong> {{number_format($sale->grand_total, 2) }}</li>
+                                            <li><strong>Total Paid: </strong> {{ number_format($paid, 2) }} </li>
+                                            <li><strong>Balance: </strong> {{ number_format($balance, 2)  }}</li>
 
                                         </ul>
 

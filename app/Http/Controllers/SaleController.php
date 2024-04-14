@@ -47,6 +47,7 @@ class SaleController extends Controller
             'shop_id' => session('shop_id'),
             'customer_id' => $request->customer_id,
             'status' => 1,
+            'description' => $request->description,
         ];
         // add sales record
         $sale = Sale::create($data);
@@ -90,7 +91,7 @@ class SaleController extends Controller
         $sale = Sale::where('uuid', $uuid)->first();
         if (!empty($sale)) {
             $data = [
-                'customer' => $sale->customer->name,
+                'customer' => isset($sale->customer->name) ? $sale->customer->name : '',
                 'sale_id' => $sale->id,
                 'balance' => number_format($sale->grand_total - $sale->payment->sum('amount'), 2),
             ];
@@ -188,6 +189,7 @@ class SaleController extends Controller
             'shop_id' => session('shop_id'),
             'customer_id' => $request->customer_id,
             'status' => 1,
+            'description'=>$request->description
         ];
         $sale = Sale::find($sale_id);
         $sale->update($data);
@@ -214,9 +216,10 @@ class SaleController extends Controller
         $html = " ";
         if (!$payments->isEmpty()) {
             foreach ($payments as $key => $payment) {
+                $customer = isset($sale->customer->name) ? $sale->customer->name:'-';
                 $html .=  "<tr class='bor-b1'>";
                 $html  .= "<td>" . $payment->date . "</td>";
-                $html  .= "<td>" . $sale->customer->name . "</td>";
+                $html  .= "<td>" . $customer . "</td>";
                 $html  .= "<td>" . $payment->reference . "</td>";
                 $html  .= "<td>" . number_format($payment->amount, 2) . " </td>";
                 $html  .= "<td>Cash</td>";
@@ -289,7 +292,8 @@ class SaleController extends Controller
         // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
         return $pdf->download('sales_' . $sale->reference . '.pdf');
     }
-    public function pos(){
+    public function pos()
+    {
         $this->data['active'] = 'pos';
         return view('sales.pos');
     }

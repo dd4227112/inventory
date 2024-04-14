@@ -29,19 +29,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="wordset">
-                        <ul>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -49,14 +36,13 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Code </th>
                                 <th>Name </th>
                                 <th>Description</th>
+                                <th>Brand</th>
                                 <th>Unit </th>
-                                <th>Category</th>
                                 <th>Quantity</th>
-                                <th>Cost</th>
-                                <th>Price</th>
+                                <th>Purchase Cost</th>
+                                <th> Selling Price</th>
                                 <th>Shop</th>
                                 <th>Created By</th>
                                 <th>Action</th>
@@ -67,11 +53,10 @@
                             @foreach($products as $key => $product)
                             <tr>
                                 <td>{{ ++$key}} </td>
-                                <td>{{ $product->code}}</td>
                                 <td>{{ $product->name}}</td>
                                 <td>{{ $product->description}}</td>
-                                <td>{{ $product->unit->name}}</td>
                                 <td>{{ $product->category->name}}</td>
+                                <td>{{ $product->unit->name}}</td>
                                 <td>{{ number_format(product_balance($product->id)['balance'])}}</td>
                                 <td>{{ number_format($product->cost, 2)}}</td>
                                 <td>{{ number_format($product->price, 2)}}</td>

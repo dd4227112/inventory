@@ -20,39 +20,28 @@
                     <div class="row">
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Code</label>
-                                <input type="text" name="code" value="{{ $product->code }}" required class="form-control">
-                                <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+                                <label>Brand</label>
+                                <select class="select2" name="category_id" required>
+                                    <option>--Select--</option>
+                                    @if(!$categories->isEmpty())
+                                    @foreach($categories as $category)
+                                    <option <?= $product->category_id == $category->id ? 'selected' : '' ?> value="{{ $category->id}}"> {{ $category->name }}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" name="name" value="{{ $product->name }}" required class="form-control">
+                                <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Description</label>
                                 <input type="text" name="description" value="{{ $product->description }}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Quantity</label>
-                                <input type="number" class="form-control" value="{{ $product->quantity }}" required name="quantity">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Cost</label>
-                                <input type="text" class="form-control" value="{{ $product->cost }}" required name="cost">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Price</label>
-                                <input type="text" class="form-control" value="{{ $product->price }}" required name="price">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
@@ -70,18 +59,22 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Category</label>
-                                <select class="select" name="category_id" required>
-                                    <option>--Select--</option>
-                                    @if(!$categories->isEmpty())
-                                    @foreach($categories as $category)
-                                    <option <?= $product->category_id == $category->id ? 'selected' : '' ?> value="{{ $category->id}}"> {{ $category->name }}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
+                                <label>Quantity</label>
+                                <input type="number" class="form-control" value="{{ $product->quantity }}" required name="quantity">
                             </div>
                         </div>
-
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Purchase Cost</label>
+                                <input type="text" class="form-control" value="{{ $product->cost }}" required name="cost">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Selling Price</label>
+                                <input type="text" class="form-control" value="{{ $product->price }}" required name="price">
+                            </div>
+                        </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>

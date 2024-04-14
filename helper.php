@@ -37,7 +37,7 @@ function delete_file($filename, $subpath)
 function customers()
 {
     $customers = Customer::where('status', 1)->get();
-    $output = " ";
+    $output = " <option value='' selected></option> ";
     if (!$customers->isEmpty()) {
         foreach ($customers as $key => $customer) {
             $output .= " <option value='" . $customer->id . "'>" . $customer->name . "</option>";
@@ -65,10 +65,7 @@ function supplier()
 function searchSaleProduct($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
-        ->where(function ($query) use ($key) {
-            $query->where('name', 'like', "%$key%")
-                ->orWhere('code', 'like', "%$key%");
-        })
+        ->where('name', 'like', "%$key%")
         ->latest()
         ->take(10)
         ->get();
@@ -80,7 +77,7 @@ function searchSaleProduct($key)
         $output .= "<table class='table table-bordered mb-0'>";
         $output .= "<tbody>";
         foreach ($products as $key => $product) {
-            $output .= "<tr class='add-icon pick_product' id ='" . $product->id . "'><td>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td></tr>";
+            $output .= "<tr class='add-icon pick_product' id ='" . $product->id . "'><td>" . $product->name . " - " . $product->description . "</td></tr>";
         }
         $output .= "</tbody>";
         $output .= "</table>";
@@ -96,7 +93,7 @@ function fetch_sale($request)
     $product = Product::find($id);
     $output = '';
     if (!empty($product)) {
-        $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td>";
+        $output .= "<tr><td class=''>" . $product->name ."- " . $product->description . "</td>";
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'>";
         $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance'] . "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
@@ -127,7 +124,7 @@ function fetch_purchase($request)
 }
 function reference()
 {
-    $reference = 'NTYD-' . time();
+    $reference = time();
     return $reference;
 }
 function product_balance($product)

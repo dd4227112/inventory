@@ -34,7 +34,7 @@
                                 <label>Customer</label>
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
-                                        <select class="select2" id="getCustomer" required name="customer_id">
+                                        <select class="select2" id="getCustomer" name="customer_id">
                                         </select>
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">

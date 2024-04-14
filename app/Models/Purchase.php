@@ -16,7 +16,8 @@ class Purchase extends BasicModel
         'shop_id',
         'supplier_id',
         'status',
-        'deleted_by'
+        'deleted_by',
+        'description'
     ];
 
     public function purchase_product(){

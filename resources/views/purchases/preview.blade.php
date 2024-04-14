@@ -189,12 +189,14 @@
                     <table class="nomargin" style="width: 100%; padding: 10px;">
                         <tr>
                             <td class="text-left">
+                                @if (isset($purchase->supplier))
                                 <h4><strong>To:</strong> </h4>
 
                                 {{$purchase->supplier->name}} <br>
                                 {{$purchase->supplier->address}} <br>
                                 {{$purchase->supplier->email}}<br>
                                 {{$purchase->supplier->phone}}<br>
+                                @endif
 
                             </td>
                             <td class="text-right">
@@ -221,6 +223,7 @@
                                     <li>Payment Reference:&nbsp;&nbsp;&nbsp;<strong> {{ $payment->reference }}</strong></li>
                                     <li>Payment Date: &nbsp;&nbsp;&nbsp;<strong> {{ $payment->date }}</strong></li>
                                     {!! $purchase_reference !!}
+                                    <li>Purchase Description:&nbsp;&nbsp;&nbsp; {{ $purchase->description }}</li>
                                     <li>Payment For: &nbsp;&nbsp;&nbsp;<strong> Being Payment for following products below:-</strong></li>
 
                                 </ul>

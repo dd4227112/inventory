@@ -70,10 +70,10 @@ class PaymentController extends Controller
         $id = $request->id;
         $payment = Payment::find($id);
         $sale = Sale::find($payment->sale_id);
+        $customer = isset($sale->customer->name) ? $sale->customer->name:'';
         if (!empty($payment) && !empty($sale)) {
-
             $data = [
-                'customer' => $sale->customer->name,
+                'customer' => $customer,
                 'payment_id' => $payment->id,
                 'amount' => number_format($payment->amount, 2),
                 'date' => $payment->date,

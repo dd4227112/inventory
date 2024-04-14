@@ -19,9 +19,8 @@ return new class extends Migration
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->bigInteger('quantity');
-            $table->string('code');
-            $table->float('cost');
-            $table->float('price');
+            $table->decimal('cost');
+            $table->decimal('price');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('user_id');
             // $table->foreign('user_id')->references('id')->on('users')->OnDelete('cascade')->onUpdate('cascade');
@@ -33,8 +32,7 @@ return new class extends Migration
             // $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->uuid('uuid');
-            $table->unique(['code', 'name', 'shop_id']);
-            $table->unique(['code', 'shop_id']);
+            $table->unique(['name', 'shop_id']);
             $table->softDeletes();
         });
     }

@@ -9,7 +9,6 @@ class Product extends BasicModel
     use HasFactory;
     protected $fillable = [
         'shop_id', // the shop where this product belong
-        'code',
         'name',
         'quantity',
         'description',

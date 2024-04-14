@@ -11,10 +11,11 @@
                 <h4>Sales Management</h4>
                 <h6>List Sales</h6>
             </div>
-            @if(can_access('add_sale'))
-            <div class="page-btn">
-                <a href=" {{ route('add_sale')}}" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-1">Add Sales</a>
-            </div>
+            @if (can_access('add_sale'))
+                <div class="page-btn">
+                    <a href=" {{ route('add_sale') }}" class="btn btn-added"><img
+                            src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Sales</a>
+                </div>
             @endif
         </div>
 
@@ -23,19 +24,23 @@
                 <div class="table-top">
                     <div class="search-set">
                         <div class="search-input">
-                            <a class="btn btn-searchset"><img src="{{ asset('assets/img/icons/search-white.svg')}}" alt="img"></a>
+                            <a class="btn btn-searchset"><img src="{{ asset('assets/img/icons/search-white.svg') }}"
+                                    alt="img"></a>
                         </div>
                     </div>
                     <div class="wordset">
                         <ul>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
+                                        src="{{ asset('assets/img/icons/pdf.svg') }}" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
+                                        src="{{ asset('assets/img/icons/excel.svg') }}" alt="img"></a>
                             </li>
                             <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+                                        src="{{ asset('assets/img/icons/printer.svg') }}" alt="img"></a>
                             </li>
                         </ul>
                     </div>
@@ -54,71 +59,94 @@
                                 <th>Paid</th>
                                 <th>Due</th>
                                 <th>Biller</th>
+                                <th>Description</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!$sales->isEmpty())
-                            @foreach($sales as $key => $sale)
-                            <tr>
-                                <td>{{ ++ $key}}</td>
-                                <td>{{ $sale->date }}</td>
-                                <td> {{ $sale->customer->name}}</td>
-                                <td>{{ $sale->reference }}</td>
-                                <td><span class="badges bg-lightgreen">Completed</span></td>
-                                @if($sale->grand_total == $payments[$sale->id] )
-                                <td><span class="badges bg-lightgreen">Completed</span></td>
-                                @elseif(( $payments[$sale->id] < $sale->grand_total) && ($payments[$sale->id] > 0))
-                                    <td> <span class="badges bg-lightyellow">Partial</span></td>
-                                    @else
-                                    <td><span class="badges bg-lightred">Pending</span></td>
-                                    @endif
-                                    <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
-                                    <td style="text-align: right;">{{ number_format($payments[$sale->id],2) }}</td>
-                                    <td style="text-align: right;">{{ number_format(($sale->grand_total - $payments[$sale->id] ),2) }}</td>
-                                    <td>{{ $sale->user->name }}</td>
-                                    <td class="text-center">
-                                        <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="true">
-                                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                       
-                                            @if(can_access('view_sale'))
-                                            <li>
-                                                <a href="{{ route('view_sale',   $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/eye1.svg')}}" class="me-2" alt="img">Sale
-                                                    Detail</a>
-                                            </li>
-                                            @endif
-                                            @if(can_access('edit_sale'))
-                                            <li>
-                                                <a href="{{ route('edit_sale', $sale->uuid) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/edit.svg')}}" class="me-2" alt="img">Edit
-                                                    Sale</a>
-                                            </li>
-                                            @endif
-                                            @if(can_access('view_sale_payment'))
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item showpayment" id="{{ $sale->id}}"><img src="{{ asset('assets/img/icons/dollar-square.svg')}}" class="me-2" alt="img">Show Payments</a>
-                                            </li>
-                                            @endif
-                                            @if(can_access('add_sale_payment'))
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item createpayment" id="{{ $sale->uuid }}"><img src="{{ asset('assets/img/icons/plus-circle.svg')}}" class="me-2" alt="img">Add Payment</a>
-                                            </li>
-                                            @endif
-                                            @if(can_access('print_sale'))
-                                            <li>
-                                                <a href="{{ route('print_sale', $sale->uuid ) }}" class="dropdown-item"><img src="{{ asset('assets/img/icons/printer.svg')}}" class="me-2" alt="img">Invoice/Slip</a>
-                                            </li>
-                                            @endif
-                                            @if(can_access('edit_sale'))
-                                            <li>
-                                                <a href="javascript:void(0);" class="dropdown-item delete_sale" id="{{$sale->id }}"><img src="{{ asset('assets/img/icons/delete1.svg')}}" class="me-2" alt="img">Delete Sale</a>
-                                            </li>
-                                            @endif
-                                        </ul>
-                                    </td>
-                            </tr>
-                            @endforeach
+                            @if (!$sales->isEmpty())
+                                @foreach ($sales as $key => $sale)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $sale->date }}</td>
+                                        <td> {{ isset($sale->customer) ? $sale->customer->name : '-' }}</td>
+                                        <td>{{ $sale->reference }}</td>
+                                        <td><span class="badges bg-lightgreen">Completed</span></td>
+                                        @if ($sale->grand_total == $payments[$sale->id])
+                                            <td><span class="badges bg-lightgreen">Completed</span></td>
+                                        @elseif($payments[$sale->id] < $sale->grand_total && $payments[$sale->id] > 0)
+                                            <td> <span class="badges bg-lightyellow">Partial</span></td>
+                                        @else
+                                            <td><span class="badges bg-lightred">Pending</span></td>
+                                        @endif
+                                        <td style="text-align: right;">{{ number_format($sale->grand_total, 2) }}</td>
+                                        <td style="text-align: right;">{{ number_format($payments[$sale->id], 2) }}</td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($sale->grand_total - $payments[$sale->id], 2) }}</td>
+                                        <td>{{ $sale->user->name }}</td>
+                                        <td> {!! wordwrap($sale->description, 50, "<br>\n") !!}</td>
+                                        <td class="text-center">
+                                            <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown"
+                                                aria-expanded="true">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+
+                                                @if (can_access('view_sale'))
+                                                    <li>
+                                                        <a href="{{ route('view_sale', $sale->uuid) }}"
+                                                            class="dropdown-item"><img
+                                                                src="{{ asset('assets/img/icons/eye1.svg') }}"
+                                                                class="me-2" alt="img">Sale
+                                                            Detail</a>
+                                                    </li>
+                                                @endif
+                                                @if (can_access('edit_sale'))
+                                                    <li>
+                                                        <a href="{{ route('edit_sale', $sale->uuid) }}"
+                                                            class="dropdown-item"><img
+                                                                src="{{ asset('assets/img/icons/edit.svg') }}"
+                                                                class="me-2" alt="img">Edit
+                                                            Sale</a>
+                                                    </li>
+                                                @endif
+                                                @if (can_access('view_sale_payment'))
+                                                    <li>
+                                                        <a href="javascript:void(0);" class="dropdown-item showpayment"
+                                                            id="{{ $sale->id }}"><img
+                                                                src="{{ asset('assets/img/icons/dollar-square.svg') }}"
+                                                                class="me-2" alt="img">Show Payments</a>
+                                                    </li>
+                                                @endif
+                                                @if (can_access('add_sale_payment'))
+                                                    <li>
+                                                        <a href="javascript:void(0);"
+                                                            class="dropdown-item createpayment"
+                                                            id="{{ $sale->uuid }}"><img
+                                                                src="{{ asset('assets/img/icons/plus-circle.svg') }}"
+                                                                class="me-2" alt="img">Add Payment</a>
+                                                    </li>
+                                                @endif
+                                                @if (can_access('print_sale'))
+                                                    <li>
+                                                        <a href="{{ route('print_sale', $sale->uuid) }}"
+                                                            class="dropdown-item"><img
+                                                                src="{{ asset('assets/img/icons/printer.svg') }}"
+                                                                class="me-2" alt="img">Invoice/Slip</a>
+                                                    </li>
+                                                @endif
+                                                @if (can_access('edit_sale'))
+                                                    <li>
+                                                        <a href="javascript:void(0);" class="dropdown-item delete_sale"
+                                                            id="{{ $sale->id }}"><img
+                                                                src="{{ asset('assets/img/icons/delete1.svg') }}"
+                                                                class="me-2" alt="img">Delete Sale</a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @endif
 
                         </tbody>
@@ -139,7 +167,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Payment</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -155,7 +184,8 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="date" required value="{{date('Y-m-d')}}" name="date" class="form-control">
+                                    <input type="date" required value="{{ date('Y-m-d') }}" name="date"
+                                        class="form-control">
 
                                 </div>
                             </div>
@@ -163,7 +193,7 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Reference</label>
-                                <input type="text" name="reference" readonly value="{{reference() }}">
+                                <input type="text" name="reference" readonly value="{{ reference() }}">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12 col-12">
@@ -176,7 +206,8 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Paying Amount</label>
-                                <input type="text" value="" id="amount" required name="amount" min="1">
+                                <input type="text" value="" id="amount" required name="amount"
+                                    min="1">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12 col-12">
@@ -207,13 +238,13 @@
 </div>
 @include('sales.actions');
 @include('authentication.footer')
-<script src="{{ asset('/assets/js/sales.js')}}"></script>
+<script src="{{ asset('/assets/js/sales.js') }}"></script>
 <script>
     show_payment = $('.showpayment').on('click', function() {
         var sale_id = $(this).attr('id');
         $.ajax({
             type: 'POST',
-            url: "{{url('singleSalePayment')}}",
+            url: "{{ url('singleSalePayment') }}",
             dataType: 'html',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
@@ -246,7 +277,7 @@
             if (t.value && t.dismiss !== "cancel") {
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('deletepayment')}}",
+                    url: "{{ url('deletepayment') }}",
                     dataType: 'json',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -270,7 +301,7 @@
         var id = $(this).attr('id');
         $.ajax({
             type: 'POST',
-            url: "{{url('getsinglepayment')}}",
+            url: "{{ url('getsinglepayment') }}",
             dataType: 'json',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
