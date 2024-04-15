@@ -11,10 +11,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/dash1.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/dash1.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>TZS <span>{{ number_format($total_purchases,2)}}</span></h5>
+                        <h5>TZS <span>{{ number_format($total_purchases, 2) }}</span></h5>
                         <h6>Total Purchases </h6>
                     </div>
                 </div>
@@ -22,10 +22,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget dash1">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/dash2.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/dash2.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>TZS <span>{{ number_format($total_sales,2)}}</span></h5>
+                        <h5>TZS <span>{{ number_format($total_sales, 2) }}</span></h5>
                         <h6>Total Sales</h6>
                     </div>
                 </div>
@@ -33,10 +33,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget dash2">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/dash3.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/dash3.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>TZS <span>{{ number_format($today_sales,2)}}</span></h5>
+                        <h5>TZS <span>{{ number_format($today_sales, 2) }}</span></h5>
                         <h6>Today's Sales </h6>
                     </div>
                 </div>
@@ -44,10 +44,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget dash3">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/dash4.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/dash4.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5>TZS <span>{{ number_format($today_purchases,2)}}</span></h5>
+                        <h5>TZS <span>{{ number_format($today_purchases, 2) }}</span></h5>
                         <h6>Today's Purchases </h6>
                     </div>
                 </div>
@@ -55,10 +55,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget dash3">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/product.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/product.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5><span>{{ number_format($all_product)}}</span></h5>
+                        <h5><span>{{ number_format($all_product) }}</span></h5>
                         <h6>All Products</h6>
                     </div>
                 </div>
@@ -66,10 +66,10 @@
             <div class="col-lg-2 col-sm-6 col-12">
                 <div class="dash-widget dash3">
                     <div class="dash-widgetimg">
-                        <span><img src="{{ asset('assets/img/icons/product.svg')}}" alt="img"></span>
+                        <span><img src="{{ asset('assets/img/icons/product.svg') }}" alt="img"></span>
                     </div>
                     <div class="dash-widgetcontent">
-                        <h5> <span>{{ number_format($in_stock)}} / {{ number_format($out_stock)}}</span></h5>
+                        <h5> <span>{{ number_format($in_stock) }} / {{ number_format($out_stock) }}</span></h5>
                         <h6>In-stock/Out-Stock</h6>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
             <div class="col-lg-3 col-sm-6 col-12 d-flex">
                 <div class="dash-count">
                     <div class="dash-counts">
-                        <h4>{{ number_format($customers)}}</h4>
+                        <h4>{{ number_format($customers) }}</h4>
                         <h5>Customers</h5>
                     </div>
                     <div class="dash-imgs">
@@ -88,7 +88,7 @@
             <div class="col-lg-3 col-sm-6 col-12 d-flex">
                 <div class="dash-count das1">
                     <div class="dash-counts">
-                        <h4>{{ number_format($suppliers)}}</h4>
+                        <h4>{{ number_format($suppliers) }}</h4>
                         <h5>Suppliers</h5>
                     </div>
                     <div class="dash-imgs">
@@ -100,7 +100,7 @@
             <div class="col-lg-3 col-sm-6 col-12 d-flex">
                 <div class="dash-count das2">
                     <div class="dash-counts">
-                        <h4>{{ number_format($number_purchases)}}</h4>
+                        <h4>{{ number_format($number_purchases) }}</h4>
                         <h5>Purchase Invoice</h5>
                     </div>
                     <div class="dash-imgs">
@@ -111,7 +111,7 @@
             <div class="col-lg-3 col-sm-6 col-12 d-flex">
                 <div class="dash-count das3">
                     <div class="dash-counts">
-                        <h4>{{ number_format($number_sales)}}</h4>
+                        <h4>{{ number_format($number_sales) }}</h4>
                         <h5>Sales Invoice</h5>
                     </div>
                     <div class="dash-imgs">
@@ -137,7 +137,7 @@
                             </ul>
                             <!-- <div class="dropdown">
                                 <button class="btn btn-white btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    2022 <img src="{{ asset('assets/img/icons/dropdown.svg')}}" alt="img" class="ms-2">
+                                    2022 <img src="{{ asset('assets/img/icons/dropdown.svg') }}" alt="img" class="ms-2">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li>
@@ -163,19 +163,20 @@
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Most Sold Products</h4>
                         @if (can_access('manage_products'))
-                        <div class="dropdown">
-                            <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a href="{{ route('list_product')}}" class="dropdown-item">List Product</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('add_product')}}" class="dropdown-item"> Add Product</a>
-                                </li>
-                            </ul>
-                        </div>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"
+                                    class="dropset">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <a href="{{ route('list_product') }}" class="dropdown-item">List Product</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('add_product') }}" class="dropdown-item"> Add Product</a>
+                                    </li>
+                                </ul>
+                            </div>
                         @endif
                     </div>
                     <div class="card-body">
@@ -191,19 +192,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(!$most_solds->isEmpty())
-                                    @foreach($most_solds as $i=> $most_sold)
-                                    <tr>
-                                        <td>{{ ++$i}}</td>
-                                        <td class="productimgname">
+                                    @if (!$most_solds->isEmpty())
+                                        @foreach ($most_solds as $i => $most_sold)
+                                            <tr>
+                                                <td>{{ ++$i }}</td>
+                                                <td class="productimgname">
 
-                                            {{$most_sold->name }} - {{ $most_sold->description}}
-                                        </td>
-                                        <td>{{$most_sold->unit->name }}</td>
-                                        <td>{{$most_sold->category->name }}</td>
-                                        <td>TZS {{number_format($most_sold->price ,2)}}</td>
-                                    </tr>
-                                    @endforeach
+                                                    {{ $most_sold->name }} - {{ $most_sold->description }}
+                                                </td>
+                                                <td>{{ $most_sold->unit->name }}</td>
+                                                <td>{{ $most_sold->category->name }}</td>
+                                                <td>TZS {{ number_format($most_sold->price, 2) }}</td>
+                                            </tr>
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -218,19 +219,20 @@
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0"> 5 Recent Sales</h4>
                         @if (can_access('manage_sale'))
-                        <div class="dropdown">
-                            <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a href="{{ route('list_sale')}}" class="dropdown-item">List Sales</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('add_sale')}}" class="dropdown-item"> Add Sale</a>
-                                </li>
-                            </ul>
-                        </div>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"
+                                    class="dropset">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <a href="{{ route('list_sale') }}" class="dropdown-item">List Sales</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('add_sale') }}" class="dropdown-item"> Add Sale</a>
+                                    </li>
+                                </ul>
+                            </div>
                         @endif
                     </div>
                     <div class="card-body">
@@ -250,21 +252,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(!$sales->isEmpty())
-                                    @foreach($sales as $key => $sale)
-                                    <tr>
-                                        <td>
-                                            {{ ++$key}}
-                                        </td>
-                                        <td>{{ $sale->date }}</td>
-                                        <td> {{ $sale->customer->name}}</td>
-                                        <td>{{ $sale->reference }}</td>
-                                        <td style="text-align: right;">{{ number_format($sale->grand_total,2) }}</td>
-                                        <td style="text-align: right;">{{ number_format($payments[$sale->id],2) }}</td>
-                                        <td style="text-align: right;">{{ number_format(($sale->grand_total - $payments[$sale->id] ),2) }}</td>
-                                        <td>{{ $sale->user->name }}</td>
-                                    </tr>
-                                    @endforeach
+                                    @if (!$sales->isEmpty())
+                                        @foreach ($sales as $key => $sale)
+                                            <tr>
+                                                <td>
+                                                    {{ ++$key }}
+                                                </td>
+                                                <td>{{ $sale->date }}</td>
+                                                <td> {{ isset($sale->customer) ? $sale->customer->name : ' - ' }}</td>
+                                                <td>{{ $sale->reference }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($sale->grand_total, 2) }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($payments[$sale->id], 2) }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($sale->grand_total - $payments[$sale->id], 2) }}
+                                                </td>
+                                                <td>{{ $sale->user->name }}</td>
+                                            </tr>
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -277,19 +283,21 @@
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0"> 5 Recent Purchases</h4>
                         @if (can_access('manage_purchase'))
-                        <div class="dropdown">
-                            <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false" class="dropset">
-                                <i class="fa fa-ellipsis-v"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a href="{{ route('list_purchase')}}" class="dropdown-item">List Purchase</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('add_purchase')}}" class="dropdown-item"> Add Purchase</a>
-                                </li>
-                            </ul>
-                        </div>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"
+                                    class="dropset">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <a href="{{ route('list_purchase') }}" class="dropdown-item">List
+                                            Purchase</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('add_purchase') }}" class="dropdown-item"> Add Purchase</a>
+                                    </li>
+                                </ul>
+                            </div>
                         @endif
                     </div>
                     <div class="card-body">
@@ -306,21 +314,25 @@
                                     <th>Biller</th>
                                 </thead>
                                 <tbody>
-                                    @if(!$purchases->isEmpty())
-                                    @foreach($purchases as $key => $purchase)
-                                    <tr>
-                                        <td>
-                                            {{ ++$key }}
-                                        </td>
-                                        <td>{{ $purchase->date }}</td>
-                                        <td> {{ $purchase->supplier->name}}</td>
-                                        <td>{{ $purchase->reference }}</td>
-                                        <td style="text-align: right;">{{ number_format($purchase->grand_total,2) }}</td>
-                                        <td style="text-align: right;">{{ number_format($purchase_payment[$purchase->id], 2) }}</td>
-                                        <td style="text-align: right;">{{ number_format(($purchase->grand_total - $purchase_payment[$purchase->id]), 2) }}</td>
-                                        <td>{{ $purchase->user->name }}</td>
-                                    </tr>
-                                    @endforeach
+                                    @if (!$purchases->isEmpty())
+                                        @foreach ($purchases as $key => $purchase)
+                                            <tr>
+                                                <td>
+                                                    {{ ++$key }}
+                                                </td>
+                                                <td>{{ $purchase->date }}</td>
+                                                <td> {{ isset($purchase->supplier)?$purchase->supplier->name:'' }}</td>
+                                                <td>{{ $purchase->reference }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($purchase->grand_total, 2) }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($purchase_payment[$purchase->id], 2) }}</td>
+                                                <td style="text-align: right;">
+                                                    {{ number_format($purchase->grand_total - $purchase_payment[$purchase->id], 2) }}
+                                                </td>
+                                                <td>{{ $purchase->user->name }}</td>
+                                            </tr>
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>
@@ -371,7 +383,9 @@
                     data: [<?= $sales_chart ?>]
                 }],
                 xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+                        'Nov', 'Dec'
+                    ],
                 },
                 yaxis: {
                     title: {

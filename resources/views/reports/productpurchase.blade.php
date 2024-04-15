@@ -9,7 +9,7 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Product Purchase Reports ( {{$product->name }} - {{$product->description }})</h4>
+                <h4>Product Purchase Reports ( {{ $product->name }} - {{ $product->description }})</h4>
             </div>
         </div>
 
@@ -19,22 +19,11 @@
                     <div class="search-set">
                         <div class="search-input">
                             <a class="btn btn-searchset">
-                                <img src="{{ asset('assets/img/icons/search-white.svg')}}" alt="img">
+                                <img src="{{ asset('assets/img/icons/search-white.svg') }}" alt="img">
                             </a>
                         </div>
                     </div>
                     <div class="wordset">
-                        <ul>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
@@ -55,21 +44,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!$reports->isEmpty())
-                            @foreach($reports as $key => $report)
-                            <tr>
-                                <td>{{ ++$key}} </td>
-                                <td>{{ $product->name}} ({{ $product->code}})</td>
-                                <td>{{ $product->description}}</td>
-                                <td>{{ $report->date}}</td>
-                                <td>{{ $purchase[$report->id]->reference}}</td>
-                                <td>{{ $purchase[$report->id]->supplier->name}}</td>
-                                <td>{{ number_format($report->quantity)}}</td>
-                                <td>{{ number_format($report->price, 2)}}</td>
-                                <td>{{ number_format($report->total,2)}}</td>
-                                <td>{{ $purchase[$report->id]->user->name}}</td>
-                            </tr>
-                            @endforeach
+                            @if (!$reports->isEmpty())
+                                @foreach ($reports as $key => $report)
+                                    <tr>
+                                        <td>{{ ++$key }} </td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->description }}</td>
+                                        <td>{{ $report->date }}</td>
+                                        <td>{{ $purchase[$report->id]->reference }}</td>
+                                        <td>{{ isset($purchase[$report->id]->supplier) ? $purchase[$report->id]->supplier->name : '' }}
+                                        </td>
+                                        <td>{{ number_format($report->quantity) }}</td>
+                                        <td>{{ number_format($report->price, 2) }}</td>
+                                        <td>{{ number_format($report->total, 2) }}</td>
+                                        <td>{{ $purchase[$report->id]->user->name }}</td>
+                                    </tr>
+                                @endforeach
                             @endif
                         </tbody>
                     </table>

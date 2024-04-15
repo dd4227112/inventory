@@ -9,15 +9,23 @@ use App\Models\Shop;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 class PurchaseController extends Controller
 {
     protected $data;
     public function index()
     {
-        $purchases = Purchase::where('shop_id', session('shop_id'))->get();
+        $from = date('Y-m-d');
+        $to = date('Y-m-d');
+        if ($_POST) {
+            $from = $_POST['from'];
+            $to = $_POST['to'];
+        }
+        $purchases = Purchase::where('shop_id', session('shop_id'))->where('created_at', '>', $from . ' 00:00:00')->where('created_at', '<', $to . ' 23:59:59')->get();
         $payment = [];
         $method = [];
+        $sum = 0;
         $availabale_method = [
             '1' => 'Cash',
             '2' => 'Bank',
@@ -28,11 +36,15 @@ class PurchaseController extends Controller
             foreach ($purchases as $key => $purchase) {
                 $payment[$purchase->id] =  $purchase->payment->sum('amount');
                 $payment_method = Payment::where('purchase_id', $purchase->id)->first();
-                $method[$purchase->id] = !empty($payment_method)?$availabale_method[$payment_method->payment_method]:' - ';
+                $method[$purchase->id] = !empty($payment_method) ? $availabale_method[$payment_method->payment_method] : ' - ';
+                $sum += $purchase->grand_total;
             }
         }
+        $this->data['to'] = $to;
+        $this->data['from'] = $from;
         $this->data['method'] = $method;
         $this->data['payments'] = $payment;
+        $this->data['sum'] = $sum;
         $this->data['purchases'] = $purchases;
         $this->data['active'] = 'list_purchase';
         return view('purchases.index', $this->data);
@@ -47,6 +59,10 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
 
+        $checkCode = $this->checkCode($request->reference);
+        if ($checkCode) {
+            return redirect()->back()->with('warning', 'Duplicate reference number');
+        }
         $data = [
             'reference' => $request->reference,
             'grand_total' => str_replace(',', '', $request->grand_total),
@@ -55,6 +71,7 @@ class PurchaseController extends Controller
             'shop_id' => session('shop_id'),
             'supplier_id' => $request->supplier_id,
             'status' => 1,
+            'description' => $request->description,
         ];
 
         $purchase = Purchase::create($data);
@@ -119,17 +136,18 @@ class PurchaseController extends Controller
         $payments = Payment::where('purchase_id', $request->id)->get();
         $html = " ";
         if (!$payments->isEmpty()) {
+            $supplier = isset($purchase->supplier)?$purchase->supplier->name:'';
             foreach ($payments as $key => $payment) {
                 $html .=  "<tr class='bor-b1'>";
                 $html  .= "<td>" . $payment->date . "</td>";
-                $html  .= "<td>" . $purchase->supplier->name . "</td>";
+                $html  .= "<td>" . $supplier. "</td>";
                 $html  .= "<td>" . $payment->reference . "</td>";
                 $html  .= "<td>" . number_format($payment->amount, 2) . " </td>";
                 $html  .= "<td>Cash</td>";
                 $html  .= "<td>" . $payment->description . " </td>";
                 $html  .= "<td>" . $payment->user->name . " </td>";
                 $html  .= "<td>
-                    <a class='me-2' href='" . route('purchase_payment_receipt', $payment->uuid) . "'>
+                    <a class='me-2' target = '_blank' href='" . route('purchase_payment_receipt', $payment->uuid) . "'>
                         <img src='" . asset('assets/img/icons/printer.svg') . "' alt='img'>
                     </a>
                     <a class='me-2 getPayment' id = '" . $payment->id . "' href='javascript:void(0);' 
@@ -226,8 +244,8 @@ class PurchaseController extends Controller
         }
         $pdf = PDF::loadView('purchases.invoice', $this->data);
         $pdf->setPaper('A4');
-        // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('purchases_' . $purchase->reference . '.pdf');
+        return $pdf->stream('purchases_' . $purchase->reference . '.pdf', array('Attachment' => false));
+        // return $pdf->download('purchases_' . $purchase->reference . '.pdf');
     }
     public function updatepurchase(Request $request)
     {
@@ -240,6 +258,7 @@ class PurchaseController extends Controller
             'shop_id' => session('shop_id'),
             'supplier_id' => $request->supplier_id,
             'status' => 1,
+            'description' => $request->description
         ];
         $purchase = Purchase::find($purchase_id);
         $purchase->update($data);
@@ -257,5 +276,14 @@ class PurchaseController extends Controller
             PurchaseProduct::create($product);
         }
         return redirect()->route('view_purchase', $purchase->uuid)->with('success', "Purchase Updated Successfully");
+    }
+    public function checkCode($code)
+    {
+        $code = Purchase::where('reference', $code)->where('shop_id', session('shop_id'))->first();
+        if (!empty($code)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

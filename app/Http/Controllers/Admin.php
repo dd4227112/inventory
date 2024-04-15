@@ -65,8 +65,8 @@ class Admin extends Controller
         $this->data['total_sales'] = Sale::where('shop_id', $shop_id)->sum('grand_total');
         $this->data['number_purchases'] = Purchase::where(['shop_id' => $shop_id, 'date' => $date])->count();
         $this->data['number_sales'] = Sale::where(['shop_id' => $shop_id, 'date' => $date])->count();
-        $this->data['today_purchases'] = Purchase::where(['shop_id' => $shop_id, 'date' => $date])->sum('grand_total');
-        $this->data['today_sales'] = Sale::where(['shop_id' => $shop_id, 'date' => $date])->sum('grand_total');
+        $this->data['today_purchases'] = Payment::where(['date' => $date])->whereNotNull('purchase_id')->whereIn('purchase_id', Purchase::where(['shop_id' => $shop_id])->get(['id']))->sum('amount');
+        $this->data['today_sales'] = Payment::where(['date' => $date])->whereNotNull('sale_id')->whereIn('sale_id', Sale::where(['shop_id' => $shop_id])->get(['id']))->sum('amount');
         $this->data['customers'] = Customer::where('shop_id', $shop_id)->count();
         $this->data['suppliers'] = Supplier::where('shop_id', $shop_id)->count();
         $this->data['all_product'] = Product::where('shop_id', $shop_id)->count();
@@ -433,11 +433,38 @@ class Admin extends Controller
                 $checked[$permission->id] = "";
             }
         }
+        if (count($permissions) == count($given_permissions)) {
+            $this->data['all_given'] = 'checked';
+        } else {
+            $this->data['all_given'] = '';
+        }
         $this->data['user'] = $user;
         $this->data['permissions'] = $permissions;
         $this->data['checked'] = $checked;
         $this->data['active'] = 'setting';
         return view('admin.manage_permissions', $this->data);
+    }
+    public function allPermission(Request $request)
+    {
+        $user_id = $request->user_id;
+        $permission  = $request->id;
+        $value = $request->checked;
+        if ($value == 'false') {
+            UserPermissions::where(['user_id' => $user_id])->delete();
+            $message = ['title' => 'User Denied All Permissions'];
+        } elseif ($value == 'true') {
+
+            UserPermissions::where(['user_id' => $user_id])->delete();
+            $permissions =  Permissions::all();
+            foreach ($permissions as $key => $permission) {
+                UserPermissions::create(['user_id' => $user_id, 'permission_id' => $permission->id]);
+            }
+
+            $message = ['title' => 'Use Granted All Permissions'];
+        } else {
+            $message = ['title' => 'Error!! '];
+        }
+        return response()->json($message);
     }
 
     public function update_permission(Request $request)

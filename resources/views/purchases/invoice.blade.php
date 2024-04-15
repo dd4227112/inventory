@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 
 
-    <title>Simple invoice page - Bootdey.com</title>
+    <title>receipt_invoice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('/assets/invoice/css/bootstrapcdn.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -216,8 +216,9 @@
                             <td>
                                 @if ($show_payment == 'yes')
                                     <ul class="list-unstyled">
-                                        <li>Paid To: &nbsp;&nbsp;&nbsp;<strong> {{ $purchase->supplier->name }} -
-                                                {{ $purchase->supplier->phone }}</strong> </li>
+                                        <li>Paid To: &nbsp;&nbsp;&nbsp;<strong>
+                                                {{ isset($purchase->supplier) ? $purchase->supplier->name . '-' . $purchase->supplier->phone : '' }}</strong>
+                                        </li>
                                         <li>Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TZS
                                                 {{ number_format($payment->amount, 2) }}/=</strong></li>
                                         <li>Amount in Word: &nbsp;&nbsp;&nbsp;<strong>Tanzania Shilings
@@ -226,6 +227,7 @@
                                                 {{ $payment->reference }}</strong></li>
                                         <li>Payment Date: &nbsp;&nbsp;&nbsp;<strong> {{ $payment->date }}</strong></li>
                                         {!! $purchase_reference !!}
+                                        <li>Purchase Description:&nbsp;&nbsp;&nbsp; {!! wordwrap($purchase->description, 50, "<br>\n") !!}</li>
                                         <li>Payment For: &nbsp;&nbsp;&nbsp;<strong> Being Payment for following products
                                                 below:-</strong></li>
 
@@ -256,8 +258,7 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>
-                                        <strong>{{ $item->product->name }} -
-                                            {{ $item->product->description }}</strong>
+                                        <strong> {!! wordwrap($item->product->name . ' - ' . $item->product->description, 15, "<br>\n") !!}</strong>
                                     </td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ number_format($item->price, 2) }}</td>

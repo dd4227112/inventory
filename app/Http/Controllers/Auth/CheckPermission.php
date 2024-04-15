@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers\Auth;
-trait checkPermission
+trait CheckPermission
 {
-    public function checkPermission($permission)
+    public function CheckPermission($permission)
     {
         if (can_access($permission)) {
             return true;

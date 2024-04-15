@@ -17,14 +17,26 @@ class SaleController extends Controller
 
     public function index()
     {
-        $sales = sale::where('shop_id', session('shop_id'))->get();
+
+        $from = date('Y-m-d');
+        $to = date('Y-m-d');
+        $sum = 0;
+        if ($_POST) {
+            $from = $_POST['from'];
+            $to = $_POST['to'];
+        }
+        $sales = sale::where('shop_id', session('shop_id'))->where('created_at', '>', $from . ' 00:00:00')->where('created_at', '<', $to . ' 23:59:59')->get();
         $this->data['sales'] = $sales;
         $payment = [];
         if (!$sales->isEmpty()) {
             foreach ($sales as $key => $sale) {
                 $payment[$sale->id] =  $sale->payment->sum('amount');
+                $sum += $sale->grand_total;
             }
         }
+        $this->data['sum'] = $sum;
+        $this->data['to'] = $to;
+        $this->data['from'] = $from;
         $this->data['payments'] = $payment;
         $this->data['active'] = 'list_sale';
         return view('sales.index', $this->data);
@@ -39,6 +51,10 @@ class SaleController extends Controller
     public function store(Request $request)
     {
 
+        $checkCode = $this->checkCode($request->reference);
+        if ($checkCode) {
+            return redirect()->back()->with('warning', 'Duplicate reference number');
+        }
         $data = [
             'reference' => $request->reference,
             'grand_total' => remove_comma($request->grand_total),
@@ -189,7 +205,7 @@ class SaleController extends Controller
             'shop_id' => session('shop_id'),
             'customer_id' => $request->customer_id,
             'status' => 1,
-            'description'=>$request->description
+            'description' => $request->description
         ];
         $sale = Sale::find($sale_id);
         $sale->update($data);
@@ -216,7 +232,7 @@ class SaleController extends Controller
         $html = " ";
         if (!$payments->isEmpty()) {
             foreach ($payments as $key => $payment) {
-                $customer = isset($sale->customer->name) ? $sale->customer->name:'-';
+                $customer = isset($sale->customer->name) ? $sale->customer->name : '-';
                 $html .=  "<tr class='bor-b1'>";
                 $html  .= "<td>" . $payment->date . "</td>";
                 $html  .= "<td>" . $customer . "</td>";
@@ -227,7 +243,7 @@ class SaleController extends Controller
                 $html  .= "<td>" . $payment->user->name . " </td>";
                 $html  .= "<td>";
                 if (can_access('print_sale_payment')) {
-                    $html  .= "<a class='me-2' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
+                    $html  .= "<a class='me-2' target ='_blank' href='" . route('sale_payment_receipt', $payment->uuid) . "'>
                         <img src='" . asset('assets/img/icons/printer.svg') . "' alt='img'>
                     </a>";
                 }
@@ -289,12 +305,21 @@ class SaleController extends Controller
 
         $pdf = PDF::loadView('sales.invoice', $this->data);
         $pdf->setPaper('A4');
-        // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('sales_' . $sale->reference . '.pdf');
+        return $pdf->stream('sales_' . $sale->reference . '.pdf', array('Attachment' => false));
+        // return $pdf->download('sales_' . $sale->reference . '.pdf');
     }
     public function pos()
     {
         $this->data['active'] = 'pos';
         return view('sales.pos');
+    }
+    public function checkCode($code)
+    {
+        $code = Sale::where('reference', $code)->where('shop_id', session('shop_id'))->first();
+        if (!empty($code)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

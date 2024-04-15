@@ -5,9 +5,9 @@
     <meta charset="utf-8">
 
 
-    <title>Simple invoice page - Bootdey.com</title>
+    <title>receipt_invoice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ asset('/assets/invoice/css/bootstrapcdn.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/assets/invoice/css/bootstrapcdn.min.css') }}" rel="stylesheet">
     <style type="text/css">
         body {
             margin-top: 20px;
@@ -180,8 +180,8 @@
     <div class="container bootstrap snippets bootdey">
         <p></p>
         <h4 class="text-center">{{ $title }}</h4>
-        <h5 class="text-center">Reference: {{$reference }}</h5>
-        <h5 class="text-center">Date: {{$date }}</h5>
+        <h5 class="text-center">Reference: {{ $reference }}</h5>
+        <h5 class="text-center">Date: {{ $date }}</h5>
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -190,12 +190,12 @@
                         <tr>
                             <td class="text-left">
                                 @if (isset($purchase->supplier))
-                                <h4><strong>To:</strong> </h4>
+                                    <h4><strong>To:</strong> </h4>
 
-                                {{$purchase->supplier->name}} <br>
-                                {{$purchase->supplier->address}} <br>
-                                {{$purchase->supplier->email}}<br>
-                                {{$purchase->supplier->phone}}<br>
+                                    {{ $purchase->supplier->name }} <br>
+                                    {{ $purchase->supplier->address }} <br>
+                                    {{ $purchase->supplier->email }}<br>
+                                    {{ $purchase->supplier->phone }}<br>
                                 @endif
 
                             </td>
@@ -215,18 +215,24 @@
                         </tr>
                         <tr>
                             <td>
-                                @if($show_payment == 'yes')
-                                <ul class="list-unstyled">
-                                    <li>Paid To: &nbsp;&nbsp;&nbsp;<strong> {{$purchase->supplier->name }} - {{$purchase->supplier->phone }}</strong> </li>
-                                    <li>Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TZS {{ number_format($payment->amount,2) }}/=</strong></li>
-                                    <li>Amount in Word: &nbsp;&nbsp;&nbsp;<strong>Tanzania Shilings {{ $in_words}} Only.</strong></li>
-                                    <li>Payment Reference:&nbsp;&nbsp;&nbsp;<strong> {{ $payment->reference }}</strong></li>
-                                    <li>Payment Date: &nbsp;&nbsp;&nbsp;<strong> {{ $payment->date }}</strong></li>
-                                    {!! $purchase_reference !!}
-                                    <li>Purchase Description:&nbsp;&nbsp;&nbsp; {{ $purchase->description }}</li>
-                                    <li>Payment For: &nbsp;&nbsp;&nbsp;<strong> Being Payment for following products below:-</strong></li>
+                                @if ($show_payment == 'yes')
+                                    <ul class="list-unstyled">
+                                        <li>Paid To: &nbsp;&nbsp;&nbsp;<strong>
+                                                {{ isset($purchase->supplier) ? $purchase->supplier->name . '-' . $purchase->supplier->phone : '' }}</strong>
+                                        </li>
+                                        <li>Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>TZS
+                                                {{ number_format($payment->amount, 2) }}/=</strong></li>
+                                        <li>Amount in Word: &nbsp;&nbsp;&nbsp;<strong>Tanzania Shilings
+                                                {{ $in_words }} Only.</strong></li>
+                                        <li>Payment Reference:&nbsp;&nbsp;&nbsp;<strong>
+                                                {{ $payment->reference }}</strong></li>
+                                        <li>Payment Date: &nbsp;&nbsp;&nbsp;<strong> {{ $payment->date }}</strong></li>
+                                        {!! $purchase_reference !!}
+                                        <li>Purchase Description:&nbsp;&nbsp;&nbsp; {{ $purchase->description }}</li>
+                                        <li>Payment For: &nbsp;&nbsp;&nbsp;<strong> Being Payment for following products
+                                                below:-</strong></li>
 
-                                </ul>
+                                    </ul>
                                 @endif
                             </td>
                             <td></td>
@@ -249,17 +255,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($purchase->purchase_product as $key =>$item)
-                            <tr>
-                                <td>{{++$key}}</td>
-                                <td>
-                                    <strong>{{ $item->product->name }} - {{ $item->product->description }}</strong>
-                                </td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->price,2) }}</td>
-                                <td class="text-right">{{ number_format($item->total,2)}}</td>
+                            @foreach ($purchase->purchase_product as $key => $item)
+                                <tr>
+                                    <td>{{ ++$key }}</td>
+                                    <td>
+                                        <strong>{{ $item->product->name }} -
+                                            {{ $item->product->description }}</strong>
+                                    </td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ number_format($item->price, 2) }}</td>
+                                    <td class="text-right">{{ number_format($item->total, 2) }}</td>
 
-                            </tr>
+                                </tr>
                             @endforeach
 
                             <tr>
@@ -280,9 +287,10 @@
                                 <td class="text-right">
                                     <div>
                                         <ul class="list-unstyled">
-                                            <li><strong> Grand Total:</strong> {{number_format($purchase->grand_total, 2) }}</li>
+                                            <li><strong> Grand Total:</strong>
+                                                {{ number_format($purchase->grand_total, 2) }}</li>
                                             <li><strong>Total Paid:</strong> {{ number_format($paid, 2) }} </li>
-                                            <li><strong>Balance</strong> {{ number_format($balance, 2)  }}</li>
+                                            <li><strong>Balance</strong> {{ number_format($balance, 2) }}</li>
 
                                         </ul>
 
@@ -297,13 +305,13 @@
                         <tr>
                             <td class="text-left">
                                 <div>
-                                   
+
                                 </div>
                             </td>
                             <td class="text-right">
                                 <div>
-                                    @if(isset($qr))
-                                    {!! $qr !!}
+                                    @if (isset($qr))
+                                        {!! $qr !!}
                                     @endif
                                 </div>
                             </td>

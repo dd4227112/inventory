@@ -29,20 +29,20 @@
                         </div>
                     </div>
                     <div class="wordset">
-                        <ul>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
-                                        src="{{ asset('assets/img/icons/pdf.svg') }}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
-                                        src="{{ asset('assets/img/icons/excel.svg') }}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
-                                        src="{{ asset('assets/img/icons/printer.svg') }}" alt="img"></a>
-                            </li>
-                        </ul>
+                        <form action="" method="POST">
+                            @csrf
+                            <ul>
+                                <li>
+                                    <input type="date" name="from" value="{{$from}}" class="form-control" id="">
+                                </li>
+                                <li>
+                                    <input type="date" name="to" value="{{$to}}" class="form-control" id="">
+                                </li>
+                                <li>
+                                    <button class="btn btn-success" type="submit">Submit</button>
+                                </li>
+                            </ul>
+                        </form>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -64,6 +64,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            $paid = 0;
+                            $due = 0;
+                        @endphp
                             @if (!$sales->isEmpty())
                                 @foreach ($sales as $key => $sale)
                                     <tr>
@@ -129,10 +133,10 @@
                                                 @endif
                                                 @if (can_access('print_sale'))
                                                     <li>
-                                                        <a href="{{ route('print_sale', $sale->uuid) }}"
+                                                        <a target="_blank" href="{{ route('print_sale', $sale->uuid) }}"
                                                             class="dropdown-item"><img
                                                                 src="{{ asset('assets/img/icons/printer.svg') }}"
-                                                                class="me-2" alt="img">Invoice/Slip</a>
+                                                                class="me-2" alt="img"> Print Invoice/Slip</a>
                                                     </li>
                                                 @endif
                                                 @if (can_access('edit_sale'))
@@ -146,10 +150,30 @@
                                             </ul>
                                         </td>
                                     </tr>
+                                    @php
+                                        $paid += $payments[$sale->id];
+                                        $due += $sale->grand_total - $payments[$sale->id];
+                                    @endphp
                                 @endforeach
                             @endif
 
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>TOTAL</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th style="text-align: right;">{{ number_format($sum, 2) }}</th>
+                                <th style="text-align: right;">{{ number_format($paid, 2) }}</th>
+                                <th style="text-align: right;">{{ number_format($due, 2) }}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

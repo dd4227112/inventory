@@ -22,6 +22,9 @@ Route::middleware(['auth', 'verify_shop'])->group(function () {
     Route::get('/profile', [Admin::class, 'profile'])->name('profile');
     Route::post('/updatephoto', [Admin::class, 'profilephoto'])->name('update_photo');
     Route::post('/updateprofile', [Admin::class, 'updateprofile'])->name('update_profile');
+    Route::post('/allPermission', [Admin::class, 'allPermission'])->name('allPermission');
+
+    
 
     Route::post('/changepassword', [Admin::class, 'changepassword'])->name('admin.changepassword');
     Route::get('/password', [Admin::class, 'password'])->name('password');

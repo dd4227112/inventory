@@ -51,7 +51,7 @@ function customers()
 function supplier()
 {
     $suppliers = Supplier::where('status', 1)->get();
-    $output = " ";
+    $output = " <option value='' selected></option> ";
     if (!$suppliers->isEmpty()) {
         foreach ($suppliers as $key => $supplier) {
             $output .= " <option value='" . $supplier->id . "'>" . $supplier->name . "</option>";
@@ -93,7 +93,7 @@ function fetch_sale($request)
     $product = Product::find($id);
     $output = '';
     if (!empty($product)) {
-        $output .= "<tr><td class=''>" . $product->name ."- " . $product->description . "</td>";
+        $output .= "<tr><td class=''>" . $product->name . "- " . $product->description . "</td>";
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'>";
         $output .= "<td><input type ='number' id='quantity' max='" . product_balance($product->id)['balance'] . "' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->price . "'></td>";
@@ -111,7 +111,7 @@ function fetch_purchase($request)
     $product = Product::find($id);
     $output = '';
     if (!empty($product)) {
-        $output .= "<tr><td class=''>" . $product->name . "(" . $product->code . ") - " . $product->description;
+        $output .= "<tr><td class=''>" . $product->name . " - " . $product->description;
         $output .= " <input class ='' type ='hidden' id ='product_id' name ='product_id[]' value ='" . $product->id . "'></td>";
         $output .= "<td><input type ='number' id='quantity' name ='quantity[]' value ='1'></td>";
         $output .= "<td><input type ='text' id='price' readonly name ='price[]' value ='" . $product->cost . "'></td>";
@@ -287,12 +287,16 @@ function decrypt_code($number)
 {
     $replace = ['A', 'e_', 'jk', 'F{', 'rgc', 'Db', 'm$', 'Z-', 'd', 'xY'];
     $key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-    if (!in_array($number, $replace)) {
-        abort(403);
-    }
+    // if (!in_array($number, $replace)) {
+    //     abort(403);
+    // }
 
     $number = str_replace($replace, $key, $number);
-    return $number;
+    if (intval($number) == 0) {
+        abort(403);
+    } else {
+        return $number;
+    }
 }
 
 function generateQr($id, $format, $controller)
@@ -315,10 +319,7 @@ function generateQr($id, $format, $controller)
 function searchPurchaseProduct($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
-        ->where(function ($query) use ($key) {
-            $query->where('name', 'like', "%$key%")
-                ->orWhere('code', 'like', "%$key%");
-        })
+        ->where('name', 'like', "%$key%")
         ->latest()
         ->take(10)
         ->get();
@@ -327,7 +328,7 @@ function searchPurchaseProduct($key)
         $output .= "<table class='table table-bordered mb-0'>";
         $output .= "<tbody>";
         foreach ($products as $key => $product) {
-            $output .= "<tr class='add-icon pick_product' id ='" . $product->id . "'><td>" . $product->name . "(" . $product->code . ") - " . $product->description . "</td></tr>";
+            $output .= "<tr class='add-icon pick_product' id ='" . $product->id . "'><td>" . $product->name . " - " . $product->description . "</td></tr>";
         }
         $output .= "</tbody>";
         $output .= "</table>";

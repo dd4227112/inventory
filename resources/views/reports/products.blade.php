@@ -23,18 +23,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="wordset">
-                        <ul>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img src="{{ asset('assets/img/icons/pdf.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img src="{{ asset('assets/img/icons/excel.svg')}}" alt="img"></a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img src="{{ asset('assets/img/icons/printer.svg')}}" alt="img"></a>
-                            </li>
-                        </ul>
+                    <div class="wordset"> 
                     </div>
                 </div>
 
@@ -62,7 +51,7 @@
                             @foreach($products as $key => $product)
                             <tr>
                                 <td>{{ ++$key}} </td>
-                                <td>{{ $product->name}} ({{ $product->code}})</td>
+                                <td>{{ $product->name}}</td>
                                 <td>{{ $product->description}}</td>
                                 <td>{{ $product->unit->name}}</td>
                                 <td>{{ $product->category->name}}</td>

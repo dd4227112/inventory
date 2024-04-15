@@ -29,16 +29,17 @@
                             </li>
                         @endif
                         @if (can_access('print_sale'))
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('print_sale', $sale->uuid) }}"><img
                                         src="{{ asset('assets/img/icons/pdf.svg') }}" alt="img"></a>
+                            </li> --}}
+
+
+                            <li>
+                                <a href="{{ route('print_sale', $sale->uuid) }}" target="_blank"><img
+                                        src="{{ asset('assets/img/icons/printer.svg') }}" alt="img"></a>
                             </li>
                         @endif
-
-                        <li>
-                            <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/printer.svg') }}"
-                                    alt="img"></a>
-                        </li>
                         @if ($status != 'Completed')
 
                             @if (can_access('add_sale_payment'))

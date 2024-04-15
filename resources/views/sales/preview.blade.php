@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 
 
-    <title>Simple invoice page - Bootdey.com</title>
+    <title>receipt_invoice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('/assets/invoice/css/bootstrapcdn.min.css') }}" rel="stylesheet">
     <style type="text/css">

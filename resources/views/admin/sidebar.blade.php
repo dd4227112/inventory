@@ -62,7 +62,7 @@
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/users1.svg') }}"
                                 alt="img"><span>
-                                People</span> <span class="menu-arrow"></span></a>
+                                Users</span> <span class="menu-arrow"></span></a>
                         <ul>
                             @if (can_access('list_customers'))
                                 <li><a href="{{ route('list_customer') }}"

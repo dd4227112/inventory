@@ -33,7 +33,7 @@
                                 <label>Supplier</label>
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
-                                        <select class="select2" id="getSupplier" required name="supplier_id">
+                                        <select class="select2" id="getSupplier"  name="supplier_id">
                                         </select>
                                     </div>
                                     <div class="col-lg-2 col-sm-2 col-2 ps-0">

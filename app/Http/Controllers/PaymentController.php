@@ -18,7 +18,7 @@ class PaymentController extends Controller
         $purchase = Purchase::where('uuid', $uuid)->first();
         if (!empty($purchase)) {
             $data = [
-                'supplier' => $purchase->supplier->name,
+                'supplier' => isset($purchase->supplier) ? $purchase->supplier->name : '',
                 'purchase_id' => $purchase->id,
                 'balance' => number_format($purchase->grand_total - $purchase->payment->sum('amount'), 2),
             ];
@@ -58,7 +58,7 @@ class PaymentController extends Controller
     {
         $payment = Payment::find($request->id);
         if ($payment->delete()) {
-            $payment->update(['deleted_by'=>Auth::user()->id]);
+            $payment->update(['deleted_by' => Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];
@@ -70,7 +70,7 @@ class PaymentController extends Controller
         $id = $request->id;
         $payment = Payment::find($id);
         $sale = Sale::find($payment->sale_id);
-        $customer = isset($sale->customer->name) ? $sale->customer->name:'';
+        $customer = isset($sale->customer->name) ? $sale->customer->name : '';
         if (!empty($payment) && !empty($sale)) {
             $data = [
                 'customer' => $customer,
@@ -143,8 +143,8 @@ class PaymentController extends Controller
 
         $pdf = PDF::loadView('sales.invoice', $this->data);
         $pdf->setPaper('A4');
-        // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('receipt_' . $payment->reference . '.pdf');
+        return $pdf->stream('receipt_' . $payment->reference . '.pdf', array('Attachment' => false));
+        // return $pdf->download('receipt_' . $payment->reference . '.pdf');
     }
     public function previewpayment()
     {
@@ -178,7 +178,7 @@ class PaymentController extends Controller
     {
         $payment = Payment::find($request->id);
         if ($payment->delete()) {
-            $payment->update(['deleted_by'=>Auth::user()->id]);
+            $payment->update(['deleted_by' => Auth::user()->id]);
             $response = ['message' => 'Deleleted Successfully'];
         } else {
             $response = ['message' => 'Failed to delete this sale'];
@@ -194,7 +194,7 @@ class PaymentController extends Controller
         if (!empty($payment) && !empty($purchase)) {
 
             $data = [
-                'supplier' => $purchase->supplier->name,
+                'supplier' => isset($purchase->supplier) ? $purchase->supplier->name : '',
                 'payment_id' => $payment->id,
                 'amount' => number_format($payment->amount, 2),
                 'date' => $payment->date,
@@ -262,8 +262,8 @@ class PaymentController extends Controller
         $this->data['qr'] = generateQr($payment->id, 'pdf', 'previewpurchase');
         $pdf = PDF::loadView('purchases.invoice', $this->data);
         $pdf->setPaper('A4');
-        // return $pdf->stream('tutsmake.pdf', array('Attachment' => false));
-        return $pdf->download('purchase_' . $payment->reference . '.pdf');
+        return $pdf->stream('purchase_' . $payment->reference . '.pdf', array('Attachment' => false));
+        // return $pdf->download('purchase_' . $payment->reference . '.pdf');
     }
 
     public function previewpurchase()
@@ -276,6 +276,7 @@ class PaymentController extends Controller
             abort(403);
         }
         $purchase = Purchase::find($payment->purchase_id);
+
         $payment_status = purchase_payment_status("purchase", $purchase->id, $purchase->grand_total);
         $this->data['status'] = $payment_status['status'];
         $this->data['class'] = $payment_status['class'];

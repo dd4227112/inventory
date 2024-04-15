@@ -43,6 +43,18 @@
 
 
                             @if(!$permissions->isEmpty())
+                            <tr>
+                                <td> -</td>
+                                <td class="text-danger"><b>Grant/Deny All Permissions to User</b></td>
+                                <td>
+                                    <div class="form-switch">
+                                        <input class="form-check-input checkAll " id= "" type="checkbox" {{$all_given}}
+                                            id="allPermission">
+                                        <label class="form-check-label text-danger" for="allPermission">Grant/Deny
+                                            All</label>
+                                    </div>
+                                </td>
+                            </tr>
                             @foreach($permissions as $permission)
                             <tr>
                                 <td>{{ $permission->name}} </td>
@@ -96,4 +108,50 @@
         });
     });
     $(document).ready(checktoggle);
+
+    $(document).on("change", ".checkAll", function() {
+        if ($(this).is(':checked')) {
+            var checked = true;
+        } else {
+            var checked = false;
+        }
+        var user_id = $('#user_id').val();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to grant/deny all permission to user",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ url('allPermission') }}",
+                    dataType: 'json',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        user_id: user_id,
+                        checked: checked
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: "success"
+                        }).then((result) => {
+                            window.location.reload();
+                        });
+
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            }
+        });
+    });
 </script>
