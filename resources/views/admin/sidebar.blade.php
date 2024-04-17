@@ -91,7 +91,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (can_access('view_report'))
+                @if (can_access('view_report') || Auth::user()->role->name == 'Auditor')
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/time.svg') }}"
                                 alt="img"><span> Report</span> <span class="menu-arrow"></span></a>
