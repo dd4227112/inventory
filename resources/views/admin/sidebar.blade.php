@@ -123,7 +123,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (can_access('manage_setting') || Auth::user()->role->name == 'Admin')
+                @if (can_access('manage_setting'))
                     <li class="submenu">
                         <a href="javascript:void(0);"><img src="{{ asset('assets/img/icons/settings.svg') }}"
                                 alt="img"><span> settings</span> <span class="menu-arrow"></span></a>
@@ -142,7 +142,7 @@
                             @endif
                             @if (Auth::user()->role->name == 'Admin' || Auth::user()->role->name == 'Auditor')
                                 <li><a href="{{ route('admin.list_category') }}"
-                                        class="{{ $active == 'categories' ? 'active' : '' }}">Categories</a></li>
+                                        class="{{ $active == 'categories' ? 'active' : '' }}">Brands</a></li>
                             @endif
                             @if (Auth::user()->role->name == 'Admin' || Auth::user()->role->name == 'Auditor')
                                 <li><a href="{{ route('admin') }}"

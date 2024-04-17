@@ -31,12 +31,12 @@
                             @csrf
                             <ul>
                                 <li>
-                                    <input type="date" name="from" value="{{ $from }}"
+                                    <input type="date" name="from" required  value="{{ $from }}"
                                         class="form-control" id="">
                                 </li>
                                 -
                                 <li>
-                                    <input type="date" name="to" value="{{ $to }}"
+                                    <input type="date" name="to"  required value="{{ $to }}"
                                         class="form-control" id="">
                                 </li>
                                 <li>
@@ -236,7 +236,7 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Payment Method</label>
-                                <select class="select" name="payment_method">
+                                <select class="select" name="payment_method" required >
                                     <option value="1">Cash</option>
                                     <option value="2">Bank</option>
                                     <option value="3">Credit Card</option>

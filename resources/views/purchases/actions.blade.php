@@ -76,7 +76,7 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Payment Method</label>
-                                <select class="select" name="payment_method">
+                                <select class="select" name="payment_method" required >
                                     <option value="1">Cash</option>
                                     <option value="2">Bank</option>
                                     <option value="3">Credit Card</option>

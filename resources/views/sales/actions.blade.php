@@ -76,7 +76,7 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Payment Method</label>
-                                <select class="select" name="payment_method">
+                                <select class="select" name="payment_method" required >
                                     <option value="1">Cash</option>
                                     <option value="2">Bank</option>
                                     <option value="3">Credit Card</option>
@@ -116,13 +116,13 @@
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" name="name" class="form-control">
+                                    <input type="text" name="name"  required class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Phone</label>
-                                    <input type="text" name="phone" class="form-control">
+                                    <input type="text" name="phone" required  class="form-control">
                                 </div>
                             </div>
                         </div>

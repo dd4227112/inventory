@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <label>Brand</label>
                                 <select class="select2" name="category_id" required>
-                                    <option>--Select--</option>
+                                     <option value="">--Select--</option>
                                     @if(!$categories->isEmpty())
                                     @foreach($categories as $category)
                                     <option <?= $product->category_id == $category->id ? 'selected' : '' ?> value="{{ $category->id}}"> {{ $category->name }}</option>
@@ -41,14 +41,14 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Description</label>
-                                <input type="text" name="description" value="{{ $product->description }}" class="form-control">
+                                <input type="text" name="description"  required  value="{{ $product->description }}" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Unit</label>
                                 <select class="select" name="unit_id" required>
-                                    <option>--Select--</option>
+                                     <option value="">--Select--</option>
                                     @if(!$units->isEmpty())
                                     @foreach($units as $unit)
                                     <option <?= $product->unit_id == $unit->id ? 'selected' : '' ?> value="{{ $unit->id}}"> {{ $unit->name }}</option>
@@ -78,8 +78,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>
-                                <select class="select" name="shop_id">
-                                    <option>--Select--</option>
+                                <select class="select" name="shop_id" required >
+                                     <option value="">--Select--</option>
                                     @if(!$shops->isEmpty())
                                     @foreach($shops as $shop)
                                     <option <?= $product->shop_id == $shop->id ? 'selected' : '' ?> value="{{ $shop->id}}"> {{ $shop->name}}</option>

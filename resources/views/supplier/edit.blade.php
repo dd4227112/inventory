@@ -21,14 +21,14 @@
                         <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name"  value="{{$supplier->name }}" class="form-control">
+                                <input type="text" name="name" required   value="{{$supplier->name }}" class="form-control">
                                 <input type="hidden" name="supplier_id"  value="{{$supplier->id }}">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="phone" value="{{$supplier->phone }}" class="form-control">
+                                <input type="text" name="phone"  required value="{{$supplier->phone }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -52,8 +52,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>
-                                <select class="select" name="shop_id">
-                                    <option>--Select--</option>
+                                <select class="select" name="shop_id" required >
+                                     <option value="">--Select--</option>
                                     @if(!$shops->isEmpty())
                                     @foreach($shops as $shop)
                                     <option <?= $shop->id == $supplier->shop_id ? 'selected' : '' ?> value="{{ $shop->id}}"> {{ $shop->name}}</option>

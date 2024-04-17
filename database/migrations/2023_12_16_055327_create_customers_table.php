@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone')->unique();
-            $table->string('email')->unique();
-            $table->string('address');
+            $table->string('email')->unique()->nullable();
+            $table->string('address')->nullable();
             $table->unsignedBigInteger('shop_id');
             // $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('deleted_by')->nullable();

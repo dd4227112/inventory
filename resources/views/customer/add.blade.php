@@ -21,13 +21,13 @@
                         <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" class="form-control">
+                                <input type="text" name="name" required class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="phone" class="form-control">
+                                <input type="text" name="phone" required class="form-control">
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>
-                                <select class="select" name="shop_id">
-                                    <option>--Select--</option>
+                                <select class="select" name="shop_id" required>
+                                     <option value="">--Select--</option>
                                     @if(!$shops->isEmpty())
                                     @foreach($shops as $shop)
                                     <option value="{{ $shop->id}}"> {{ $shop->name}}</option>

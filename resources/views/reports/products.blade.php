@@ -32,13 +32,13 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                               
+                                <th>Brand</th>
                                 <th>Name </th>
                                 <th>Description</th>
                                 <th>Unit </th>
-                                <th>Category</th>
-                                <th>Cost</th>
-                                <th>Price</th>
+                                <th>Purchase Cost</th>
+                                <th>Selling Price</th>
+                                <th>Opening Qty</th>
                                 <th>Purchase Qty</th>
                                 <th>Sold Qty</th>
                                 <th>Balance Qty</th>
@@ -51,12 +51,13 @@
                             @foreach($products as $key => $product)
                             <tr>
                                 <td>{{ ++$key}} </td>
+                                <td>{{ $product->category->name}}</td>
                                 <td>{{ $product->name}}</td>
                                 <td>{{ $product->description}}</td>
                                 <td>{{ $product->unit->name}}</td>
-                                <td>{{ $product->category->name}}</td>
                                 <td>{{ number_format($product->cost, 2)}}</td>
                                 <td>{{ number_format($product->price, 2)}}</td>
+                                <td>{{ number_format($product->quantity)}}</td>
                                 <td>{{ number_format($summary[$product->id]['purchased'])}}</td>
                                 <td>{{ number_format($summary[$product->id]['sold'])}}</td>
                                 <td>{{ number_format($summary[$product->id]['balance'])}}</td>

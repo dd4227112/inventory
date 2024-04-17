@@ -55,6 +55,9 @@ class SaleController extends Controller
         if ($checkCode) {
             return redirect()->back()->with('warning', 'Duplicate reference number');
         }
+        if (empty($request->product_id)) {
+            return redirect()->back()->with('warning', 'Please Select Atleast one Product');
+        }
         $data = [
             'reference' => $request->reference,
             'grand_total' => remove_comma($request->grand_total),
@@ -197,6 +200,9 @@ class SaleController extends Controller
     public function updatesale(Request $request)
     {
         $sale_id = $request->sale_id;
+        if (empty($request->product_id)) {
+            return redirect()->back()->with('warning', 'Please Select Atleast one Product');
+        }
         $data = [
             'reference' => $request->reference,
             'grand_total' => str_replace(',', '', $request->grand_total),

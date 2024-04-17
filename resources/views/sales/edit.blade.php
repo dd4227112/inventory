@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Auth;
                                 <label>Customer</label>
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10 col-10">
-                                        <select class="select2" id="getCustomer" required name="customer_id">
+                                        <select class="select2" id="getCustomer"  name="customer_id">
                                             <option value="{{ isset($sale->customer) ? $sale->customer->id : '' }}"
                                                 selected>{{ isset($sale->customer) ? $sale->customer->name : '' }}
                                             </option>

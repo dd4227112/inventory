@@ -73,7 +73,7 @@
                             <div class="col-lg-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" name="name" class="form-control">
+                                    <input type="text" name="name"  required class="form-control">
 
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                             <div class="col-lg-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" name="name" id="name" class="form-control">
+                                    <input type="text" name="name" id="name"  required  class="form-control">
                                     <input type="hidden" name="unit_id" class="form-control">
 
                                 </div>

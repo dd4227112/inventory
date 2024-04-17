@@ -202,7 +202,7 @@
                                 <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
                                     <td> {{ ++$key }}</td>
                                     <td style="padding: 10px;vertical-align: top; display: flex;align-items: center;">
-                                        {{ $item->product->name }} ( {{ $item->product->code }} ) -
+                                        {{ $item->product->name }} -
                                         {{ $item->product->description }}
                                     </td>
                                     <td style="padding: 10px;vertical-align: top; ">

@@ -49,7 +49,7 @@
                             <div class="form-group">
                                 <label>Date</label>
                                 <div class="input-groupicon">
-                                    <input type="date" class="form-control" value="{{ date('Y-m-d')}}" name="date">
+                                    <input type="date" class="form-control" required value="{{ date('Y-m-d')}}" name="date">
                                     <!-- <div class="addonset">
                                     <img src="{{ asset('assets/img/icons/calendars.svg')}}" alt="img">
                                 </div> -->

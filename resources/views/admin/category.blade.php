@@ -9,12 +9,12 @@
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Categorys Management</h4>
-                <h6>List Categories</h6>
+                <h4>Brands Management</h4>
+                <h6>List Brands</h6>
             </div>
             @if(can_access('add_category'))
             <div class="page-btn">
-                <a href="#" class="btn btn-added add_category"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add Category</a>
+                <a href="#" class="btn btn-added add_category"><img src="{{ asset('assets/img/icons/plus.svg')}}" alt="img" class="me-2">Add Brand</a>
             </div>
             @endif
         </div>
@@ -83,7 +83,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Category</h5>
+                <h5 class="modal-title">Add Brand</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <form action="" method="post" enctype="" id="save_category">
@@ -94,7 +94,7 @@
                             <div class="col-lg-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input type="text" name="name" class="form-control">
+                                    <input type="text" name="name"  required class="form-control">
                                     <input type="hidden" name="category_id" class="form-control">
 
                                 </div>
@@ -191,7 +191,7 @@
 
     // edit category 
     edit_category = $('.edit').on('click', function() {
-        $('.modal-title').text('Edit category');
+        $('.modal-title').text('Edit Brand');
         $('.btn-submit').text('Update');
         $('#save_category').addClass('save_category');
         $('#save_category').removeAttr('id');

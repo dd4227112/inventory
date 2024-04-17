@@ -21,13 +21,13 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" value="{{ $user->name }}" class="form-control">
+                                <input type="text" name="name" required  value="{{ $user->name }}" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="phone" value="{{ $user->phone }}" class="form-control">
+                                <input type="text"  required name="phone" value="{{ $user->phone }}" class="form-control">
                                 <input type="hidden" name="user_id" value="{{ $user->id }}">
                             </div>
                         </div>
@@ -40,8 +40,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Role</label>
-                                <select class="select" name="role_id">
-                                    <option>--Select--</option>
+                                <select class="select" name="role_id" required >
+                                     <option value="">--Select--</option>
                                     @if(!$roles->isEmpty())
                                     @foreach($roles as $role)
                                     <option <?= $role->id == $user->role_id ? 'selected' : '' ?> value="{{ $role->id}}"> {{ $role->name }}</option>
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label>Shop</label>
                                 <select class="select" name="shop_id">
-                                    <option>--Select--</option>
+                                     <option value="">--Select--</option>
                                     @if(!$shops->isEmpty())
                                     @foreach($shops as $shop)
                                     <option <?= $shop->id == $user->shop_id ? 'selected' : '' ?> value="{{ $shop->id}}"> {{ $shop->name}}</option>

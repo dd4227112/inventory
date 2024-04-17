@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <label>Brand</label>
                                 <select class="select2" name="category_id" required>
-                                    <option>--Select--</option>
+                                    <option value="">--Select--</option>
                                     @if (!$categories->isEmpty())
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"> {{ $category->name }}</option>
@@ -40,14 +40,14 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Description</label>
-                                <input type="text" name="description" class="form-control">
+                                <input type="text"   name="description" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Unit</label>
                                 <select class="select2" name="unit_id" required>
-                                    <option>--Select--</option>
+                                     <option value="">--Select--</option>
                                     @if (!$units->isEmpty())
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit->id }}"> {{ $unit->name }}</option>
@@ -78,8 +78,8 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Shop</label>
-                                <select class="select2" name="shop_id">
-                                    <option>--Select--</option>
+                                <select class="select2" required  name="shop_id">
+                                     <option value="">--Select--</option>
                                     @if (!$shops->isEmpty())
                                         @foreach ($shops as $shop)
                                             <option value="{{ $shop->id }}"> {{ $shop->name }}</option>

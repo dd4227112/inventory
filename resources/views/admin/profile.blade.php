@@ -49,7 +49,7 @@
                         <div class="col-lg-6 col-sm-12">
                             <div class="form-group">
                                 <label> Name</label>
-                                <input type="text" name="name" value="{{ Auth::user()->name }}" placeholder="Name">
+                                <input type="text" name="name"  required value="{{ Auth::user()->name }}" placeholder="Name">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12">
@@ -61,7 +61,7 @@
                         <div class="col-lg-6 col-sm-12">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="phone" value="{{ Auth::user()->phone }}" placeholder="+2557123456789">
+                                <input type="text"  required name="phone" value="{{ Auth::user()->phone }}" placeholder="+2557123456789">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12">

@@ -28,7 +28,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-md-2">Select</label>
                                 <div class="col-md-10">
-                                    <select class="form-select" name="id">
+                                    <select class="form-select" name="id" required >
                                         <option value="">-- Select --</option>
                                         @if(!$shops->isEmpty())
                                         @foreach($shops as $shop)

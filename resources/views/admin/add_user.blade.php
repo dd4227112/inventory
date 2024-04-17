@@ -21,26 +21,26 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="name" class="form-control">
+                                <input type="text"  required  name="name" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="phone" class="form-control">
+                                <input type="text"  required  name="phone" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" class="form-control" name="email">
+                                <input type="email" class="form-control" required name="email">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Password</label>
                                 <div class="pass-group">
-                                    <input type="password" class=" pass-input" name="password">
+                                    <input type="password" class=" pass-input" required  name="password">
                                     <span class="fas toggle-password fa-eye-slash"></span>
                                 </div>
                             </div>
@@ -48,8 +48,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="form-group">
                                 <label>Role</label>
-                                <select class="select" name="role_id">
-                                    <option>--Select--</option>
+                                <select class="select" name="role_id" required >
                                     @if(!$roles->isEmpty())
                                     @foreach($roles as $role)
                                     <option value="{{ $role->id}}"> {{ $role->name }}</option>
@@ -63,7 +62,7 @@
                             <div class="form-group">
                                 <label>Shop</label>
                                 <select class="select" name="shop_id">
-                                        <option>--Select--</option>
+                                         <option value="">--Select--</option>
                                         @if(!$shops->isEmpty())
                                         @foreach($shops as $shop)
                                         <option value="{{ $shop->id}}"> {{ $shop->name}}</option>

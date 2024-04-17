@@ -1,0 +1,266 @@
+[
+    {
+        "name": "add_product",
+        "description": "Add Product"
+    },
+    {
+        "name": "edit_product",
+        "description": "Edit Product"
+    },
+    {
+        "name": "delete_product",
+        "description": "Delete Product"
+    },
+    {
+        "name": "add_user",
+        "description": "Add new User"
+    },
+    {
+        "name": "edit_user",
+        "description": "Edit User"
+    },
+    {
+        "name": "list_products",
+        "description": "List Products"
+    },
+    {
+        "name": "list_users",
+        "description": "List Users"
+    },
+    {
+        "name": "add_customer",
+        "description": "Add new Customer"
+    },
+    {
+        "name": "edit_customer",
+        "description": "Edit Customer"
+    },
+    {
+        "name": "delete_customer",
+        "description": "Delete Customer"
+    },
+    {
+        "name": "list_customers",
+        "description": "List Customers"
+    },
+    {
+        "name": "list_suppliers",
+        "description": "List Suppliers"
+    },
+    {
+        "name": "add_supplier",
+        "description": "Add Supplier"
+    },
+    {
+        "name": "edit_supplier",
+        "description": "Edit_Supplier"
+    },
+    {
+        "name": "delete_supplier",
+        "description": "Delete Supplier"
+    },
+    {
+        "name": "manage_people",
+        "description": "Manage People"
+    },
+    {
+        "name": "manage_products",
+        "description": "Manage Products"
+    },
+    {
+        "name": "manage_shops",
+        "description": "Manage Shops"
+    },
+    {
+        "name": "add_shop",
+        "description": "Add_shop"
+    },
+    {
+        "name": "list_shops",
+        "description": "List_shops"
+    },
+    {
+        "name": "edit_shop",
+        "description": "Edit Shops"
+    },
+    {
+        "name": "delete_shop",
+        "description": "Delete Shop"
+    },
+    {
+        "name": "view_report",
+        "description": "View Reports"
+    },
+    {
+        "name": "product_report",
+        "description": "View Product Report"
+    },
+    {
+        "name": "sale_report",
+        "description": "View Sale Report"
+    },
+    {
+        "name": "purchase_report",
+        "description": "View Purchase Report"
+    },
+    {
+        "name": "product_sale_report",
+        "description": "View Product Sale Report in Details"
+    },
+    {
+        "name": "product_combined_report",
+        "description": "View Product Sale & Purchase Reports in Details"
+    },
+    {
+        "name": "product_purchase_report",
+        "description": "View Product Purchase Report in Details"
+    },
+    {
+        "name": "manage_sale",
+        "description": "Manage Sales"
+    },
+    {
+        "name": "add_sale",
+        "description": "Add new sale"
+    },
+    {
+        "name": "edit_sale",
+        "description": "Edit Sale"
+    },
+    {
+        "name": "delete_sale",
+        "description": "Delete Sale"
+    },
+    {
+        "name": "list_sales",
+        "description": "List Sales"
+    },
+    {
+        "name": "add_sale_payment",
+        "description": "Add Sale Payment"
+    },
+    {
+        "name": "view_sale_payment",
+        "description": "View Sale Payments"
+    },
+    {
+        "name": "edit_sale_payment",
+        "description": "Edit Sale Payment"
+    },
+    {
+        "name": "delete_sale_payment",
+        "description": "Delete Sale Payment"
+    },
+    {
+        "name": "print_sale_payment",
+        "description": "Print Sale Payment"
+    },
+    {
+        "name": "print_sale",
+        "description": "Print Sale"
+    },
+    {
+        "name": "manage_purchase",
+        "description": "Manage purchases"
+    },
+    {
+        "name": "add_purchase",
+        "description": "Add new purchase"
+    },
+    {
+        "name": "edit_purchase",
+        "description": "Edit purchase"
+    },
+    {
+        "name": "delete_purchase",
+        "description": "Delete purchase"
+    },
+    {
+        "name": "list_purchases",
+        "description": "List purchases"
+    },
+    {
+        "name": "add_purchase_payment",
+        "description": "Add purchase Payment"
+    },
+    {
+        "name": "view_purchase_payment",
+        "description": "View purchase Payments"
+    },
+    {
+        "name": "edit_purchase_payment",
+        "description": "Edit purchase Payment"
+    },
+    {
+        "name": "delete_purchase_payment",
+        "description": "Delete purchase Payment"
+    },
+    {
+        "name": "print_purchase_payment",
+        "description": "Print purchase Payment"
+    },
+    {
+        "name": "print_purchase",
+        "description": "Print Purchase "
+    },
+    {
+        "name": "manage_setting",
+        "description": "Manage System Settings"
+    },
+    {
+        "name": "user_permission",
+        "description": "Manage User Permission"
+    },
+    {
+        "name": "view_sale",
+        "description": "View Sale Details"
+    },
+    {
+        "name": "view_purchase",
+        "description": "View Purchase Details"
+    },
+    {
+        "name": "manage_trash",
+        "description": "manage deleted items"
+    },
+    {
+        "name": "manage_units",
+        "description": "Manage Units"
+    },
+    {
+        "name": "add_unit",
+        "description": "add Unit"
+    },
+    {
+        "name": "edit_unit",
+        "description": "Edit Unit"
+    },
+    {
+        "name": "delete_unit",
+        "description": "Delete Unit"
+    },
+    {
+        "name": "list_units",
+        "description": "List Units"
+    },
+    {
+        "name": "manage_category",
+        "description": "Manage category"
+    },
+    {
+        "name": "add_category",
+        "description": "add category"
+    },
+    {
+        "name": "edit_category",
+        "description": "Edit category"
+    },
+    {
+        "name": "delete_category",
+        "description": "Delete category"
+    },
+    {
+        "name": "list_category",
+        "description": "List category"
+    }
+]

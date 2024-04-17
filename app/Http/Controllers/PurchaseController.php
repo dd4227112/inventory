@@ -60,8 +60,12 @@ class PurchaseController extends Controller
     {
 
         $checkCode = $this->checkCode($request->reference);
+
         if ($checkCode) {
             return redirect()->back()->with('warning', 'Duplicate reference number');
+        }
+        if (empty($request->product_id)) {
+            return redirect()->back()->with('warning', 'Please Select Atleast one Product');
         }
         $data = [
             'reference' => $request->reference,
@@ -136,11 +140,11 @@ class PurchaseController extends Controller
         $payments = Payment::where('purchase_id', $request->id)->get();
         $html = " ";
         if (!$payments->isEmpty()) {
-            $supplier = isset($purchase->supplier)?$purchase->supplier->name:'';
+            $supplier = isset($purchase->supplier) ? $purchase->supplier->name : '';
             foreach ($payments as $key => $payment) {
                 $html .=  "<tr class='bor-b1'>";
                 $html  .= "<td>" . $payment->date . "</td>";
-                $html  .= "<td>" . $supplier. "</td>";
+                $html  .= "<td>" . $supplier . "</td>";
                 $html  .= "<td>" . $payment->reference . "</td>";
                 $html  .= "<td>" . number_format($payment->amount, 2) . " </td>";
                 $html  .= "<td>Cash</td>";
@@ -250,6 +254,9 @@ class PurchaseController extends Controller
     public function updatepurchase(Request $request)
     {
         $purchase_id = $request->purchase_id;
+        if (empty($request->product_id)) {
+            return redirect()->back()->with('warning', 'Please Select Atleast one Product');
+        }
         $data = [
             'reference' => $request->reference,
             'grand_total' => str_replace(',', '', $request->grand_total),

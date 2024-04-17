@@ -66,6 +66,7 @@ function searchSaleProduct($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
         ->where('name', 'like', "%$key%")
+        ->OrWhere('description', 'like', "%$key%")
         ->latest()
         ->take(10)
         ->get();
@@ -129,17 +130,20 @@ function reference()
 }
 function product_balance($product)
 {
+    $open_balance = Product::where('id', $product)->value('quantity');
     $purchased = PurchaseProduct::where('product_id', $product)->sum('quantity');
     $sold = SaleProduct::where('product_id', $product)->sum('quantity');
-    return ['purchased' => $purchased, 'sold' => $sold, 'balance' => ($purchased - $sold)];
+    return ['purchased' => $purchased, 'sold' => $sold, 'balance' => (($open_balance + $purchased) - $sold)];
 }
 function overallProductBalance($products = [])
 {
     $product_ids  = [];
     foreach ($products as $product) {
+        $open_balance = Product::where('id', $product->id)->value('quantity');
         $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
         $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
-        if ($purchased - $sold > 0) {
+        $balance = ($purchased + $open_balance) - $sold;
+        if ($balance > 0) {
             $product_ids[] = $product->id;
         }
     }
@@ -320,6 +324,7 @@ function searchPurchaseProduct($key)
 {
     $products = Product::where('shop_id', session('shop_id'))
         ->where('name', 'like', "%$key%")
+        ->OrWhere('description', 'like', "%$key%")
         ->latest()
         ->take(10)
         ->get();
@@ -370,7 +375,7 @@ function can_access($name)
     $user_id = Auth::user()->id;
     $user_permission = UserPermissions::where('user_id', $user_id)->where('permission_id', Permissions::where('name', $name)->value('id'))->first();
 
-    if (!empty($user_permission)) {
+    if (!empty($user_permission) || Auth::user()->role->name == 'Admin') {
         return true;
     }
     return false;

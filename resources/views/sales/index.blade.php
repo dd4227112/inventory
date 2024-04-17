@@ -33,10 +33,10 @@
                             @csrf
                             <ul>
                                 <li>
-                                    <input type="date" name="from" value="{{$from}}" class="form-control" id="">
+                                    <input type="date" name="from"  required  value="{{$from}}" class="form-control" id="">
                                 </li>
                                 <li>
-                                    <input type="date" name="to" value="{{$to}}" class="form-control" id="">
+                                    <input type="date" name="to" required  value="{{$to}}" class="form-control" id="">
                                 </li>
                                 <li>
                                     <button class="btn btn-success" type="submit">Submit</button>

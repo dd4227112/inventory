@@ -110,8 +110,7 @@ use Illuminate\Support\Facades\Auth;
                                 <tbody id="selectedProduct">
                                     @foreach ($items as $item)
                                         <tr>
-                                            <td class=" ">{{ $item->product->name }} ( {{ $item->product->code }}
-                                                ) - {{ $item->product->description }}</td>
+                                            <td class=" ">{{ $item->product->name }} - {{ $item->product->description }}</td>
                                             <input class="" type='hidden' id='product_id' name='product_id[]'
                                                 value="{{ $item->product->id }}">
                                             <td><input type='number' id='quantity'

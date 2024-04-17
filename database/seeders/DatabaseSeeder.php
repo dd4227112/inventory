@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Permissions;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,9 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         \App\Models\Role::factory()->create([
-                'name' => 'Admin',
-                'description' => 'System Administrator',
-            
+            'name' => 'Admin',
+            'description' => 'System Administrator',
         ]);
 
         \App\Models\Role::factory()->create([
@@ -27,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Role::factory()->create([
             'name' => 'Sales',
-                'description' => 'Shop Keeper',
+            'description' => 'Shop Keeper',
         ]);
 
         \App\Models\Shop::factory()->create(
@@ -38,13 +39,13 @@ class DatabaseSeeder extends Seeder
                 'description' => ' Duka la Vifaa vyote jumla na rejareja'
             ]
         );
-        
+
 
         \App\Models\User::factory()->create([
             'name' => 'David Daniel',
             'phone' => '+255743414770',
             'email' => 'admin@gmail.com',
-            'role_id'=>1,
+            'role_id' => 1,
             'password' => Hash::make('admin123'),
         ]);
 
@@ -52,7 +53,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Ludovick Konyo',
             'phone' => '+255743414772',
             'email' => 'auditor@gmail.com',
-            'role_id'=>2,
+            'role_id' => 2,
             'password' => Hash::make('auditor123'),
         ]);
 
@@ -60,22 +61,35 @@ class DatabaseSeeder extends Seeder
             'name' => 'Andrea Mpulila',
             'phone' => '+255743414771',
             'email' => 'sales@gmail.com',
-            'role_id'=>3,
-            'shop_id' =>1,
+            'role_id' => 3,
+            'shop_id' => 1,
             'password' => Hash::make('sales123'),
         ]);
-      
-        
+
+
 
 
         \App\Models\Category::factory()->create([
-            'name' =>'Default',
+            'name' => 'Default',
             'description' => 'For Testing Only'
         ]);
 
         \App\Models\Unit::factory()->create([
-            'name' =>'Default',
+            'name' => 'Default',
             'description' => 'For Testing Only'
         ]);
+        $this->seedPermissions();
+    }
+    public function seedPermissions()
+    {
+        $data = file_get_contents(storage_path('permissions.json'));
+        $permissions = json_decode($data);
+        foreach ($permissions as $key => $permission) {
+            $data = [
+                'name' => $permission->name,
+                'description' => $permission->description
+            ];
+            Permissions::create($data);
+        }
     }
 }

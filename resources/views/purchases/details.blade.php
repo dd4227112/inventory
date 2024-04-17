@@ -189,7 +189,7 @@
                                 <tr class="details" style="border-bottom:1px solid #E9ECEF ;">
                                     <td> {{ ++$key }}</td>
                                     <td style="padding: 10px;vertical-align: top; display: flex;align-items: center;">
-                                        {{ $item->product->name }} ( {{ $item->product->code }} ) -
+                                        {{ $item->product->name }} -
                                         {{ $item->product->description }}
                                     </td>
                                     <td style="padding: 10px;vertical-align: top; ">
@@ -302,7 +302,7 @@
                         <div class="col-lg-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Payment Method</label>
-                                <select class="select" name="payment_method">
+                                <select class="select" required  name="payment_method">
                                     <option value="1">Cash</option>
                                     <option value="2">Bank</option>
                                     <option value="3">Credit Card</option>
