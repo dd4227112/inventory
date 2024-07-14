@@ -61,8 +61,8 @@ class Admin extends Controller
     {
         $shop_id = session('shop_id');
         $date = date('Y-m-d');
-        $this->data['total_purchases'] = Purchase::where('shop_id', $shop_id)->sum('grand_total');
-        $this->data['total_sales'] = Sale::where('shop_id', $shop_id)->sum('grand_total');
+        $this->data['total_purchases'] = Purchase::where('shop_id', $shop_id)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->sum('grand_total');
+        $this->data['total_sales'] = Sale::where('shop_id', $shop_id)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->sum('grand_total');
         $this->data['number_purchases'] = Purchase::where(['shop_id' => $shop_id, 'date' => $date])->count();
         $this->data['number_sales'] = Sale::where(['shop_id' => $shop_id, 'date' => $date])->count();
         $this->data['today_purchases'] = Payment::where(['date' => $date])->whereNotNull('purchase_id')->whereIn('purchase_id', Purchase::where(['shop_id' => $shop_id])->get(['id']))->sum('amount');
@@ -74,7 +74,10 @@ class Admin extends Controller
         $this->data['out_stock'] = Product::where('shop_id', $shop_id)->whereIn('id', outStockProducts())->count();
         $this->data['most_solds'] =  Product::where('shop_id', $shop_id)->whereIn('id', most_sold())->get();
 
-        $months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $months = [];
+        for ($i=1; $i <=12 ; $i++) { 
+           $months[$i] = $i;
+        }
         $sales = [];
         $purchases = [];
         $year = date('Y');

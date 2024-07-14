@@ -15,7 +15,7 @@
                     </div>
                     <div class="dash-widgetcontent">
                         <h5>TZS <span>{{ number_format($total_purchases, 2) }}</span></h5>
-                        <h6>Total Purchases </h6>
+                        <h6>{{ date('F')}}'s  Purchases </h6>
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="dash-widgetcontent">
                         <h5>TZS <span>{{ number_format($total_sales, 2) }}</span></h5>
-                        <h6>Total Sales</h6>
+                        <h6>{{ date('F')}}'s Sales</h6>
                     </div>
                 </div>
             </div>
