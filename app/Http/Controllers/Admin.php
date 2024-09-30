@@ -369,7 +369,7 @@ class Admin extends Controller
     }
     public function updateprofile(Request $request)
     {
-        $user  =  $user = User::find(Auth::user()->id);
+        $user = User::find(Auth::user()->id);
         $data = [
             'name' => $request->name,
             'email' => $request->email,
