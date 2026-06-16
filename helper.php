@@ -154,9 +154,11 @@ function inStockProducts()
     $products  = Product::where('shop_id', session('shop_id'))->get();
     $product_ids = [];
     foreach ($products as $product) {
+        $opening = $product->quantity ?? 0;
         $purchased = PurchaseProduct::where('product_id', $product->id)->sum('quantity');
+        $total_quantity = $opening + $purchased;
         $sold = SaleProduct::where('product_id', $product->id)->sum('quantity');
-        if ($purchased - $sold > 0) {
+        if ($total_quantity - $sold > 0) {
             $product_ids[] = $product->id;
         }
     }
@@ -247,14 +249,38 @@ function number_to_words($number)
     }
 
     $ones = array(
-        "", "One", "Two", "Three", "Four", "Five", "Six",
-        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
-        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen",
+        "",
+        "One",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Eleven",
+        "Twelve",
+        "Thirteen",
+        "Fourteen",
+        "Fifteen",
+        "Sixteen",
+        "Seventeen",
+        "Eightteen",
         "Nineteen"
     );
     $tens = array(
-        "", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty",
-        "Seventy", "Eigthy", "Ninety"
+        "",
+        "",
+        "Twenty",
+        "Thirty",
+        "Fourty",
+        "Fifty",
+        "Sixty",
+        "Seventy",
+        "Eigthy",
+        "Ninety"
     );
 
     if ($Dn || $n) {
